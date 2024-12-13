@@ -102,7 +102,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
-            <JFXButton fx:id="loginButton" layoutX="324.0" layoutY="291.0" prefWidth="64.0" ripplerFill="#5e3c3c" style="-fx-background-color: #8ca1e4;" text="Login" />
+            <JFXButton fx:id="loginButton" layoutX="324.0" layoutY="291.0" onAction="#handleLogin" prefWidth="64.0" ripplerFill="#5e3c3c" style="-fx-background-color: #8ca1e4;" text="Login" />
             <TextField fx:id="emailField" layoutX="280.0" layoutY="159.0" promptText="Enter your email" />
             <TextField fx:id="passwordField" layoutX="281.0" layoutY="202.0" promptText="Enter your password" />
             </children>

@@ -1,12 +1,16 @@
 package com.example.loborems;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class LoginController {
@@ -23,10 +27,9 @@ public class LoginController {
     @FXML
     public void initialize() {
         // Add event handler for loginButton click
-        loginButton.setOnAction(e -> handleLogin());
     }
 
-    private void handleLogin() {
+    public void handleLogin(ActionEvent event) {
         // Fetch input values
         String email = emailField.getText();
         String password = passwordField.getText();
@@ -41,12 +44,10 @@ public class LoginController {
         if (validateLogin(email, password)) {
             // Navigate to the Dashboard
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Dashboard.fxml"));
-                Parent dashboardRoot = loader.load();
-
-                // Get current scene and set the new root
-                Scene currentScene = loginButton.getScene();
-                currentScene.setRoot(dashboardRoot);
+                Parent secondRoot = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
+                Scene newScene = new Scene(secondRoot);
+                Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                window.setScene(newScene);
             } catch (IOException e) {
                 e.printStackTrace();
                 showAlert("Error", "Unable to load the Dashboard.");
@@ -58,7 +59,7 @@ public class LoginController {
 
     private boolean validateLogin(String email, String password) {
         // Simulate validation logic
-        return email.equals("user@example.com") && password.equals("password");
+        return email.equals("salah") && password.equals("11");
     }
 
     private void showAlert(String title, String message) {
