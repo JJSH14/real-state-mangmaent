@@ -204,17 +204,12 @@
                         <Font name="Calibri Light" size="22.0" />
                     </font>
                 </Text>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="10.0" layoutY="482.0">
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="10.0" layoutY="412.0">
                     <image>
                         <Image url="@../../../images/logout.png" />
                     </image>
                 </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="8.0" layoutY="440.0">
-                    <image>
-                        <Image url="@../../../images/sssti.png" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="8.0" layoutY="395.0">
+                <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="8.0" layoutY="356.0">
                     <image>
                         <Image url="@../../../images/trans.png" />
                     </image>
@@ -246,17 +241,12 @@
                 <Image url="@../../../images/propr.png" />
             </image>
         </ImageView>
-        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="21.0" layoutY="362.0">
-            <image>
-                <Image url="@../../../images/intect.png" />
-            </image>
-        </ImageView>
-        <JFXButton layoutX="58.0" layoutY="225.0"  prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Dashboard" />
-        <JFXButton layoutX="58.0" layoutY="450.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Settings" />
-        <JFXButton layoutX="58.0" layoutY="405.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@salah.css" text="Interactions" />
+        <JFXButton layoutX="58.0" layoutY="225.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Dashboard" />
+        <JFXButton layoutX="58.0" layoutY="365.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@salah.css" text="Interactions" />
         <JFXButton layoutX="58.0" layoutY="270.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Client" />
-        <JFXButton layoutX="58.0" layoutY="495.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Logut" />
+        <JFXButton layoutX="58.0" layoutY="422.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Logut" />
         <JFXButton layoutX="58.0" layoutY="315.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Prorperties" />
-        <JFXButton layoutX="58.0" layoutY="360.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Transaction" />
     </children>
 </AnchorPane>
+
+
