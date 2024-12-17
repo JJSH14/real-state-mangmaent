@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.DownloadDataController" stylesheets="@styles.css">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Client ID:" styleClass="label"/>
+        <TextField fx:id="clientIDTextField" promptText="Enter Client ID" styleClass="text-field" HBox.hgrow="ALWAYS"/>
+        <Button text="Search" onAction="#searchClient" styleClass="button"/>
+    </HBox>
+    <TableView fx:id="clientInfoTable" styleClass="table-view" prefHeight="200" prefWidth="600">
+        <columns>
+            <TableColumn text="Field" fx:id="fieldColumn" styleClass="table-column"/>
+            <TableColumn text="Value" fx:id="valueColumn" styleClass="table-column"/>
+        </columns>
+    </TableView>
+    <Button text="Download Data" onAction="#downloadData" styleClass="button" disable="true" fx:id="downloadButton"/>
+    <ProgressIndicator fx:id="downloadProgress" visible="false" styleClass="progress-indicator"/>
+    <Button text="Back to Preferences" onAction="#goToPreferences" styleClass="button"/>
+</VBox>
