@@ -1,0 +1,43 @@
+.buttonhome {
+    -fx-background-color:  #dae4f5
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-style: solid;
+    -fx-border-color: #b2ba99;
+}
+.buttonhome:hover{
+    -fx-background-color : #BBC3A1;
+    -fx-cursor: hand;
+}
+.button1 {
+    -fx-background-color:  #dae4f5;
+    -fx-border-width: 2px 2px 2px 2px;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-border-style: solid;
+    -fx-border-color: #4a554a;
+    }
+
+    .pack1 {
+        -fx-background-color: rgb(19, 37, 73);
+        -fx-border-width: 2px 2px 2px 2px;
+        -fx-background-radius: 25px;
+    }
+
+    .pack {
+        -fx-background-color: rgb(186, 198, 224);
+        -fx-border-width: 2px 2px 2px 2px;
+        -fx-border-radius: 15px;
+        -fx-background-radius: 15px;
+        -fx-border-style: solid;
+        -fx-border-color:rgb(186, 198, 224);
+        -fx-effect: dropshadow(gaussian, rgb(186, 198, 224), 9,.2, 4, 4);
+
+     }
+
+     .img{
+
+    -fx-background-radius: 15px;
+
+     }
