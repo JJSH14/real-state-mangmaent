@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="402.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controller.authntociation.addAgentController">
+    <children>
+        <!-- Background with color gradient -->
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="388.0" prefWidth="442.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" height="403.0" layoutX="97.0" width="441.0">
+                    <fill>
+                        <RadialGradient centerY="0.3" cycleMethod="REFLECT" radius="1.0">
+                            <stops>
+                                <Stop>
+                                    <color>
+                                        <Color red="0.6779999732971191" green="0.7329999804496765" blue="0.8539999723434448" />
+                                    </color>
+                                </Stop>
+                                <Stop offset="1.0">
+                                    <color>
+                                        <Color red="0.30000001192092896" green="0.5" blue="0.800000011920929" />
+                                    </color>
+                                </Stop>
+                            </stops>
+                        </RadialGradient>
+                    </fill>
+                </Rectangle>
+
+                <!-- Logo or Header -->
+                <ImageView fitHeight="66.0" fitWidth="102.0" layoutX="221.0" layoutY="-7.0">
+                    <image>
+                        <Image url="@../../../../images/logo.png" />
+                    </image></ImageView>
+                <!-- Login Form -->
+                <Label layoutX="123.0" layoutY="191.0" text="Email:" />
+
+                <Label layoutX="110.0" layoutY="238.0" text="Password:" />
+
+                <!-- Accept terms checkbox -->
+                <CheckBox fx:id="acceptTerms" contentDisplay="RIGHT" layoutX="215.0" layoutY="281.0" nodeOrientation="RIGHT_TO_LEFT" text="Accept all privcy&amp;cookies" />
+                <Text fill="#3d52a0" layoutX="119.0" layoutY="94.0" text="ent">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <JFXButton fx:id="loginButton" layoutX="314.0" layoutY="339.0" prefWidth="64.0" ripplerFill="#5e3c3c" style="-fx-background-color: #8ca1e4;" text="Login" />
+                <TextField fx:id="emailField" layoutX="163.0" layoutY="183.0" prefHeight="26.0" prefWidth="210.0" promptText="Enter your email" />
+                <TextField fx:id="passwordField" layoutX="163.0" layoutY="233.0" prefHeight="26.0" prefWidth="210.0" promptText="Enter your password" />
+            <Text layoutX="38.0" layoutY="93.0" text="Create" wrappingWidth="64.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="96.0" layoutY="93.0" text="Ag">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="152.0" layoutY="94.0" text="Acc">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text fill="#3d52a0" layoutX="182.0" layoutY="94.0" text="ount">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <TextField fx:id="emailField1" layoutX="163.0" layoutY="129.0" prefHeight="26.0" prefWidth="90.0" promptText="first name" />
+            <TextField fx:id="emailField11" layoutX="282.0" layoutY="129.0" prefHeight="26.0" prefWidth="90.0" promptText="first name" />
+            <Label layoutX="109.0" layoutY="135.0" text="FullName:">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <Text layoutX="200.0" layoutY="32.0" text="Lobo" wrappingWidth="64.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text fill="#3d52a0" layoutX="216.0" layoutY="44.0" text="RE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="227.0" layoutY="57.0" text="MS" wrappingWidth="64.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="359.0" fitWidth="183.0" layoutX="-10.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../images/Agent.png" />
+               </image>
+            </ImageView>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
