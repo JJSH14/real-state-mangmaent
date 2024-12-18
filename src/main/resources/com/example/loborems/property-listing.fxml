@@ -35,7 +35,7 @@
             <Label layoutX="208.0" layoutY="103.0" style="-fx-text-fill: #154360; -fx-font-size: 12;" styleClass="property-value" text="Commercial" />
             <Label layoutX="150.0" layoutY="129.0" style="-fx-text-fill: #154360; -fx-font-size: 12;" styleClass="property-label" text="Status:" />
             <Label layoutX="208.0" layoutY="129.0" style="-fx-text-fill: #154360; -fx-font-size: 12;" styleClass="property-value" text="Sold" />
-            <Button layoutX="311.0" layoutY="117.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-text-fill: #154360; -fx-background-color: #EDE8F5;" text="View more" />
+            <Button layoutX="311.0" layoutY="117.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" style="-fx-font-size: 12; -fx-text-fill: #154360; -fx-background-color: #EDE8F5;" text="View more" fx:id="detailsPage" onMouseClicked="#onViewButtonClicked"/>
             <ImageView fitHeight="152.0" fitWidth="140.0" pickOnBounds="true">
                <image>
                   <Image url="@../../../images/property5.jpeg" />

@@ -4,6 +4,7 @@
 <?import javafx.geometry.Pos?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.loborems.ClientListPageController">
     <!-- Left Section (Form to Add Client) -->
     <left>
@@ -16,7 +17,16 @@
             <TextField fx:id="roleField" promptText="Enter Role" style="-fx-pref-width: 200;"/>
             <Button text="Add Client" fx:id="addClientButton" onAction="#onAddClientButtonClicked"
                     style="-fx-background-color: #14274d; -fx-text-fill: white; -fx-padding: 10 20; -fx-border-radius: 5;"/>
+            <Button fx:id="backButton"  text="Back" onAction="#onBackButtonClicked"
+                    style="-fx-background-color: #14274d; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 5 5; -fx-border-radius: 3; -fx-pref-width: 50;"
+                    StackPane.alignment="BOTTOM_LEFT">
+                <VBox.margin>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </VBox.margin>
+            </Button>
         </VBox>
+
+
     </left>
 
     <!-- Right Section (Table View of Clients) -->
@@ -45,6 +55,8 @@
         </VBox>
     </center>
 </BorderPane>
+
+
 
 
 

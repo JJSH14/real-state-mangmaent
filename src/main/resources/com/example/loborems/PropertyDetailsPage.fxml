@@ -9,7 +9,7 @@
             fx:controller="com.example.loborems.PropertyDetailsPageController">
     <!-- Root container -->
     <VBox spacing="20" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-background-color: #F9FAFB;">
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" style="-fx-background-color: #EDE8F5;">
 
         <!-- Header -->
         <Text text="Property Details" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #333;">
@@ -82,7 +82,17 @@
                     <Label text="• Bar and restaurant"/>
                     <Label text="• Wi-Fi and Fitness Center"/>
                 </VBox>
+                <HBox spacing="10" alignment="BOTTOM_LEFT">
+                    <Button fx:id="backButton" text="Back" onAction="#onBackButtonClicked"
+                            style="-fx-background-color: #14274d; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 5 5; -fx-border-radius: 3; -fx-pref-width: 50;" />
+                    <Button fx:id="editButton" text="Edit" onAction="#onEditButtonClicked"
+                            style="-fx-background-color: #14274d; -fx-text-fill: white; -fx-font-size: 12px; -fx-padding: 5 5; -fx-border-radius: 3; -fx-pref-width: 50;" />
+                    <VBox.margin>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </VBox.margin>
+                </HBox>
             </VBox>
         </HBox>
     </VBox>
 </AnchorPane>
+

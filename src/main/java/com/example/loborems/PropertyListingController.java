@@ -19,7 +19,7 @@ public class PropertyListingController implements javafx.fxml.Initializable {
     @FXML
     public Button navigateButton;
     public Button backButton;
-    @FXML
+    public Button detailsPage;    @FXML
     private Parent root;
     @FXML
     private VBox propertyListContainer;
@@ -52,5 +52,18 @@ public class PropertyListingController implements javafx.fxml.Initializable {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void onViewButtonClicked() {
+        try {
+            Stage stage = (Stage) detailsPage.getScene().getWindow();
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("propertyDetailsPage.fxml")));
+            stage.setScene(newScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load Client List Page.");
+        }
     }
 }
