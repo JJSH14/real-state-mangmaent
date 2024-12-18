@@ -4,9 +4,15 @@ import com.example.loborems.modules.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import java.io.IOException;
+
 public class ClientListPageController {
 
     @FXML
@@ -41,6 +47,9 @@ public class ClientListPageController {
 
     @FXML
     private Button addClientButton;
+
+    @FXML
+    private Button backButton;
 
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
 
@@ -180,6 +189,18 @@ public class ClientListPageController {
 
         if (searchQuery.isEmpty()) {
             clientTable.setItems(clientList); // إعادة القائمة الأصلية
+        }
+    }
+    @FXML
+    private void onBackButtonClicked() {
+        try {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard.fxml")));
+            stage.setScene(newScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load Client List Page.");
         }
     }
 }
