@@ -71,6 +71,13 @@ public class dashboord {
         window.setScene(newScene);
 
     }
+    public void goToDownloadData(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("DownloadData/download-data.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
 
 
 }
