@@ -251,7 +251,7 @@
         <JFXButton layoutX="58.0" layoutY="225.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Dashboard" />
         <JFXButton layoutX="58.0" layoutY="366.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@salah.css" text="Interactions" />
         <JFXButton layoutX="58.0" layoutY="270.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Client" />
-        <JFXButton layoutX="58.0" layoutY="315.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Properties" />
+        <JFXButton layoutX="58.0" layoutY="315.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@salah.css" text="Prorperties" />
         <JFXButton layoutX="773.0" layoutY="15.0" style="-fx-background-color: #0d1f43;" text="Add Agents" textFill="#f9fafb" />
       <JFXButton layoutX="766.0" layoutY="48.0" style="-fx-background-color: #0d1f43;" text="Remove Agent" textFill="#f9fafb" />
       <JFXButton layoutX="58.0" layoutY="409.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@salah.css" text="Tcategorization" />
