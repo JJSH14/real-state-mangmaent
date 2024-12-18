@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<?import java.lang.String?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+
+>
+
+
+   <left>
+      <VBox spacing="10" style="-fx-padding: 20;">
+         <!-- ComboBox for selecting client -->
+         <ComboBox fx:id="clientSelect" promptText="Select Client" />
+
+         <!-- ComboBox for Interaction Type -->
+         <ComboBox fx:id="interactionType" promptText="Select Interaction Type" />
+
+         <!-- DatePicker for Date -->
+         <DatePicker fx:id="datePicker" promptText="Select Date" />
+
+         <!-- TextArea for Interaction Details -->
+         <TextArea fx:id="interactionDetails" promptText="Interaction Details" />
+
+         <!-- Buttons -->
+         <HBox spacing="10">
+            <Button fx:id="cancelButton" text="Cancel" styleClass="cancel-button" />
+            <Button fx:id="saveButton" text="Save" styleClass="save-button" />
+         </HBox>
+      </VBox>
+   </left>
+   <center>
+      <!-- TableView for displaying interactions -->
+      <TableView fx:id="tableView" style="-fx-padding: 10;">
+         <columns>
+            <TableColumn fx:id="clientIDColumn" text="Client ID" prefWidth="150" />
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100" />
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="100" />
+            <TableColumn fx:id="interactionTypeColumn" text="Interaction Type" prefWidth="150" />
+         </columns>
+      </TableView>
+   </center>
+</BorderPane>

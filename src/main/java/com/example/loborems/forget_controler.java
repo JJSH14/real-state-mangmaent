@@ -17,4 +17,11 @@ public class forget_controler {
         window.setScene(newScene);
 
     }
+    public void goToLogin(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
 }
