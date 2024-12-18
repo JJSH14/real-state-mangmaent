@@ -51,7 +51,7 @@ public class dashboord {
     }
 
     public void goToAddAgents(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("add-agents.fxml"));
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("addAgent.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);

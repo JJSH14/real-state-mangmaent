@@ -69,4 +69,13 @@ public class LoginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public void goToForget(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("forgot-password.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+
 }
