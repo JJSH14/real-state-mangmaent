@@ -1,0 +1,73 @@
+/* Background color for the entire application */
+.root {
+    -fx-background-color: #F4F0FA; /* Softer lavender */
+}
+
+/* ComboBox and TextField styling */
+.combo-box, .text-field, .text-area {
+    -fx-background-color: #D0D8E9; /* Light gray-blue */
+    -fx-border-color: #8697C4;
+    -fx-border-radius: 8;
+    -fx-text-fill: #333333; /* Darker text */
+    -fx-font-size: 14px;
+    -fx-padding: 5;
+}
+
+.combo-box:hover, .text-field:hover, .text-area:hover {
+    -fx-background-color: #C5D0E3; /* Slight hover effect */
+    -fx-cursor: hand;
+}
+
+/* Button Styling */
+.button {
+    -fx-font-weight: bold;
+    -fx-border-radius: 5;
+    -fx-padding: 6 12;
+}
+
+.cancel-button {
+    -fx-background-color: #8697C4;
+    -fx-text-fill: #FFFFFF;
+}
+
+.save-button {
+    -fx-background-color: #7091E6;
+    -fx-text-fill: #FFFFFF;
+}
+
+.cancel-button:hover, .save-button:hover {
+    -fx-background-color: #3D52A0;
+    -fx-cursor: hand;
+}
+
+/* TableView Styling */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #ADBBDA;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #3D52A0;
+    -fx-border-radius: 5 5 0 0; /* Rounded top corners */
+}
+
+.table-view .column-header, .table-view .table-cell {
+    -fx-text-fill: #333333;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #F9F8FC; /* Light lavender */
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #EDE8F5; /* Alternate row */
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #C3CFEF; /* Selected row */
+    -fx-text-fill: BLACK;
+}
