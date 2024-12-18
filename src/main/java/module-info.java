@@ -1,5 +1,4 @@
 module com.example.loborems {
-    requires javafx.controls;
     requires javafx.fxml;
 
     requires org.controlsfx.controls;

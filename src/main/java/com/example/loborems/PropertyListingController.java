@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 public class PropertyListingController implements javafx.fxml.Initializable {
     @FXML
     public Button navigateButton;
+    public Button backButton;
     @FXML
     private Parent root;
     @FXML
@@ -35,20 +36,21 @@ public class PropertyListingController implements javafx.fxml.Initializable {
 
     @FXML
     public void handleButtonClick(ActionEvent event) throws IOException {
-        // Load the FXML file for the new scene
+
         Parent root = FXMLLoader.load(getClass().getResource("add-property.fxml"));
-
-        // Get the current stage from the event source
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Create a new scene with specified dimensions (900x650) and add the CSS stylesheet
-        scene = new Scene(root, 900, 650); // Set dimensions here
+        scene = new Scene(root, 900, 650);
         scene.getStylesheets().add(getClass().getResource("addPropertyStyles.css").toExternalForm());
-
-        // Set the new scene and show the stage
         stage.setScene(scene);
         stage.show();
     }
 
 
+    public void handleBackClick(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

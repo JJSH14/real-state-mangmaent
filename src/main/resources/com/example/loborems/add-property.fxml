@@ -12,7 +12,7 @@
       alignment="CENTER"
       styleClass="add-property-container">
 
-    <!-- Apply addPropertyStyles.css -->
+
     <stylesheets>
         <String fx:value="@addPropertyStyles.css"/>
     </stylesheets>
