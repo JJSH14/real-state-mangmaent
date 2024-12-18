@@ -27,7 +27,7 @@ public class dashboord {
 
     }
     public void goToInteractions(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("interactions.fxml"));
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("ClientInteractionUi/ClaientIntersction.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
