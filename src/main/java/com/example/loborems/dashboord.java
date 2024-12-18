@@ -10,15 +10,54 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class dashboord {
-public void logout(ActionEvent event) throws IOException {
-    Parent secondRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
-    Scene newScene = new Scene(secondRoot);
-    Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    window.setScene(newScene);
+    public void logout(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
 
 
+    }
 
-}
+    public void goToDashboard(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("Dashboard.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+    public void goToInteractions(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("interactions.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+
+    public void goToClients(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("ClientListPage.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+
+    public void goToProperties(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("property-listing.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+
+    public void goToAddAgents(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("add-agents.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+
 
 }
 
