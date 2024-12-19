@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.DownloadDataController" stylesheets="@styles.css">
+<VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.DownloadDataController" stylesheets="@download-data.css">
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Client ID:" styleClass="label"/>
         <TextField fx:id="clientIDTextField" promptText="Enter Client ID" styleClass="text-field" HBox.hgrow="ALWAYS"/>
@@ -17,5 +17,5 @@
     </TableView>
     <Button text="Download Data" onAction="#downloadData" styleClass="button" disable="true" fx:id="downloadButton"/>
     <ProgressIndicator fx:id="downloadProgress" visible="false" styleClass="progress-indicator"/>
-    <Button text="Back to Preferences" onAction="#goToPreferences" styleClass="button"/>
+    <Button text="Back to Preferences" onAction="#handleBack" styleClass="button"/>
 </VBox>

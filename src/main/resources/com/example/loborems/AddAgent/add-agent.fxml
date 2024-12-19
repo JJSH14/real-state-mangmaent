@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox prefHeight="402.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+    <children>
+        <!-- Background with color gradient -->
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="388.0" prefWidth="442.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Rectangle fx:id="addButton" arcHeight="5.0" arcWidth="5.0" height="403.0" layoutX="-1.0" width="539.0">
+                    <fill>
+                        <RadialGradient centerY="0.3" cycleMethod="REFLECT" radius="1.0">
+                            <stops>
+                                <Stop>
+                                    <color>
+                                        <Color red="0.6779999732971191" green="0.7329999804496765" blue="0.8539999723434448" />
+                                    </color>
+                                </Stop>
+                                <Stop offset="1.0">
+                                    <color>
+                                        <Color red="0.30000001192092896" green="0.5" blue="0.800000011920929" />
+                                    </color>
+                                </Stop>
+                            </stops>
+                        </RadialGradient>
+                    </fill>
+                </Rectangle>
+
+                <!-- Logo or Header -->
+                <ImageView fitHeight="66.0" fitWidth="102.0" layoutX="431.0" layoutY="-7.0">
+                    <image>
+                        <Image url="@../../../images/logo.png" />
+                    </image></ImageView>
+                <!-- Login Form -->
+                <Label layoutX="139.0" layoutY="186.0" text="Email:" />
+
+                <Label layoutX="131.0" layoutY="238.0" text="Password:" />
+
+                <!-- Accept terms checkbox -->
+                <CheckBox fx:id="acceptTerms" contentDisplay="RIGHT" layoutX="347.0" layoutY="288.0" nodeOrientation="RIGHT_TO_LEFT" text="Sure?" />
+                <Text fill="#3d52a0" layoutX="263.0" layoutY="67.0" text="ent">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <JFXButton fx:id="loginButton" layoutX="338.0" layoutY="338.0" prefWidth="64.0" ripplerFill="#5e3c3c" style="-fx-background-color: #8ca1e4;" text="Add" />
+                <TextField fx:id="emailField" layoutX="189.0" layoutY="183.0" prefHeight="26.0" prefWidth="210.0" promptText="Enter your email" />
+                <TextField fx:id="passwordField" layoutX="189.0" layoutY="234.0" prefHeight="26.0" prefWidth="210.0" promptText="Enter your password" />
+                <Text layoutX="240.0" layoutY="67.0" text="Ag">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text layoutX="297.0" layoutY="67.0" text="Acc">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text fill="#3d52a0" layoutX="328.0" layoutY="68.0" text="ount">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Label layoutX="129.0" layoutY="144.0" text="FullName:">
+                    <font>
+                        <Font size="11.0" />
+                    </font>
+                </Label>
+                <Text layoutX="411.0" layoutY="32.0" text="Lobo" wrappingWidth="64.0">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text fill="#3d52a0" layoutX="427.0" layoutY="44.0" text="RE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text layoutX="437.0" layoutY="57.0" text="MS" wrappingWidth="64.0">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text layoutX="197.0" layoutY="67.0" text="drop" wrappingWidth="64.0">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text fill="#3d52a0" layoutX="179.0" layoutY="68.0" text="&amp;">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <Text fill="#3d52a0" layoutX="143.0" layoutY="68.0" text="Add">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Text>
+                <TextField fx:id="full_name" layoutX="188.0" layoutY="137.0" prefHeight="26.0" prefWidth="210.0" promptText="Enter your name" />
+                <ImageView fitHeight="416.0" fitWidth="329.0" layoutX="-16.0" layoutY="-35.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../../images/Agent.png" />
+                    </image>
+                </ImageView>
+                <ChoiceBox fx:id="roleChoiceBox" layoutX="197.0" layoutY="284.0" prefHeight="26.0" prefWidth="102.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="admin" />
+                            <String fx:value="agent" />
+                        </FXCollections>
+                    </items>
+                </ChoiceBox>
+                <Label fx:id="Type" layoutX="143.0" layoutY="289.0" text="Type:" />
+
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      spacing="10"
+      alignment="CENTER">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <TabPane VBox.vgrow="ALWAYS">
+        <Tab text="Offers Management">
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Client Name:" />
+                    <TextField fx:id="clientNameField" HBox.hgrow="ALWAYS" promptText="Enter client name"/>
+
+                    <Label text="Property Type:" />
+                    <ComboBox fx:id="propertyTypeCombo" promptText="Select Property Type">
+                    </ComboBox>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Offer Type:" />
+                    <ComboBox fx:id="offerTypeCombo" promptText="Select Offer Type">
+                        <items>
+                        </items>
+                    </ComboBox>
+
+                    <Label text="Price:" />
+                    <TextField fx:id="priceField" promptText="Enter offer price"/>
+
+                    <Button text="Add Offer" fx:id="addOfferButton" />
+                </HBox>
+
+                <TableView fx:id="offersTable">
+                    <columns>
+                        <TableColumn text="Client Name" fx:id="clientNameColumn"/>
+                        <TableColumn text="Property Type" fx:id="propertyTypeColumn"/>
+                        <TableColumn text="Offer Type" fx:id="offerTypeColumn"/>
+                        <TableColumn text="Price" fx:id="priceColumn"/>
+                        <TableColumn text="Status" fx:id="statusColumn"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+
+        <Tab text="Client Management">
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Name:" />
+                    <TextField fx:id="clientNameInputField" HBox.hgrow="ALWAYS" promptText="Enter client name"/>
+
+                    <Label text="Contact Info:" />
+                    <TextField fx:id="contactInfoField" promptText="Enter contact information"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Client Category:" />
+                    <ComboBox fx:id="clientCategoryCombo" promptText="Select Client Category">
+                    </ComboBox>
+
+                    <Label text="Preferences:" />
+                    <TextField fx:id="preferencesField" promptText="Enter property preferences"/>
+
+                    <Button text="Add Client" fx:id="addClientButton" />
+                </HBox>
+
+                <TableView fx:id="clientsTable">
+                    <columns>
+                        <TableColumn text="Name" fx:id="clientNameColumn2"/>
+                        <TableColumn text="Contact Info" fx:id="contactInfoColumn"/>
+                        <TableColumn text="Category" fx:id="categoryColumn"/>
+                        <TableColumn text="Preferences" fx:id="preferencesColumn"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>
