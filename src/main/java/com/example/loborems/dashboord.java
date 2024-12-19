@@ -27,7 +27,7 @@ public class dashboord {
 
     }
     public void goToInteractions(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("interactions.fxml"));
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("ClientInteractionUi/ClaientIntersction.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
@@ -52,6 +52,27 @@ public class dashboord {
 
     public void goToAddAgents(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("addAgent.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+    public void goToCategorisation(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("Client-Categorization.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+    public void goToOffers(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("offer-page.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+
+    }
+    public void goToDownloadData(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("DownloadData/download-data.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);

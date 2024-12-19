@@ -1,9 +1,15 @@
 package com.example.loborems;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class PropertyDetailsPageController {
 
@@ -24,6 +30,13 @@ public class PropertyDetailsPageController {
 
     @FXML
     private ImageView thumbImage4;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button editButton;
+
 
     // مسارات الصور
     private final String[] imagePaths = {
@@ -75,4 +88,34 @@ public class PropertyDetailsPageController {
             imageView.setScaleY(1.0);
         });
     }
+
+    @FXML
+    private void onBackButtonClicked() {
+        try {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("property-listing.fxml")));
+            stage.setScene(newScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load Client List Page.");
+        }
+    }
+
+    @FXML
+    private void onEditButtonClicked() {
+        try {
+            Stage stage = (Stage) backButton.getScene().getWindow();
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("add-property.fxml")));
+
+            // Adding the CSS file to the scene
+            newScene.getStylesheets().add(getClass().getResource("addPropertyStyles.css").toExternalForm());
+
+            stage.setScene(newScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load Client List Page.");
+        }
+    }
+
 }
