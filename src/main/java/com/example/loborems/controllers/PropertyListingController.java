@@ -19,7 +19,8 @@ public class PropertyListingController implements javafx.fxml.Initializable {
     @FXML
     public Button navigateButton;
     public Button backButton;
-    public Button detailsPage;    @FXML
+    public Button detailsPage;    
+    @FXML
     private Parent root;
     @FXML
     private VBox propertyListContainer;
