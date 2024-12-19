@@ -1,12 +1,13 @@
 package com.example.loborems.util;
 
 
-import com.example.loborems.modules.Client;
-import com.example.loborems.modules.Interaction;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+
+import com.example.loborems.models.Client;
+import com.example.loborems.models.Interaction;
 
 
 public class HibernateUtil {

@@ -19,11 +19,12 @@ module com.example.loborems {
 
     opens com.example.loborems to javafx.fxml;
     exports com.example.loborems;
+    exports com.example.loborems.controllers;
     exports com.example.loborems.interfaces;
     opens com.example.loborems.interfaces to javafx.fxml;
-    opens com.example.loborems.modules to javafx.fxml, org.hibernate.orm.core;  // Open to both javafx.fxml and Hibernate;
-    exports com.example.loborems.modules;
+    opens com.example.loborems.models to javafx.fxml, org.hibernate.orm.core;  // Open to both javafx.fxml and Hibernate;
+    exports com.example.loborems.models;
     opens com.example.loborems.util to javafx.fxml;
     exports com.example.loborems.util;
-    opens com.example.loborems.Controller to javafx.fxml;
+    opens com.example.loborems.controllers to javafx.fxml;
 }
