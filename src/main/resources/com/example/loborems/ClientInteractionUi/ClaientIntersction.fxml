@@ -11,10 +11,6 @@
 
 >
 
-   <stylesheets>
-      <String value="@style.css" />
-   </stylesheets>
-
    <left>
       <VBox spacing="10" style="-fx-padding: 20;">
          <!-- ComboBox for selecting client -->

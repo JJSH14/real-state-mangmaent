@@ -25,4 +25,5 @@ module com.example.loborems {
     exports com.example.loborems.modules;
     opens com.example.loborems.util to javafx.fxml;
     exports com.example.loborems.util;
+    opens com.example.loborems.Controller to javafx.fxml;
 }
