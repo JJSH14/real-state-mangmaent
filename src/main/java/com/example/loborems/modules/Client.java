@@ -2,13 +2,25 @@ package com.example.loborems.modules;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.hibernate.annotations.Entity;
 
+import javax.persistence.*;
+
+@Entity
+@Table (name = "client")
 public class Client {
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private StringProperty id;
+    @Column (name = "name")
     private StringProperty name;
+    @Column (name = "email")
     private StringProperty email;
+    @Column (name = "phone")
     private StringProperty phone;
+    @Column (name = "property")
     private StringProperty property;
+    @Column (name = "role")
     private StringProperty role;
 
     public Client(String id, String name, String email, String phone, String property, String role) {
