@@ -1,6 +1,6 @@
-package com.example.loborems.modules.Interfaces;
+package com.example.loborems.models.Interfaces;
 
-import com.example.loborems.modules.User;
+import com.example.loborems.models.User;
 
 import java.util.List;
 
