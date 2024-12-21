@@ -28,7 +28,7 @@ public class addAgentController {
     private JFXTextField passwordField;
 
     @FXML
-    private JFXButton addButton;
+    private JFXButton addButton1;
 
     @FXML
     private JFXCheckBox acceptTerms;
@@ -103,7 +103,7 @@ public class addAgentController {
     }
 
     private boolean validateFields() {
-        addButton.setDisable(true);
+        addButton1.setDisable(true);
 
         // Check if any field is empty
         if (isFieldEmpty(emailField) ||
@@ -134,7 +134,7 @@ public class addAgentController {
             return false;
         }
 
-        addButton.setDisable(false);
+        addButton1.setDisable(false);
         return true;
     }
 
