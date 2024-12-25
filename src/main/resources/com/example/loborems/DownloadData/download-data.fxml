@@ -17,5 +17,5 @@
     </TableView>
     <Button text="Download Data" onAction="#downloadData" styleClass="button" disable="true" fx:id="downloadButton"/>
     <ProgressIndicator fx:id="downloadProgress" visible="false" styleClass="progress-indicator"/>
-    <Button text="Back to Preferences" onAction="#handleBack" styleClass="button"/>
+    <Button text="Back" onAction="#handleBack" styleClass="button"/>
 </VBox>
