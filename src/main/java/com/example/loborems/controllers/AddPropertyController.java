@@ -1,4 +1,5 @@
 package com.example.loborems.controllers;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,9 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class AddPropertyController {
     @FXML
@@ -52,34 +55,88 @@ public class AddPropertyController {
     @FXML
     public void handleSaveProperty(ActionEvent actionEvent) {
         if (validateInput()) {
-            // Here you would implement property saving logic
-            // This could involve creating a Property object and saving to MongoDB
+            if (selectedPhotos.size() != 5) {
+                showAlert("Validation Error", "Please upload 5 photos.");
+                return;
+            }
+
             showAlert("Property Saved", "Property has been successfully added.");
+            navigateToPropertyListing(actionEvent);
             clearForm();
+        }
+    }
+
+    private void navigateToPropertyListing(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            showAlert("Navigation Error", "Could not load the previous page: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @FXML
     public void handleCancel(ActionEvent actionEvent) {
-        clearForm();
-        // Optionally navigate back to previous scene
+        if (areAllFieldsEmpty()) {
+            navigateToPropertyListing(actionEvent);
+        } else {
+            clearForm();
+        }
+    }
+
+    private boolean areAllFieldsEmpty() {
+        return allFieldsEmpty().test(titleField) &&
+                allFieldsEmpty().test(locationField) &&
+                allFieldsEmpty().test(priceField) &&
+                allFieldsEmpty().test(featuresArea) &&
+                allFieldsEmpty().test(sizeField) &&
+                propertyTypeComboBox.getValue() == null &&
+                statusComboBox.getValue() == null &&
+                selectedPhotos.isEmpty();
+    }
+
+    private Predicate<javafx.scene.Node> allFieldsEmpty() {
+        return field -> field instanceof TextField && ((TextField) field).getText().trim().isEmpty() ||
+                field instanceof TextArea && ((TextArea) field).getText().trim().isEmpty() ||
+                field instanceof ComboBox && ((ComboBox<?>) field).getValue() == null;
     }
 
     private boolean validateInput() {
         StringBuilder errors = new StringBuilder();
 
-        if (titleField.getText().trim().isEmpty()) {
-            errors.append("Property title is required.\n");
+        validateField(titleField, "Property title is required.", errors);
+        validateField(locationField, "Location is required.", errors);
+        validateComboBox(propertyTypeComboBox, "Property type must be selected.", errors);
+        validateComboBox(statusComboBox, "Property status must be selected.", errors);
+        validatePrice(errors);
+        validateSize(errors);
+
+        if (errors.length() > 0) {
+            showAlert("Validation Error", errors.toString());
+            return false;
         }
-        if (locationField.getText().trim().isEmpty()) {
-            errors.append("Location is required.\n");
+        return true;
+    }
+
+    private void validateField(TextField field, String errorMessage, StringBuilder errors) {
+        if (field.getText().trim().isEmpty()) {
+            errors.append(errorMessage).append("\n");
         }
-        if (propertyTypeComboBox.getValue() == null) {
-            errors.append("Property type must be selected.\n");
+    }
+
+    private void validateComboBox(ComboBox<String> comboBox, String errorMessage, StringBuilder errors) {
+        if (comboBox.getValue() == null) {
+            errors.append(errorMessage).append("\n");
         }
-        if (statusComboBox.getValue() == null) {
-            errors.append("Property status must be selected.\n");
-        }
+    }
+
+    private void validatePrice(StringBuilder errors) {
         try {
             double price = Double.parseDouble(priceField.getText());
             if (price <= 0) {
@@ -88,14 +145,15 @@ public class AddPropertyController {
         } catch (NumberFormatException e) {
             errors.append("Invalid price format.\n");
         }
+    }
+
+    private void validateSize(StringBuilder errors) {
         try {
             String sizeText = sizeField.getText().trim();
 
-            // Check if the size field is empty
             if (sizeText.isEmpty()) {
-                errors.append("Property is required\n");
+                errors.append("Property size is required.\n");
             } else {
-                // Parse the size value only if it's not empty
                 double size = Double.parseDouble(sizeText);
 
                 if (size <= 0) {
@@ -105,12 +163,6 @@ public class AddPropertyController {
         } catch (NumberFormatException e) {
             errors.append("Invalid size format. Please enter a valid number.\n");
         }
-
-        if (errors.length() > 0) {
-            showAlert("Validation Error", errors.toString());
-            return false;
-        }
-        return true;
     }
 
     private void clearForm() {
@@ -133,24 +185,38 @@ public class AddPropertyController {
         alert.showAndWait();
     }
 
+    private boolean hasUnsavedChanges() {
+        return anyFieldModified().test(titleField) ||
+                anyFieldModified().test(locationField) ||
+                anyFieldModified().test(priceField) ||
+                anyFieldModified().test(featuresArea) ||
+                anyFieldModified().test(sizeField) ||
+                propertyTypeComboBox.getValue() != null ||
+                statusComboBox.getValue() != null ||
+                !selectedPhotos.isEmpty();
+    }
+
+    private Predicate<javafx.scene.Node> anyFieldModified() {
+        return field -> field instanceof TextField && !((TextField) field).getText().trim().isEmpty() ||
+                field instanceof TextArea && !((TextArea) field).getText().trim().isEmpty() ||
+                field instanceof ComboBox && ((ComboBox<?>) field).getValue() != null;
+    }
+
     public void handleBack(ActionEvent actionEvent) {
-        try {
-            // Load the previous scene (e.g., property list or dashboard)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
-            Parent root = loader.load();
-
-            // Get the current stage
-            Stage stage = (Stage) ((javafx.scene.Node)actionEvent.getSource()).getScene().getWindow();
-
-            // Set the new scene
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            // Show an error alert if loading fails
-            showAlert("Navigation Error", "Could not load the previous page: " + e.getMessage());
-            e.printStackTrace();
+        if (hasUnsavedChanges()) {
+            if (confirmDiscardChanges()) {
+                navigateToPropertyListing(actionEvent);
+            }
+        } else {
+            navigateToPropertyListing(actionEvent);
         }
     }
-}
 
+    private boolean confirmDiscardChanges() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Unsaved Changes");
+        alert.setHeaderText(null);
+        alert.setContentText("You have unsaved changes. Do you want to discard them?");
+        return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
+    }
+}

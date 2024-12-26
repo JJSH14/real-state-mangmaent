@@ -1,6 +1,6 @@
 /* Modern, vibrant color palette with professional real estate theme */
 .add-property-container {
-    -fx-background-color:  #EDE8F5; /* Light blue for a refreshing background */
+    -fx-background-color:  #fff; /* Light blue for a refreshing background */
     -fx-font-family: 'Inter';
 }
 
@@ -14,7 +14,7 @@
 }
 
 .label {
-    -fx-text-fill: #1c2833; /* Darker text for readability */
+    -fx-text-fill: #4051A6; /* Darker text for readability */
     -fx-font-weight: bold;
     -fx-font-size: 14px; /* Slightly larger label text */
 }
@@ -35,7 +35,7 @@
 }
 
 .primary-button {
-    -fx-background-color:  #8697C4; /* Changed to deep blue for a professional tone */
+    -fx-background-color:  #7191E6; /* Changed to deep blue for a professional tone */
     -fx-text-fill:#f9fafb; /* Keep text color white */
     -fx-font-weight: bold;
     -fx-background-radius: 12px; /* Increased radius for more rounded corners */
@@ -58,7 +58,7 @@
     -fx-font-size: 14px;
 }
 .back-button {
-    -fx-background-color: #dae4f5; /* Light blue for a calm, secondary feel */
+    -fx-background-color: #7191E6; /* Light blue for a calm, secondary feel */
         -fx-text-fill: #154360;
         -fx-font-weight: bold;
         -fx-background-radius: 12px; /* Increased radius for more rounded corners */

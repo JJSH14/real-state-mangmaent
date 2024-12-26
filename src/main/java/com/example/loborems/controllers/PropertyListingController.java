@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.event.ActionEvent; // Correct import
+import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +19,7 @@ public class PropertyListingController implements javafx.fxml.Initializable {
     @FXML
     public Button navigateButton;
     public Button backButton;
-    public Button detailsPage;    
+    public Button detailsPage;
     @FXML
     private Parent root;
     @FXML
@@ -54,16 +54,5 @@ public class PropertyListingController implements javafx.fxml.Initializable {
         stage.show();
     }
 
-    @FXML
-    public void onViewButtonClicked() {
-        try {
-            Stage stage = (Stage) detailsPage.getScene().getWindow();
-            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyDetails/property-details.fxml")));
-            stage.setScene(newScene);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to load Client List Page.");
-        }
-    }
 }

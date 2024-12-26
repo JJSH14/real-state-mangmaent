@@ -12,6 +12,7 @@ module com.example.loborems {
     requires java.sql;
     requires mysql.connector.java;
     requires java.persistence;
+    requires java.desktop;
 
 
     // Export and open necessary packages
