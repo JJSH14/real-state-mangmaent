@@ -1,46 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
-<?import java.lang.String?>
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-
+<BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.loborems.controllers.ClientInteractionController"
-
+            stylesheets="@client-interaction.css"
 >
 
    <left>
-      <VBox spacing="10" style="-fx-padding: 20;">
+      <VBox prefWidth="250" spacing="15" styleClass="left-panel">
+         <Label styleClass="label" text="Client Interaction" />
+
          <!-- ComboBox for selecting client -->
-         <ComboBox fx:id="clientSelect" promptText="Select Client" />
+         <ComboBox fx:id="clientSelect" promptText="Select Client" styleClass="combo-box" />
 
          <!-- ComboBox for Interaction Type -->
-         <ComboBox fx:id="interactionType" promptText="Select Interaction Type" />
+         <ComboBox fx:id="interactionType" promptText="Select Interaction Type" styleClass="combo-box" />
 
          <!-- DatePicker for Date -->
-         <DatePicker fx:id="datePicker" promptText="Select Date" />
+         <DatePicker fx:id="datePicker" promptText="Select Date" styleClass="date-picker" />
 
          <!-- TextArea for Interaction Details -->
-         <TextArea fx:id="interactionDetails" promptText="Interaction Details" />
+         <TextArea fx:id="interactionDetails" prefHeight="120" promptText="Interaction Details" styleClass="text-area" />
 
          <!-- Buttons -->
          <HBox spacing="10">
-            <Button fx:id="cancelButton" text="Cancel" styleClass="cancel-button" />
-            <Button fx:id="saveButton" text="Save" styleClass="save-button" />
+            <Button fx:id="cancelButton" styleClass="button" text="Cancel" />
+            <Button fx:id="saveButton" styleClass="button" text="Save" />
+            <Button fx:id="backButton" styleClass="button" text="Back" />
          </HBox>
       </VBox>
    </left>
-   <center>
-      <!-- TableView for displaying interactions -->
-      <TableView fx:id="tableView" style="-fx-padding: 10;">
+
+   <bottom>
+      <TableView fx:id="tableView" styleClass="table-view">
          <columns>
-            <TableColumn fx:id="clientIDColumn" text="Client ID" prefWidth="150" />
-            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100" />
-            <TableColumn fx:id="dateColumn" text="Date" prefWidth="100" />
-            <TableColumn fx:id="interactionTypeColumn" text="Interaction Type" prefWidth="150" />
+            <TableColumn fx:id="clientIDColumn" prefWidth="150" styleClass="table-column" text="Client ID" />
+            <TableColumn fx:id="statusColumn" prefWidth="100" styleClass="table-column" text="Status" />
+            <TableColumn fx:id="dateColumn" prefWidth="100" styleClass="table-column" text="Date" />
+            <TableColumn fx:id="interactionTypeColumn" prefWidth="150" styleClass="table-column" text="Interaction Type" />
          </columns>
       </TableView>
+   </bottom>
+
+   <center>
+      <ImageView fx:id="imageView" styleClass="image-view" pickOnBounds="true" BorderPane.alignment="CENTER">
+         <image>
+            <Image url="@../../../../images/4439992.png" />
+         </image>
+      </ImageView>
    </center>
+
 </BorderPane>
