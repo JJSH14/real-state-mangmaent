@@ -2,3 +2,43 @@
 
 
 
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color:#FFF;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 14;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #8697C3;
+    -fx-background-radius: 7;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: #EDE8F5;
+    -fx-border-color: transparent;
+    -fx-background-radius: 7;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.property-container {
+    -fx-padding: 10;
+    -fx-alignment: center;
+}
+
+#addPropertyButton:hover, #backButton:hover {
+    -fx-background-color: #7486B3;
+    -fx-cursor: hand;
+}
