@@ -52,8 +52,13 @@ public class DOAClient implements DOA<Client> {
 
     @Override
     public List<Client> findAll() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("FROM Client", Client.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
     }
-
-
 }

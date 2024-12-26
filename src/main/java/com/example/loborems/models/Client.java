@@ -1,103 +1,113 @@
 package com.example.loborems.models;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "client")
 public class Client {
-    private StringProperty id;
-    private StringProperty name;
-    private StringProperty email;
-    private StringProperty phone;
-    private StringProperty property;
-    private StringProperty role;
 
-    public Client(String id, String name, String email, String phone, String property, String role) {
-        this.id = new SimpleStringProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.email = new SimpleStringProperty(email);
-        this.phone = new SimpleStringProperty(phone);
-        this.property = new SimpleStringProperty(property);
-        this.role = new SimpleStringProperty(role);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
+
+    @Column(name = "property")
+    private String property;
+
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    public Client() {}
+
+
+    public Client(String name, String email, String phone, String property, String role) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.property = property;
+        this.role = role;
     }
 
-    // Getter and setter for ID
-    public String getId() {
-        return id.get();
+    public SimpleIntegerProperty idProperty() {
+        return new SimpleIntegerProperty(id);
     }
 
-    public void setId(String id) {
-        this.id.set(id);
+    public SimpleStringProperty nameProperty() {
+        return new SimpleStringProperty(name);
     }
 
-    public StringProperty idProperty() {
+    public SimpleStringProperty emailProperty() {
+        return new SimpleStringProperty(email);
+    }
+
+    public SimpleStringProperty phoneProperty() {
+        return new SimpleStringProperty(phone);
+    }
+
+    public SimpleStringProperty propertyProperty() {
+        return new SimpleStringProperty(property);
+    }
+
+    public SimpleStringProperty roleProperty() {
+        return new SimpleStringProperty(role);
+    }
+
+    public int getId() {
         return id;
     }
 
-    // Getter and setter for Name
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
-        return name.get();
-    }
-
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public StringProperty nameProperty() {
         return name;
     }
 
-    // Getter and setter for Email
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getEmail() {
-        return email.get();
-    }
-
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-
-    public StringProperty emailProperty() {
         return email;
     }
 
-    // Getter and setter for Phone
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPhone() {
-        return phone.get();
-    }
-
-    public void setPhone(String phone) {
-        this.phone.set(phone);
-    }
-
-    public StringProperty phoneProperty() {
         return phone;
     }
 
-    // Getter and setter for Property
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getProperty() {
-        return property.get();
-    }
-
-    public void setProperty(String property) {
-        this.property.set(property);
-    }
-
-    public StringProperty propertyProperty() {
         return property;
     }
 
-    // Getter and setter for Role
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
     public String getRole() {
-        return role.get();
+        return role;
     }
 
     public void setRole(String role) {
-        this.role.set(role);
-    }
-
-    public StringProperty roleProperty() {
-        return role;
+        this.role = role;
     }
 }
-
-
-

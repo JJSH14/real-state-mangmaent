@@ -56,40 +56,43 @@ public class ClientListController {
 
     @FXML
     public void initialize() {
-        // ربط الأعمدة بالبيانات
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
-        phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
-        propertyColumn.setCellValueFactory(cellData -> cellData.getValue().propertyProperty());
-        roleColumn.setCellValueFactory(cellData -> cellData.getValue().roleProperty());
-
+        bindTableColumns();
         addEditButtonToTable();
         addDeleteButtonToTable();
 
         clientTable.setItems(clientList);
 
-        // إضافة وظيفة البحث
+        // Add search functionality
         searchField.textProperty().addListener((observable, oldValue, newValue) -> searchClients(newValue));
     }
 
-    // زر إضافة عميل
+    // Bind table columns to the Client properties
+    private void bindTableColumns() {
+
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+        phoneColumn.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+        propertyColumn.setCellValueFactory(cellData -> cellData.getValue().propertyProperty());
+        roleColumn.setCellValueFactory(cellData -> cellData.getValue().roleProperty());
+    }
+
+    // Handle Add/Update Client button click
     @FXML
     private void onAddClientButtonClicked() {
-        String name = nameField.getText();
-        String email = emailField.getText();
-        String phone = phoneField.getText();
-        String property = propertyField.getText();
-        String role = roleField.getText();
+        String name = nameField.getText().trim();
+        String email = emailField.getText().trim();
+        String phone = phoneField.getText().trim();
+        String property = propertyField.getText().trim();
+        String role = roleField.getText().trim();
 
-        if (!name.isEmpty()) {
-            String newId = String.valueOf(clientList.size() + 1); // توليد ID تلقائي
-            clientList.add(new Client(newId, name, email, phone, property, role));
+        if (validateFields(name, email, phone, role)) {
+            String newId = String.valueOf(clientList.size() + 1); // Generate unique ID
+            clientList.add(new Client( name, email, phone, property, role));
             clearFields();
         }
     }
 
-    // إضافة زر Edit لكل صف
+    // Add Edit button to each row
     private void addEditButtonToTable() {
         Callback<TableColumn<Client, Void>, TableCell<Client, Void>> cellFactory = param -> new TableCell<>() {
             private final Button editButton = new Button("Edit");
@@ -105,18 +108,14 @@ public class ClientListController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(editButton);
-                }
+                setGraphic(empty ? null : editButton);
             }
         };
 
         editColumn.setCellFactory(cellFactory);
     }
 
-    // إضافة زر Delete لكل صف
+    // Add Delete button to each row
     private void addDeleteButtonToTable() {
         Callback<TableColumn<Client, Void>, TableCell<Client, Void>> cellFactory = param -> new TableCell<>() {
             private final Button deleteButton = new Button("Delete");
@@ -132,18 +131,14 @@ public class ClientListController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(deleteButton);
-                }
+                setGraphic(empty ? null : deleteButton);
             }
         };
 
         removeColumn.setCellFactory(cellFactory);
     }
 
-    // ملء الحقول لتحرير العميل
+    // Populate fields for editing an existing client
     private void populateFieldsForEdit(Client client) {
         nameField.setText(client.getName());
         emailField.setText(client.getEmail());
@@ -155,21 +150,28 @@ public class ClientListController {
         addClientButton.setOnAction(event -> updateClient(client));
     }
 
-    // تحديث بيانات العميل
+    // Update client details
     private void updateClient(Client client) {
-        client.setName(nameField.getText());
-        client.setEmail(emailField.getText());
-        client.setPhone(phoneField.getText());
-        client.setProperty(propertyField.getText());
-        client.setRole(roleField.getText());
+        if (validateFields(nameField.getText(), emailField.getText(), phoneField.getText(), roleField.getText())) {
+            client.setName(nameField.getText());
+            client.setEmail(emailField.getText());
+            client.setPhone(phoneField.getText());
+            client.setProperty(propertyField.getText());
+            client.setRole(roleField.getText());
 
-        clientTable.refresh();
+            clientTable.refresh();
+            resetAddClientButton();
+        }
+    }
+
+    // Reset Add Client button to default state
+    private void resetAddClientButton() {
         clearFields();
         addClientButton.setText("Add Client");
         addClientButton.setOnAction(event -> onAddClientButtonClicked());
     }
 
-    // مسح الحقول بعد الإضافة أو التحديث
+    // Clear input fields
     private void clearFields() {
         nameField.clear();
         emailField.clear();
@@ -178,7 +180,28 @@ public class ClientListController {
         roleField.clear();
     }
 
-    // البحث عن العملاء
+    // Validate fields for non-empty and email format
+    private boolean validateFields(String name, String email, String phone, String role) {
+        if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || role.isEmpty()) {
+            showAlert("Validation Error", "All fields are required.", Alert.AlertType.ERROR);
+            return false;
+        }
+        if (!email.contains("@")) {
+            showAlert("Validation Error", "Invalid email format.", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    // Show alert message
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    // Filter clients based on search query
     private void searchClients(String searchQuery) {
         ObservableList<Client> filteredList = FXCollections.observableArrayList();
         for (Client client : clientList) {
@@ -186,22 +209,19 @@ public class ClientListController {
                 filteredList.add(client);
             }
         }
-        clientTable.setItems(filteredList);
-
-        if (searchQuery.isEmpty()) {
-            clientTable.setItems(clientList); // إعادة القائمة الأصلية
-        }
+        clientTable.setItems(searchQuery.isEmpty() ? clientList : filteredList);
     }
+
+    // Navigate back to the dashboard
     @FXML
     private void onBackButtonClicked() {
         try {
             Stage stage = (Stage) backButton.getScene().getWindow();
             Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml")));
             stage.setScene(newScene);
-
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load Client List Page.");
+            showAlert("Navigation Error", "Failed to load Dashboard.", Alert.AlertType.ERROR);
         }
     }
 }
