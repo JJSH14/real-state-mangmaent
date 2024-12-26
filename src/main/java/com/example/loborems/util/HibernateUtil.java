@@ -1,51 +1,42 @@
 package com.example.loborems.util;
 
-
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import com.example.loborems.models.User;
+import com.example.loborems.models.Role;
+import com.example.loborems.models.Permission;
 
-import com.example.loborems.models.Client;
-import com.example.loborems.models.Interaction;
-
+import java.util.Properties;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
-    private static HibernateUtil instance = null;
-    private static SessionFactory sessionFactory;
+    private static final SessionFactory sessionFactory = buildSessionFactory();
 
-    private HibernateUtil() {
+    private static SessionFactory buildSessionFactory() {
         try {
+            // Create a configuration instance and configure programmatically
             Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-            configuration.addAnnotatedClass(Client.class);
-            configuration.addAnnotatedClass(Interaction.class);
-            StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties())
-                    .build();
+            configuration.configure("hibernate.cfg.xml"); // Load default settings from the XML file
 
-            sessionFactory = configuration.buildSessionFactory(standardRegistry);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ExceptionInInitializerError("Failed to initialize Hibernate session factory.");
-        }
-    }
+            // Add annotated classes dynamically
+            configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Permission.class);
+            configuration.addAnnotatedClass(Role.class);
 
-    public static HibernateUtil getInstance() {
-        if (instance == null) {
-            synchronized (HibernateUtil.class) {
-                if (instance == null) {
-                    instance = new HibernateUtil();
-                }
-            }
+            // Build the SessionFactory
+            return configuration.buildSessionFactory();
+        } catch (Throwable ex) {
+            System.err.println("Initial SessionFactory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
         }
-        return instance;
     }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            getInstance();
-        }
         return sessionFactory;
+    }
+
+    public static void shutdown() {
+        getSessionFactory().close();
     }
 }
