@@ -23,7 +23,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<StackPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controller.authntociation.LoginController">
+<StackPane style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.LoginController">
 
     <AnchorPane>
         <!-- Main Background -->
@@ -66,7 +66,7 @@
                 <!-- Logo -->
                 <StackPane>
                     <ImageView fitWidth="150" preserveRatio="true">
-                        <Image url="@../../../images/logo.png" />
+                        <Image url="@../../../../images/logo.png" />
                     </ImageView>
                 </StackPane>
 
@@ -78,7 +78,7 @@
 
                 <!-- Feature Image -->
                 <ImageView fitHeight="300" preserveRatio="true">
-                    <Image url="@../../../images/Estate.png" />
+                    <Image url="@../../../../images/Estate.png" />
                 </ImageView>
             </VBox>
 
@@ -89,7 +89,7 @@
                 </padding>
 
                 <VBox spacing="25" style="-fx-max-width: 400; -fx-alignment: center;">
-               <Text style="-fx-font-size: 24; -fx-fill: #3d52a0; -fx-font-weight: bold;" text="Find your place of dream" />
+                    <Text style="-fx-font-size: 24; -fx-fill: #3d52a0; -fx-font-weight: bold;" text="Find your place of dream" />
                     <Text style="-fx-font-size: 28; -fx-font-weight: bold; -fx-fill: #3d52a0;" text="Login" />
 
                     <!-- Form Fields -->
@@ -118,9 +118,9 @@
                     </VBox>
                 </VBox>
             </StackPane>
-         <rowConstraints>
-            <RowConstraints />
-         </rowConstraints>
+            <rowConstraints>
+                <RowConstraints />
+            </rowConstraints>
         </GridPane>
     </AnchorPane>
 </StackPane>
