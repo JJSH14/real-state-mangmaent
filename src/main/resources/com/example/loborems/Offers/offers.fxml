@@ -12,8 +12,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefWidth="634.0" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.loborems.controllers.OffersController" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ede8f5, #adbbda, #8697c4);">
-    
+<VBox alignment="CENTER" prefWidth="800" spacing="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="com.example.loborems.controllers.OffersController" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #ede8f5, #adbbda, #8697c4);">
+
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
     </padding>
@@ -25,19 +25,17 @@
                     <Button fx:id="backButtonOffers" onAction="#handleBack" alignment="CENTER" mnemonicParsing="false" text="Back" style="-fx-background-color: #3d52a0; -fx-text-fill: #7091e6;" />
                     <Label text="Client Name:" style="-fx-text-fill: #7091e6;" />
                     <TextField fx:id="clientNameField" promptText="Enter client name" HBox.hgrow="ALWAYS" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
-
-                    <Label text="Property Type:" style="-fx-text-fill: #7091e6;" />
-                    <ComboBox fx:id="propertyTypeCombo" promptText="Select Property Type" style="-fx-text-fill: #7091e6;">
-                    </ComboBox>
                 </HBox>
 
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="Offer Type:" style="-fx-text-fill: #7091e6;" />
-                    <ComboBox fx:id="offerTypeCombo" promptText="Select Offer Type" style="-fx-text-fill: #7091e6;">
-                        <items>
-                        </items>
-                    </ComboBox>
+                    <Label text="Property Type:" style="-fx-text-fill: #7091e6;" />
+                    <ComboBox fx:id="propertyTypeCombo" promptText="Select Property Type" style="-fx-text-fill: #7091e6;" />
 
+                    <Label text="Offer Type:" style="-fx-text-fill: #7091e6;" />
+                    <ComboBox fx:id="offerTypeCombo" promptText="Select Offer Type" style="-fx-text-fill: #7091e6;" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label text="Price:" style="-fx-text-fill: #7091e6;" />
                     <TextField fx:id="priceField" promptText="Enter offer price" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
 
@@ -63,17 +61,21 @@
                     <Label text="Name:" style="-fx-text-fill: #7091e6;" />
                     <TextField fx:id="clientNameInputField" promptText="Enter client name" HBox.hgrow="ALWAYS" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
 
-                    <Label text="Contact Info:" style="-fx-text-fill: #7091e6;" />
-                    <TextField fx:id="contactInfoField" promptText="Enter contact information" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
+                    <Label text="Email:" style="-fx-text-fill: #7091e6;" />
+                    <TextField fx:id="contactInfoField" promptText="Enter email" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
                 </HBox>
 
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label text="Client Category:" style="-fx-text-fill: #7091e6;" />
-                    <ComboBox fx:id="clientCategoryCombo" promptText="Select Client Category" style="-fx-text-fill: #7091e6;">
-                    </ComboBox>
+                    <Label text="Phone:" style="-fx-text-fill: #7091e6;" />
+                    <TextField fx:id="phoneField" promptText="Enter phone number" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
 
-                    <Label text="Preferences:" style="-fx-text-fill: #7091e6;" />
-                    <TextField fx:id="preferencesField" promptText="Enter property preferences" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
+                    <Label text="Property:" style="-fx-text-fill: #7091e6;" />
+                    <TextField fx:id="propertyField" promptText="Enter property" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Role:" style="-fx-text-fill: #7091e6;" />
+                    <TextField fx:id="roleField" promptText="Enter role" style="-fx-text-fill: #7091e6; -fx-prompt-text-fill: derive(#7091e6, 70%);" />
 
                     <Button fx:id="addClientButton" text="Add Client" onAction="#handleAddClient" style="-fx-background-color: #3d52a0; -fx-text-fill: #7091e6;" />
                 </HBox>
@@ -81,9 +83,10 @@
                 <TableView fx:id="clientsTable">
                     <columns>
                         <TableColumn fx:id="clientNameColumn2" text="Name" />
-                        <TableColumn fx:id="contactInfoColumn" text="Contact Info" />
-                        <TableColumn fx:id="categoryColumn" text="Category" />
-                        <TableColumn fx:id="preferencesColumn" text="Preferences" />
+                        <TableColumn fx:id="contactInfoColumn" text="Email" />
+                        <TableColumn fx:id="phoneColumn" text="Phone" />
+                        <TableColumn fx:id="propertyColumn" text="Property" />
+                        <TableColumn fx:id="roleColumn" text="Role" />
                     </columns>
                 </TableView>
             </VBox>
