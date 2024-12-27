@@ -5,16 +5,23 @@
 
 <VBox spacing="15" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.DownloadDataController" stylesheets="@download-data.css">
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Client ID:" styleClass="label"/>
-        <TextField fx:id="clientIDTextField" promptText="Enter Client ID" styleClass="text-field" HBox.hgrow="ALWAYS"/>
+        <Label text="Client ID or Name:" styleClass="label"/>
+        <TextField fx:id="searchTextField" promptText="Enter Client ID or Name" styleClass="text-field" HBox.hgrow="ALWAYS"/>
         <Button text="Search" onAction="#searchClient" styleClass="button"/>
     </HBox>
-    <TableView fx:id="clientInfoTable" styleClass="table-view" prefHeight="200" prefWidth="600">
+    <TableView fx:id="clientInfoTable" styleClass="table-view" prefHeight="400" prefWidth="800">
         <columns>
-            <TableColumn text="Field" fx:id="fieldColumn" styleClass="table-column"/>
-            <TableColumn text="Value" fx:id="valueColumn" styleClass="table-column"/>
+            <TableColumn fx:id="idColumn" text="ID" styleClass="table-column"/>
+            <TableColumn fx:id="nameColumn" text="Name" styleClass="table-column"/>
+            <TableColumn fx:id="emailColumn" text="Email" styleClass="table-column"/>
+            <TableColumn fx:id="phoneColumn" text="Phone" styleClass="table-column"/>
+            <TableColumn fx:id="propertyColumn" text="Property" styleClass="table-column"/>
+            <TableColumn fx:id="roleColumn" text="Role" styleClass="table-column"/>
         </columns>
     </TableView>
+    <HBox spacing="10" alignment="CENTER">
+        <Pagination fx:id="pagination" styleClass="pagination" />
+    </HBox>
     <Button text="Download Data" onAction="#downloadData" styleClass="button" disable="true" fx:id="downloadButton"/>
     <ProgressIndicator fx:id="downloadProgress" visible="false" styleClass="progress-indicator"/>
     <Button text="Back" onAction="#handleBack" styleClass="button"/>
