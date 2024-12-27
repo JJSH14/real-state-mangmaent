@@ -51,7 +51,7 @@ public class DashboardController {
     }
 
     public void goToAddAgents(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddAgent/addAgent.fxml"));
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddAgent/add-agent.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
