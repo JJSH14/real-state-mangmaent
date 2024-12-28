@@ -31,19 +31,28 @@ public class PropertyListingController implements javafx.fxml.Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialization logic (if needed)
-    }
 
+    }
 
     @FXML
-    public void handleButtonClick(ActionEvent event) throws IOException {
+    public void handleButtonClick(ActionEvent actionEvent) {
+        try {
 
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddProperty/add-property.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root, 900, 650);
-        stage.setScene(scene);
-        stage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/AddProperty/add-property.fxml"));
+            Parent root = loader.load();
+
+            AddPropertyController controller = loader.getController();
+            Stage stage = (Stage) ((javafx.scene.Node) actionEvent.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root,900,750);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
+
 
 
     public void handleBackClick(ActionEvent event) throws IOException{
