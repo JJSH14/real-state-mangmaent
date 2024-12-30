@@ -1,9 +1,9 @@
 package com.example.loborems.models;
 
+import javax.persistence.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-
-import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -28,8 +28,10 @@ public class Client {
     @Column(name = "role", nullable = false)
     private String role;
 
-    public Client() {}
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Offer> offers;
 
+    public Client() {}
 
     public Client(String name, String email, String phone, String property, String role) {
         this.name = name;
@@ -109,5 +111,13 @@ public class Client {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 }

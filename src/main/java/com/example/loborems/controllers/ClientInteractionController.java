@@ -19,10 +19,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.loborems.interfaces.DOAClient;
-import com.example.loborems.interfaces.DOAInteraction;
 import com.example.loborems.models.Client;
 import com.example.loborems.models.Interaction;
+import com.example.loborems.services.DOAClientImpl;
+import com.example.loborems.services.DOAInteractionImpl;
+
 import javafx.stage.Stage;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -139,7 +140,7 @@ public class ClientInteractionController {
 
     private void loadTableData() {
         try {
-            DOAInteraction doaInteraction = new DOAInteraction();
+            DOAInteractionImpl doaInteraction = new DOAInteractionImpl();
             List<Interaction> interactions = doaInteraction.findAll();
 
             if (interactions == null || interactions.isEmpty()
@@ -181,7 +182,7 @@ public class ClientInteractionController {
                     clientSelect.getValue()
             );
 
-            DOAInteraction doaInteraction = new DOAInteraction();
+            DOAInteractionImpl doaInteraction = new DOAInteractionImpl();
             doaInteraction.save(interaction);
 
             LOGGER.info("Interaction saved successfully.");
@@ -197,7 +198,7 @@ public class ClientInteractionController {
 
     private void loadClients() {
         try {
-            DOAClient doaClient = new DOAClient();
+            DOAClientImpl doaClient = new DOAClientImpl();
             List<Client> clients = doaClient.findAll();
 
             ObservableList<Client> clientNames = FXCollections.observableArrayList(clients);

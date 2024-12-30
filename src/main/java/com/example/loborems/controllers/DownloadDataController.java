@@ -13,8 +13,8 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-import com.example.loborems.interfaces.DOAClient;
 import com.example.loborems.models.Client;
+import com.example.loborems.services.DOAClientImpl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -69,7 +69,7 @@ public class DownloadDataController {
     private Pagination pagination;
 
     private final ObservableList<Client> clientDataList = FXCollections.observableArrayList();
-    private final DOAClient doaClientV = new DOAClient();
+    private final DOAClientImpl doaClientV = new DOAClientImpl();
     private List<Client> searchResults;
     private Client selectedClient;
 
