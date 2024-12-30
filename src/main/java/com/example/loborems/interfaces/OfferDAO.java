@@ -1,4 +1,4 @@
-package com.example.loborems.models.services;
+package com.example.loborems.Interfaces;
 
 import java.util.List;
 

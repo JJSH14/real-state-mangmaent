@@ -1,11 +1,13 @@
-package com.example.loborems.models.services;
+package com.example.loborems.Services;
 
-import com.example.loborems.models.Offer;
-import com.example.loborems.util.HibernateUtil;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.List;
+import com.example.loborems.Interfaces.OfferDAO;
+import com.example.loborems.models.Offer;
+import com.example.loborems.util.HibernateUtil;
 
 public class OfferDAOImpl implements OfferDAO {
 

@@ -1,4 +1,4 @@
-package com.example.loborems.models.Interfaces;
+package com.example.loborems.Interfaces;
 
 import com.example.loborems.models.Role;
 

@@ -3,12 +3,12 @@ package com.example.loborems.controllers;
 import java.io.IOException;
 import java.util.List;
 
+import com.example.loborems.Interfaces.OfferDAO;
+import com.example.loborems.Services.OfferDAOImpl;
 import com.example.loborems.models.Offer;
 import com.example.loborems.models.Offer.OfferType;
 import com.example.loborems.models.Offer.PropertyType;
 import com.example.loborems.models.Offer.Status;
-import com.example.loborems.models.services.OfferDAO;
-import com.example.loborems.models.services.OfferDAOImpl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

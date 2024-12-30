@@ -1,39 +1,37 @@
 package com.example.loborems.controllers;
 
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+
+import com.example.loborems.Interfaces.DOAClient;
+import com.example.loborems.models.Client;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.Pagination;
-
-import com.example.loborems.models.Client;
-import com.example.loborems.models.DOAClient;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DownloadDataController {
 
@@ -71,7 +69,7 @@ public class DownloadDataController {
     private Pagination pagination;
 
     private final ObservableList<Client> clientDataList = FXCollections.observableArrayList();
-    private final DOAClient doaClient = new DOAClient();
+    private final DOAClient doaClientV = new DOAClient();
     private List<Client> searchResults;
     private Client selectedClient;
 
@@ -99,7 +97,7 @@ public class DownloadDataController {
             return;
         }
 
-        searchResults = doaClient.findAll().stream()
+        searchResults = doaClientV.findAll().stream()
                 .filter(client -> client.getName().toLowerCase().contains(searchQuery.toLowerCase())
                 || String.valueOf(client.getId()).equals(searchQuery))
                 .collect(Collectors.toList());
