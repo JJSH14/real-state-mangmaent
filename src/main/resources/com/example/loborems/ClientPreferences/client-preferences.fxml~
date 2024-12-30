@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="10" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controller.ClientPreferencesController" stylesheets="@styles.css">
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #EDE8F5; -fx-padding: 10;" HBox.hgrow="ALWAYS">
+        <Label text="Activity Level" style="-fx-text-fill: #3D52A0;"/>
+        <ComboBox fx:id="activityLevelComboBox" style="-fx-background-color: #ADBBDA;" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #EDE8F5; -fx-padding: 10;" HBox.hgrow="ALWAYS">
+        <Label text="Property Type" style="-fx-text-fill: #3D52A0;"/>
+        <ComboBox fx:id="propertyTypeComboBox" style="-fx-background-color: #ADBBDA;" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #EDE8F5; -fx-padding: 10;" HBox.hgrow="ALWAYS">
+        <Label text="Budget Range" style="-fx-text-fill: #3D52A0;"/>
+        <ComboBox fx:id="budgetRangeComboBox" style="-fx-background-color: #ADBBDA;" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <Button text="Reset Filters" style="-fx-background-color: #7091E6; -fx-text-fill: #FFFFFF;" onAction="#resetFilters"/>
+    <TableView fx:id="clientsTableView" style="-fx-background-color: #EDE8F5;" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Name" fx:id="nameColumn" style="-fx-text-fill: #3D52A0;"/>
+            <TableColumn text="Activity Level" fx:id="activityLevelColumn" style="-fx-text-fill: #3D52A0;"/>
+            <TableColumn text="Property Preferences" fx:id="propertyPreferencesColumn" style="-fx-text-fill: #3D52A0;"/>
+            <TableColumn text="Budget Range" fx:id="budgetRangeColumn" style="-fx-text-fill: #3D52A0;"/>
+            <TableColumn text="Recent Interactions" fx:id="recentInteractionsColumn" style="-fx-text-fill: #3D52A0;"/>
+        </columns>
+    </TableView>
+    <Button fx:id="downloadButton" text="Back to Download Data" onAction="#goToDownloadData" styleClass="button"/>
+</VBox>
