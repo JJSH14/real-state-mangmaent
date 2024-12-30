@@ -13,16 +13,31 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
 import java.io.IOException;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.loborems.Interfaces.DOAClient;
+import com.example.loborems.Interfaces.DOAInteraction;
 import com.example.loborems.models.Client;
-import com.example.loborems.models.DOAClient;
-import com.example.loborems.models.DOAInteraction;
 import com.example.loborems.models.Interaction;
 import javafx.stage.Stage;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 
 public class ClientInteractionController {
 

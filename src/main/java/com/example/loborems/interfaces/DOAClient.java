@@ -1,12 +1,13 @@
-package com.example.loborems.models;
+package com.example.loborems.Interfaces;
 
 
-import com.example.loborems.interfaces.DOA;
-import com.example.loborems.util.HibernateUtil;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import java.util.List;
+import com.example.loborems.models.Client;
+import com.example.loborems.util.HibernateUtil;
 
 public class DOAClient implements DOA<Client> {
 
