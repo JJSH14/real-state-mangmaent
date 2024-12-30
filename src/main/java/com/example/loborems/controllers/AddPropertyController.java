@@ -1,11 +1,15 @@
 package com.example.loborems.controllers;
 
+import com.example.loborems.models.*;
+import com.example.loborems.models.services.PropertyService;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -15,26 +19,55 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class AddPropertyController {
-    @FXML
-    public TextField priceField;
-    @FXML
-    public TextArea featuresArea;
-    @FXML
-    public ComboBox<String> statusComboBox;
-    @FXML
-    public Label photoCountLabel;
-    @FXML
-    public Button uploadPhotosButton;
-    @FXML
-    public ComboBox<String> propertyTypeComboBox;
-    @FXML
-    public TextField locationField;
-    @FXML
-    public TextField titleField;
-    @FXML
-    public TextField sizeField;
+    private PropertyService propertyService = new PropertyService();
+    @FXML public TextField priceField;
+    @FXML public TextArea featuresArea;
+    @FXML public ComboBox<String> statusComboBox;
+    @FXML public Label photoCountLabel;
+    @FXML public Button uploadPhotosButton;
+    @FXML public ComboBox<String> propertyTypeComboBox;
+    @FXML public TextField locationField;
+    @FXML public TextField titleField;
+    @FXML public TextField sizeField;
+
+    // New fields for property types
+    @FXML public VBox residentialFields;
+    @FXML public VBox commercialFields;
+    @FXML public TextField bedroomsField;
+    @FXML public CheckBox hasGardenCheckBox;
+    @FXML public TextField floorsField;
+    @FXML public TextField parkingField;
+
 
     private List<File> selectedPhotos = new ArrayList<>();
+    private Property currentProperty;
+
+
+    @FXML
+    public void initialize() {
+        propertyTypeComboBox.setItems(FXCollections.observableArrayList("Residential", "Commercial"));
+    }
+    @FXML
+    public void handlePropertyTypeChange(ActionEvent event) {
+        String selectedType = propertyTypeComboBox.getValue();
+
+        if (selectedType == null || selectedType.trim().isEmpty()) {
+            System.out.println("Please select a property type.");
+            return;
+        }
+
+        boolean isResidential = "Residential".equals(selectedType);
+        boolean isCommercial = "Commercial".equals(selectedType);
+
+        residentialFields.setVisible(isResidential);
+        residentialFields.setManaged(isResidential);
+        commercialFields.setVisible(isCommercial);
+        commercialFields.setManaged(isCommercial);
+
+        System.out.println("Selected Property Type: " + selectedType);
+    }
+
+
 
     @FXML
     public void handlePhotoUpload(ActionEvent actionEvent) {
@@ -60,9 +93,58 @@ public class AddPropertyController {
                 return;
             }
 
-            showAlert("Property Saved", "Property has been successfully added.");
-            navigateToPropertyListing(actionEvent);
-            clearForm();
+            try {
+                String propertyType = propertyTypeComboBox.getValue();
+                String title = titleField.getText();
+                String location = locationField.getText();
+                double size = Double.parseDouble(sizeField.getText());
+                double price = Double.parseDouble(priceField.getText());
+                String features = featuresArea.getText();
+                String status = statusComboBox.getValue();
+
+                if ("Residential".equals(propertyType)) {
+                    int bedrooms = Integer.parseInt(bedroomsField.getText());
+                    propertyService.saveProperty(
+                            propertyType, title, location, size, price, features, status,
+                            bedrooms, hasGardenCheckBox, null, null, selectedPhotos
+                    );
+                } else if ("Commercial".equals(propertyType)) {
+                    int floors = Integer.parseInt(floorsField.getText());
+                    int parking = Integer.parseInt(parkingField.getText());
+                    propertyService.saveProperty(
+                            propertyType, title, location, size, price, features, status,
+                            null, null, floors, parking, selectedPhotos
+                    );
+                }
+
+                showAlert("Property Saved", "Property has been successfully added.");
+                navigateToPropertyListing(actionEvent);
+
+            } catch (NumberFormatException e) {
+                showAlert("Validation Error", "Please check numeric fields for valid numbers.");
+            }
+        }
+    }
+
+
+    private void updatePropertyFromFields() {
+        if (currentProperty == null) {
+            currentProperty = PropertyFactory.createProperty(propertyTypeComboBox.getValue());
+        }
+
+        currentProperty.setTitle(titleField.getText());
+        currentProperty.setLocation(locationField.getText());
+        currentProperty.setSize(Double.parseDouble(sizeField.getText()));
+        currentProperty.setPrice(Double.parseDouble(priceField.getText()));
+        currentProperty.setFeatures(featuresArea.getText());
+        currentProperty.setStatus(statusComboBox.getValue());
+
+        if (currentProperty instanceof ResidentialProperty residential) {
+            residential.setNumberOfBedrooms(Integer.parseInt(bedroomsField.getText()));
+            residential.setHasGarden(hasGardenCheckBox.isSelected());
+        } else if (currentProperty instanceof CommercialProperty commercial) {
+            commercial.setNumberOfFloors(Integer.parseInt(floorsField.getText()));
+            commercial.setParkingSpaces(Integer.parseInt(parkingField.getText()));
         }
     }
 
@@ -98,7 +180,11 @@ public class AddPropertyController {
                 allFieldsEmpty().test(sizeField) &&
                 propertyTypeComboBox.getValue() == null &&
                 statusComboBox.getValue() == null &&
-                selectedPhotos.isEmpty();
+                selectedPhotos.isEmpty() &&
+                allFieldsEmpty().test(bedroomsField) &&
+                !hasGardenCheckBox.isSelected() &&
+                allFieldsEmpty().test(floorsField) &&
+                allFieldsEmpty().test(parkingField);
     }
 
     private Predicate<javafx.scene.Node> allFieldsEmpty() {
@@ -116,12 +202,54 @@ public class AddPropertyController {
         validateComboBox(statusComboBox, "Property status must be selected.", errors);
         validatePrice(errors);
         validateSize(errors);
+        validateTypeSpecificFields(errors);
 
         if (errors.length() > 0) {
             showAlert("Validation Error", errors.toString());
             return false;
         }
         return true;
+    }
+    private void validateTypeSpecificFields(StringBuilder errors) {
+        String propertyType = propertyTypeComboBox.getValue();
+        if ("Residential".equals(propertyType)) {
+            validateField(bedroomsField, "Number of bedrooms is required.", errors);
+            try {
+                if (!bedroomsField.getText().trim().isEmpty()) {
+                    int bedrooms = Integer.parseInt(bedroomsField.getText().trim());
+                    if (bedrooms <= 0) {
+                        errors.append("Number of bedrooms must be greater than 0.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                errors.append("Invalid number of bedrooms format.\n");
+            }
+        } else if ("Commercial".equals(propertyType)) {
+            validateField(floorsField, "Number of floors is required.", errors);
+            validateField(parkingField, "Number of parking spaces is required.", errors);
+
+            try {
+                if (!floorsField.getText().trim().isEmpty()) {
+                    int floors = Integer.parseInt(floorsField.getText().trim());
+                    if (floors <= 0) {
+                        errors.append("Number of floors must be greater than 0.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                errors.append("Invalid number of floors format.\n");
+            }
+
+            try {
+                if (!parkingField.getText().trim().isEmpty()) {
+                    int parkingSpaces = Integer.parseInt(parkingField.getText().trim());
+                    if (parkingSpaces < 0) {
+                        errors.append("Number of parking spaces cannot be negative.\n");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                errors.append("Invalid number of parking spaces format.\n");
+            }
+        }
     }
 
     private void validateField(TextField field, String errorMessage, StringBuilder errors) {
@@ -138,9 +266,14 @@ public class AddPropertyController {
 
     private void validatePrice(StringBuilder errors) {
         try {
-            double price = Double.parseDouble(priceField.getText());
-            if (price <= 0) {
-                errors.append("Price must be a positive number.\n");
+            String priceText = priceField.getText().trim();
+            if (priceText.isEmpty()) {
+                errors.append("Price is required.\n");
+            } else {
+                double price = Double.parseDouble(priceText);
+                if (price <= 0) {
+                    errors.append("Price must be greater than 0.\n");
+                }
             }
         } catch (NumberFormatException e) {
             errors.append("Invalid price format.\n");
@@ -150,18 +283,16 @@ public class AddPropertyController {
     private void validateSize(StringBuilder errors) {
         try {
             String sizeText = sizeField.getText().trim();
-
             if (sizeText.isEmpty()) {
                 errors.append("Property size is required.\n");
             } else {
                 double size = Double.parseDouble(sizeText);
-
                 if (size <= 0) {
-                    errors.append("Property size must be a positive number.\n");
+                    errors.append("Property size must be greater than 0.\n");
                 }
             }
         } catch (NumberFormatException e) {
-            errors.append("Invalid size format. Please enter a valid number.\n");
+            errors.append("Invalid size format.\n");
         }
     }
 
@@ -173,8 +304,18 @@ public class AddPropertyController {
         sizeField.clear();
         propertyTypeComboBox.setValue(null);
         statusComboBox.setValue(null);
+        bedroomsField.clear();
+        hasGardenCheckBox.setSelected(false);
+        floorsField.clear();
+        parkingField.clear();
         selectedPhotos.clear();
         photoCountLabel.setText("No photos selected");
+
+        // Hide both type-specific field containers
+        residentialFields.setVisible(false);
+        residentialFields.setManaged(false);
+        commercialFields.setVisible(false);
+        commercialFields.setManaged(false);
     }
 
     private void showAlert(String title, String content) {
@@ -185,23 +326,6 @@ public class AddPropertyController {
         alert.showAndWait();
     }
 
-    private boolean hasUnsavedChanges() {
-        return anyFieldModified().test(titleField) ||
-                anyFieldModified().test(locationField) ||
-                anyFieldModified().test(priceField) ||
-                anyFieldModified().test(featuresArea) ||
-                anyFieldModified().test(sizeField) ||
-                propertyTypeComboBox.getValue() != null ||
-                statusComboBox.getValue() != null ||
-                !selectedPhotos.isEmpty();
-    }
-
-    private Predicate<javafx.scene.Node> anyFieldModified() {
-        return field -> field instanceof TextField && !((TextField) field).getText().trim().isEmpty() ||
-                field instanceof TextArea && !((TextArea) field).getText().trim().isEmpty() ||
-                field instanceof ComboBox && ((ComboBox<?>) field).getValue() != null;
-    }
-
     public void handleBack(ActionEvent actionEvent) {
         if (hasUnsavedChanges()) {
             if (confirmDiscardChanges()) {
@@ -210,6 +334,27 @@ public class AddPropertyController {
         } else {
             navigateToPropertyListing(actionEvent);
         }
+    }
+
+    private boolean hasUnsavedChanges() {
+        return anyFieldModified().test(titleField) ||
+                anyFieldModified().test(locationField) ||
+                anyFieldModified().test(priceField) ||
+                anyFieldModified().test(featuresArea) ||
+                anyFieldModified().test(sizeField) ||
+                propertyTypeComboBox.getValue() != null ||
+                statusComboBox.getValue() != null ||
+                !selectedPhotos.isEmpty() ||
+                anyFieldModified().test(bedroomsField) ||
+                hasGardenCheckBox.isSelected() ||
+                anyFieldModified().test(floorsField) ||
+                anyFieldModified().test(parkingField);
+    }
+
+    private Predicate<javafx.scene.Node> anyFieldModified() {
+        return field -> field instanceof TextField && !((TextField) field).getText().trim().isEmpty() ||
+                field instanceof TextArea && !((TextArea) field).getText().trim().isEmpty() ||
+                field instanceof ComboBox && ((ComboBox<?>) field).getValue() != null;
     }
 
     private boolean confirmDiscardChanges() {
