@@ -8,48 +8,79 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane prefHeight="203.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.PropertyItemController">
+<StackPane
+        xmlns="http://javafx.com/javafx/17"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="com.example.loborems.controllers.PropertyItemController"
+        prefWidth="450.0"
+        prefHeight="220.0">
 
-    <HBox fx:id="propertyItem" maxWidth="450.0" minWidth="450.0" prefHeight="201.0" prefWidth="450.0" spacing="15" style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0.1, 0, 4); -fx-border-radius: 20; -fx-border-color: transparent;">
+    <HBox fx:id="propertyItem"
+          spacing="15"
+          maxWidth="450.0"
+          minWidth="450.0"
+          prefHeight="201.0"
+          prefWidth="450.0"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0.1, 0, 4); -fx-border-radius: 20; -fx-border-color: transparent;">
 
-        <!-- Image Container with Gradient Overlay -->
+        <!-- Image Container -->
         <VBox alignment="CENTER" minWidth="220.0" style="-fx-background-color: #8697C3; -fx-background-radius: 20; -fx-padding: 15;">
-            <children>
-                <ImageView fx:id="propertyImage" fitHeight="151.0" fitWidth="200.0" preserveRatio="true">
-                    <image>
-                        <Image url="@../../../../images/property4.jpg" />
-                    </image>
-                </ImageView>
-            </children>
+            <ImageView fx:id="propertyImage"
+                       fitHeight="170.0"
+                       fitWidth="220.0"
+                       preserveRatio="true" />
         </VBox>
 
-        <!-- Content Container with increased width -->
-        <VBox maxWidth="300.0" minWidth="230.0" prefWidth="230.0" spacing="8" style="-fx-padding: 15 15 15 0;" HBox.hgrow="ALWAYS">
-            <!-- Property Name -->
-            <Label fx:id="propertyName" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #4051A6;" text="Modern Office Space" />
+        <!-- Content Container -->
+        <VBox spacing="8" maxWidth="300.0" minWidth="230.0" prefWidth="230.0" style="-fx-padding: 15 15 15 0;" HBox.hgrow="ALWAYS">
 
-            <!-- Location with icon -->
-            <HBox alignment="CENTER_LEFT" spacing="5">
-                <Label style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;" text="📍 Business District" />
+            <!-- Title -->
+            <Label fx:id="propertyName"
+                   style="-fx-font-family: 'Segoe UI'; -fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #4051A6;" />
+
+            <!-- Location -->
+            <Label fx:id="locationLabel"
+                   style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;" />
+
+            <!-- Size -->
+            <Label fx:id="sizeLabel"
+                   style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;" />
+
+            <!-- Price -->
+            <Label fx:id="priceLabel"
+                   style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #4051A6;" />
+
+            <!-- Status -->
+            <Label fx:id="statusLabel"
+                   style="-fx-background-color: #FDEDEC; -fx-text-fill: #E74C3C; -fx-padding: 5 10; -fx-background-radius: 15; -fx-font-size: 12;"
+                   text="Status Placeholder" />
+
+            <!-- Type -->
+            <Label fx:id="typeLabel"
+                   style="-fx-background-color: #E8F6F3; -fx-text-fill: #16A085; -fx-padding: 5 10; -fx-background-radius: 15; -fx-font-size: 12;"
+                   text="Type Placeholder" />
+
+            <!-- Bedrooms & Garden (Residential) -->
+            <HBox spacing="10">
+                <Label fx:id="bedroomsLabel"
+                       style="-fx-font-size: 13; -fx-text-fill: #7F8C8D;" />
+                <Label fx:id="gardenLabel"
+                       style="-fx-font-size: 13; -fx-text-fill: #7F8C8D;" />
             </HBox>
 
-            <!-- Size with icon -->
-            <HBox alignment="CENTER_LEFT" spacing="5">
-                <Label style="-fx-font-size: 14; -fx-text-fill: #7F8C8D;" text="📐 250 sq. m" />
+            <!-- Floors & Parking (Commercial) -->
+            <HBox spacing="10">
+                <Label fx:id="floorsLabel"
+                       style="-fx-font-size: 13; -fx-text-fill: #7F8C8D;" />
+                <Label fx:id="parkingLabel"
+                       style="-fx-font-size: 13; -fx-text-fill: #7F8C8D;" />
             </HBox>
 
-            <!-- Price with icon -->
-            <HBox alignment="CENTER_LEFT" spacing="5">
-                <Label style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #4051A6;" text="💰 500,000" />
-            </HBox>
-
-            <!-- Type and Status -->
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label style="-fx-background-color: #E8F6F3; -fx-text-fill: #16A085; -fx-padding: 5 10; -fx-background-radius: 15; -fx-font-size: 12;" text="Commercial" />
-                <Label style="-fx-background-color: #FDEDEC; -fx-text-fill: #E74C3C; -fx-padding: 5 10; -fx-background-radius: 15; -fx-font-size: 12;" text="Sold" />
-            </HBox>
-
-            <Button fx:id="viewMoreButton" onAction="#onViewButtonClicked" style="-fx-background-color: #9DB1EC; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13; -fx-font-weight: bold;" styleClass="view-more-button" text="View Details" />
+            <!-- View More Button -->
+            <Button fx:id="viewMoreButton"
+                    text="View Details"
+                    onAction="#onViewButtonClicked"
+                    style="-fx-background-color: #9DB1EC; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13; -fx-font-weight: bold;" />
         </VBox>
     </HBox>
 </StackPane>
