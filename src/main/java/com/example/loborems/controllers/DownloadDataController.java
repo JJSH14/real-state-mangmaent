@@ -13,7 +13,7 @@ import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
-import com.example.loborems.Interfaces.DOAClient;
+import com.example.loborems.interfaces.DOAClient;
 import com.example.loborems.models.Client;
 
 import javafx.collections.FXCollections;

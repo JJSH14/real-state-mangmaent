@@ -1,6 +1,6 @@
-package com.example.loborems.Services;
+package com.example.loborems.services;
 
-import com.example.loborems.Interfaces.UserDOA;
+import com.example.loborems.interfaces.UserDOA;
 import com.example.loborems.models.Permission;
 import com.example.loborems.models.User;
 import com.example.loborems.util.HibernateUtil;

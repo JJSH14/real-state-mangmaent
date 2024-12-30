@@ -1,7 +1,7 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.Services.UserDOAimp;
 import com.example.loborems.models.User;
+import com.example.loborems.services.UserDOAimp;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

@@ -1,4 +1,4 @@
-package com.example.loborems.Services;
+package com.example.loborems.services;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.example.loborems.Interfaces.PermissionDOA;
+import com.example.loborems.interfaces.PermissionDOA;
 import com.example.loborems.models.Permission;
 import com.example.loborems.util.HibernateUtil;
 

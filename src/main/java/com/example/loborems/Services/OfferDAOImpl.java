@@ -1,11 +1,11 @@
-package com.example.loborems.Services;
+package com.example.loborems.services;
 
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.example.loborems.Interfaces.OfferDAO;
+import com.example.loborems.interfaces.OfferDAO;
 import com.example.loborems.models.Offer;
 import com.example.loborems.util.HibernateUtil;
 

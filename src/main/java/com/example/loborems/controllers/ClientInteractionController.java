@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.example.loborems.Interfaces.DOAClient;
-import com.example.loborems.Interfaces.DOAInteraction;
+import com.example.loborems.interfaces.DOAClient;
+import com.example.loborems.interfaces.DOAInteraction;
 import com.example.loborems.models.Client;
 import com.example.loborems.models.Interaction;
 import javafx.stage.Stage;

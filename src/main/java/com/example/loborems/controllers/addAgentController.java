@@ -1,9 +1,9 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.Services.RoleDOAimp;
-import com.example.loborems.Services.UserDOAimp;
 import com.example.loborems.models.Role;
 import com.example.loborems.models.User;
+import com.example.loborems.services.RoleDOAimp;
+import com.example.loborems.services.UserDOAimp;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
