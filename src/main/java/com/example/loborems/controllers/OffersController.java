@@ -102,4 +102,12 @@ public class OffersController {
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
     }
+
+    @FXML
+    public void handleDownloadData(ActionEvent event) throws IOException {
+        Parent downloadDataRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/DownloadData/download-data.fxml"));
+        Scene downloadDataScene = new Scene(downloadDataRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(downloadDataScene);
+    }
 }
