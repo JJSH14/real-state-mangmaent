@@ -1,4 +1,4 @@
-package com.example.loborems.interfaces;
+package com.example.loborems.services;
 
 import java.util.List;
 
@@ -6,14 +6,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import com.example.loborems.interfaces.DOA;
 import com.example.loborems.models.Client;
 import com.example.loborems.util.HibernateUtil;
 
-public class DOAClient implements DOA<Client> {
+public class DOAClientImpl implements DOA<Client> {
 
     private final SessionFactory sessionFactory;
 
-    public DOAClient() {
+    public DOAClientImpl() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
