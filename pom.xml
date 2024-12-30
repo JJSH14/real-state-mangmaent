@@ -18,6 +18,20 @@
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.connectbot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.jfoenix</groupId>
+      <artifactId>jfoenix</artifactId>
+      <version>9.0.10</version>
+    </dependency>
+
     <!-- JavaFX Dependencies -->
     <dependency>
       <groupId>org.apache.commons</groupId>
