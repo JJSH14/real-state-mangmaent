@@ -1,18 +1,38 @@
 package com.example.loborems.controllers;
 
+import com.example.loborems.models.Property;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class PropertyItemController {
-
     @FXML
-    private Button viewMoreButton;  // Correctly use viewMoreButton
+    public Button viewMoreButton;
+    @FXML
+    private Label propertyName;  // Changed from titleLabel
+    @FXML
+    private Label locationLabel;
+    @FXML
+    private Label priceLabel;
+    @FXML
+    private Label sizeLabel;
+
+    public void setPropertyDetails(Property property) {
+
+        if (property != null) {
+            propertyName.setText(property.getTitle());
+            locationLabel.setText("📍 " + property.getLocation());
+            priceLabel.setText("💰 " + String.format("%,.2f", property.getPrice()));
+            sizeLabel.setText("📐 " + property.getSize());
+
+        }
+    }
 
     @FXML
     public void onViewButtonClicked() {
@@ -31,4 +51,5 @@ public class PropertyItemController {
             System.out.println("Failed to load Property Details Page.");
         }
     }
+
 }

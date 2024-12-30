@@ -1,6 +1,7 @@
 package com.example.loborems.controllers;
 
 import com.example.loborems.models.*;
+import com.example.loborems.models.services.PropertyService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 public class AddPropertyController {
+    private PropertyService propertyService = new PropertyService();
     @FXML public TextField priceField;
     @FXML public TextArea featuresArea;
     @FXML public ComboBox<String> statusComboBox;
@@ -36,33 +38,26 @@ public class AddPropertyController {
     @FXML public TextField floorsField;
     @FXML public TextField parkingField;
 
+
+    // Remove @FXML from these as they're not in the FXML
+
     private List<File> selectedPhotos = new ArrayList<>();
     private Property currentProperty;
 
 
     @FXML
     public void initialize() {
-        // Initialize the ComboBox with items
         propertyTypeComboBox.setItems(FXCollections.observableArrayList("Residential", "Commercial"));
-
-        // Ensure fields are hidden initially
-        residentialFields.setVisible(false);
-        residentialFields.setManaged(false);
-        commercialFields.setVisible(false);
-        commercialFields.setManaged(false);
     }
-
     @FXML
     public void handlePropertyTypeChange(ActionEvent event) {
         String selectedType = propertyTypeComboBox.getValue();
 
         if (selectedType == null || selectedType.trim().isEmpty()) {
             System.out.println("Please select a property type.");
-            // Optionally, display a user-friendly error message in the UI
             return;
         }
 
-        // Update field visibility based on selection
         boolean isResidential = "Residential".equals(selectedType);
         boolean isCommercial = "Commercial".equals(selectedType);
 
@@ -73,6 +68,7 @@ public class AddPropertyController {
 
         System.out.println("Selected Property Type: " + selectedType);
     }
+
 
 
     @FXML
@@ -100,15 +96,38 @@ public class AddPropertyController {
             }
 
             try {
-                updatePropertyFromFields();
+                String propertyType = propertyTypeComboBox.getValue();
+                String title = titleField.getText();
+                String location = locationField.getText();
+                double size = Double.parseDouble(sizeField.getText());
+                double price = Double.parseDouble(priceField.getText());
+                String features = featuresArea.getText();
+                String status = statusComboBox.getValue();
+
+                if ("Residential".equals(propertyType)) {
+                    int bedrooms = Integer.parseInt(bedroomsField.getText());
+                    propertyService.saveProperty(
+                            propertyType, title, location, size, price, features, status,
+                            bedrooms, hasGardenCheckBox, null, null, selectedPhotos
+                    );
+                } else if ("Commercial".equals(propertyType)) {
+                    int floors = Integer.parseInt(floorsField.getText());
+                    int parking = Integer.parseInt(parkingField.getText());
+                    propertyService.saveProperty(
+                            propertyType, title, location, size, price, features, status,
+                            null, null, floors, parking, selectedPhotos
+                    );
+                }
+
                 showAlert("Property Saved", "Property has been successfully added.");
                 navigateToPropertyListing(actionEvent);
-                clearForm();
+
             } catch (NumberFormatException e) {
                 showAlert("Validation Error", "Please check numeric fields for valid numbers.");
             }
         }
     }
+
 
     private void updatePropertyFromFields() {
         if (currentProperty == null) {

@@ -2,10 +2,10 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.FlowPane?>
 
 <VBox prefWidth="1000.0" prefHeight="700.0" style="-fx-background-color: #FFF;" stylesheets="@property-listing.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.PropertyListingController">
 
@@ -23,18 +23,8 @@
    <!-- Scrollable Content Area -->
    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
       <content>
-         <FlowPane fx:id="propertyContainer" hgap="20" vgap="20" alignment="CENTER" prefWidth="880.0" style="-fx-padding: 20;">
-            <!-- Dynamically added property items -->
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
-            <fx:include source="property-item.fxml" />
+         <FlowPane fx:id="propertyListContainer" hgap="20" vgap="20" alignment="CENTER" prefWidth="880.0" style="-fx-padding: 20;">
+            <!-- Dynamically added property items will be placed here -->
          </FlowPane>
       </content>
    </ScrollPane>

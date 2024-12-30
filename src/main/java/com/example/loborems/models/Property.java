@@ -10,6 +10,10 @@ public abstract class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    @Column(columnDefinition = "LONGTEXT", length = 16777215) // Increased length to maximum MEDIUMTEXT size
+    private String images;
+
     private String title;
     private String location;
     private double size;
@@ -32,4 +36,16 @@ public abstract class Property {
     public void setFeatures(String features) { this.features = features; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
+    }
+    public String getType() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
+    }
+    public abstract void setType(String type);
 }
