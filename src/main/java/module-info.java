@@ -15,6 +15,7 @@ module com.example.loborems {
     requires com.jfoenix;
     requires java.logging;
     requires java.desktop;
+    requires org.apache.commons.compress;
 
     // Export and open necessary packages
     opens com.example.loborems to javafx.fxml;

@@ -1,5 +1,15 @@
 package com.example.loborems.controllers;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.example.loborems.models.Offer;
+import com.example.loborems.models.Offer.OfferType;
+import com.example.loborems.models.Offer.PropertyType;
+import com.example.loborems.models.Offer.Status;
+import com.example.loborems.models.services.OfferDAO;
+import com.example.loborems.models.services.OfferDAOImpl;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,108 +25,74 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
 public class OffersController {
 
     @FXML
     private Button backButtonOffers;
-    @FXML
-    private Button backButtonClients;
 
     @FXML
     private TextField clientNameField;
     @FXML
-    private ComboBox<String> propertyTypeCombo;
+    private ComboBox<PropertyType> propertyTypeCombo;
     @FXML
-    private ComboBox<String> offerTypeCombo;
+    private ComboBox<OfferType> offerTypeCombo;
     @FXML
     private TextField priceField;
     @FXML
-    private TableView<String[]> offersTable;
+    private TableView<Offer> offersTable;
     @FXML
-    private TableColumn<String[], String> clientNameColumn;
+    private TableColumn<Offer, String> clientNameColumn;
     @FXML
-    private TableColumn<String[], String> propertyTypeColumn;
+    private TableColumn<Offer, PropertyType> propertyTypeColumn;
     @FXML
-    private TableColumn<String[], String> offerTypeColumn;
+    private TableColumn<Offer, OfferType> offerTypeColumn;
     @FXML
-    private TableColumn<String[], String> priceColumn;
+    private TableColumn<Offer, Double> priceColumn;
     @FXML
-    private TableColumn<String[], String> statusColumn;
+    private TableColumn<Offer, Status> statusColumn;
 
-    @FXML
-    private TextField clientNameInputField;
-    @FXML
-    private TextField contactInfoField;
-    @FXML
-    private ComboBox<String> clientCategoryCombo;
-    @FXML
-    private TextField preferencesField;
-    @FXML
-    private TableView<String[]> clientsTable;
-    @FXML
-    private TableColumn<String[], String> clientNameColumn2;
-    @FXML
-    private TableColumn<String[], String> contactInfoColumn;
-    @FXML
-    private TableColumn<String[], String> categoryColumn;
-    @FXML
-    private TableColumn<String[], String> preferencesColumn;
-
-    private ObservableList<String[]> offerData = FXCollections.observableArrayList();
-    private ObservableList<String[]> clientData = FXCollections.observableArrayList();
+    private ObservableList<Offer> offerData = FXCollections.observableArrayList();
+    private OfferDAO offerDAO = new OfferDAOImpl();
 
     @FXML
     public void initialize() {
-        propertyTypeCombo.setItems(FXCollections.observableArrayList("House", "Apartment", "Condo"));
-        offerTypeCombo.setItems(FXCollections.observableArrayList("Sale", "Rent"));
-        clientCategoryCombo.setItems(FXCollections.observableArrayList("Regular", "VIP", "New"));
+        // Initialize ComboBoxes with enum values
+        propertyTypeCombo.setItems(FXCollections.observableArrayList(PropertyType.values()));
+        offerTypeCombo.setItems(FXCollections.observableArrayList(OfferType.values()));
 
-        clientNameColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[0]));
-        propertyTypeColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[1]));
-        offerTypeColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[2]));
-        priceColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[3]));
-        statusColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[4]));
+        // Set up TableColumns for the offersTable
+        clientNameColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getClientName()));
+        propertyTypeColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPropertyType()));
+        offerTypeColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getOfferType()));
+        priceColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleDoubleProperty(data.getValue().getPrice()).asObject());
+        statusColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getStatus()));
         offersTable.setItems(offerData);
 
-        clientNameColumn2.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[0]));
-        contactInfoColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[1]));
-        categoryColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[2]));
-        preferencesColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue()[3]));
-        clientsTable.setItems(clientData);
+        // Load existing offers
+        // loadOffers();
+    }
+
+    private void loadOffers() {
+        List<Offer> offers = offerDAO.findAll();
+        offerData.setAll(offers);
     }
 
     @FXML
     public void handleAddOffer(ActionEvent event) {
         String clientName = clientNameField.getText();
-        String propertyType = propertyTypeCombo.getSelectionModel().getSelectedItem();
-        String offerType = offerTypeCombo.getSelectionModel().getSelectedItem();
-        String price = priceField.getText();
+        PropertyType propertyType = propertyTypeCombo.getSelectionModel().getSelectedItem();
+        OfferType offerType = offerTypeCombo.getSelectionModel().getSelectedItem();
+        double price = Double.parseDouble(priceField.getText());
 
-        String[] newOffer = {clientName, propertyType, offerType, price, "Pending"};
+        Offer newOffer = new Offer(clientName, propertyType, offerType, price, Status.PENDING);
+        offerDAO.save(newOffer);
         offerData.add(newOffer);
 
+        // Clear the input fields
         clientNameField.clear();
         propertyTypeCombo.getSelectionModel().clearSelection();
         offerTypeCombo.getSelectionModel().clearSelection();
         priceField.clear();
-    }
-
-    @FXML
-    public void handleAddClient(ActionEvent event) {
-        String name = clientNameInputField.getText();
-        String contactInfo = contactInfoField.getText();
-        String category = clientCategoryCombo.getSelectionModel().getSelectedItem();
-        String preferences = preferencesField.getText();
-
-        String[] newClient = {name, contactInfo, category, preferences};
-        clientData.add(newClient);
-
-        clientNameInputField.clear();
-        contactInfoField.clear();
-        clientCategoryCombo.getSelectionModel().clearSelection();
-        preferencesField.clear();
     }
 
     @FXML
@@ -125,5 +101,13 @@ public class OffersController {
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
+    }
+
+    @FXML
+    public void handleDownloadData(ActionEvent event) throws IOException {
+        Parent downloadDataRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/DownloadData/download-data.fxml"));
+        Scene downloadDataScene = new Scene(downloadDataRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(downloadDataScene);
     }
 }

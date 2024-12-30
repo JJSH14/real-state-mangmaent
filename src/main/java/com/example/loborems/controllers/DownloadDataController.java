@@ -1,5 +1,16 @@
 package com.example.loborems.controllers;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
@@ -15,21 +26,40 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Pagination;
+
+import com.example.loborems.models.Client;
+import com.example.loborems.models.DOAClient;
+
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DownloadDataController {
 
     @FXML
-    private TextField clientIDTextField;
+    private TextField searchTextField;
 
     @FXML
-    private TableView<ClientData> clientInfoTable;
+    private TableView<Client> clientInfoTable;
 
     @FXML
-    private TableColumn<ClientData, String> fieldColumn;
+    private TableColumn<Client, Integer> idColumn;
 
     @FXML
-    private TableColumn<ClientData, String> valueColumn;
+    private TableColumn<Client, String> nameColumn;
+
+    @FXML
+    private TableColumn<Client, String> emailColumn;
+
+    @FXML
+    private TableColumn<Client, String> phoneColumn;
+
+    @FXML
+    private TableColumn<Client, String> propertyColumn;
+
+    @FXML
+    private TableColumn<Client, String> roleColumn;
 
     @FXML
     private Button downloadButton;
@@ -37,50 +67,108 @@ public class DownloadDataController {
     @FXML
     private ProgressIndicator downloadProgress;
 
-    private final ObservableList<ClientData> clientDataList = FXCollections.observableArrayList();
+    @FXML
+    private Pagination pagination;
+
+    private final ObservableList<Client> clientDataList = FXCollections.observableArrayList();
+    private final DOAClient doaClient = new DOAClient();
+    private List<Client> searchResults;
+    private Client selectedClient;
 
     @FXML
-    public void initialize() {
-        // Initialize Table Columns
-        fieldColumn.setCellValueFactory(new PropertyValueFactory<>("field"));
-        valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+    private void initialize() {
+        downloadButton.setDisable(true); // Initially disabled
+        clientInfoTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> downloadButton.setDisable(newValue == null)
+        );
 
-        // Bind Data to TableView
+        // Other initialization code
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        propertyColumn.setCellValueFactory(new PropertyValueFactory<>("property"));
+        roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         clientInfoTable.setItems(clientDataList);
     }
 
     @FXML
     private void searchClient() {
-        // Perform search based on client ID and populate table
-        String clientID = clientIDTextField.getText();
-        if (clientID != null && !clientID.trim().isEmpty()) {
-            // Fetch client data (dummy data for example)
-            clientDataList.clear();
-            clientDataList.add(new ClientData("Name", "John Doe"));
-            clientDataList.add(new ClientData("Email", "john.doe@example.com"));
-            // Enable download button
-            downloadButton.setDisable(false);
+        String searchQuery = searchTextField.getText();
+        if (searchQuery.isEmpty()) {
+            return;
         }
+
+        searchResults = doaClient.findAll().stream()
+                .filter(client -> client.getName().toLowerCase().contains(searchQuery.toLowerCase())
+                || String.valueOf(client.getId()).equals(searchQuery))
+                .collect(Collectors.toList());
+
+        updatePagination();
+    }
+
+    private void updatePagination() {
+        int pages = (int) Math.ceil((double) searchResults.size() / 10);
+        pagination.setPageCount(pages);
+        pagination.setCurrentPageIndex(0);
+        createPage(0);
+    }
+
+    private Node createPage(int pageIndex) {
+        int fromIndex = pageIndex * 10;
+        int toIndex = Math.min(fromIndex + 10, searchResults.size());
+        clientDataList.setAll(searchResults.subList(fromIndex, toIndex));
+        return clientInfoTable;
     }
 
     @FXML
     private void downloadData() {
-        // Start download process
-        downloadProgress.setVisible(true);
-        downloadButton.setDisable(true);
+        selectedClient = clientInfoTable.getSelectionModel().getSelectedItem();
+        if (selectedClient == null) {
+            return;
+        }
 
-        // Simulate download process
+        downloadButton.setDisable(true);
+        downloadProgress.setVisible(true);
+
         new Thread(() -> {
             try {
-                Thread.sleep(2000); // Simulate time-consuming task
-                // Hide progress indicator
-                downloadProgress.setVisible(false);
-                // Enable download button
-                downloadButton.setDisable(false);
-                // Notify user of successful download (implement actual notification logic)
-                System.out.println("Data downloaded successfully!");
-            } catch (InterruptedException e) {
+                // Step 1: Gather Client Data
+                String clientData = String.format("ID: %d%nName: %s%nEmail: %s%nPhone: %s%nProperty: %s%nRole: %s%n",
+                        selectedClient.getId(),
+                        selectedClient.getName(),
+                        selectedClient.getEmail(),
+                        selectedClient.getPhone(),
+                        selectedClient.getProperty(),
+                        selectedClient.getRole());
+
+                // Step 2: Create Temporary Files
+                File tempDir = new File(System.getProperty("java.io.tmpdir"), "clientData");
+                if (!tempDir.exists()) {
+                    tempDir.mkdirs();
+                }
+                File clientFile = new File(tempDir, "client_data.txt");
+                try (FileWriter writer = new FileWriter(clientFile)) {
+                    writer.write(clientData);
+                }
+
+                // Step 3: Package into a .zip File
+                File zipFile = new File(tempDir, "client_data.zip");
+                try (ArchiveOutputStream archive = new ZipArchiveOutputStream(Files.newOutputStream(Paths.get(zipFile.toURI())))) {
+                    ArchiveEntry entry = new ZipArchiveEntry(clientFile.getName());
+                    archive.putArchiveEntry(entry);
+                    Files.copy(clientFile.toPath(), archive);
+                    archive.closeArchiveEntry();
+                }
+
+                // Provide a link or prompt for downloading the .zip file
+                System.out.println("Client data packaged successfully! Download from: " + zipFile.getAbsolutePath());
+
+            } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                downloadButton.setDisable(false);
+                downloadProgress.setVisible(false);
             }
         }).start();
     }
@@ -91,25 +179,5 @@ public class DownloadDataController {
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
-    }
-
-    // Define the ClientData class for TableView
-    public static class ClientData {
-        private final String field;
-        private final String value;
-
-        public ClientData(String field, String value) {
-            this.field = field;
-            this.value = value;
-        }
-
-        public String getField() {
-            return field;
-        }
-
-        public String getValue() {
-            return value;
-        }
     }
 }

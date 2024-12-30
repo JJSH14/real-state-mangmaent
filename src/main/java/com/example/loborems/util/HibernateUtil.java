@@ -2,13 +2,10 @@ package com.example.loborems.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import com.example.loborems.models.User;
-import com.example.loborems.models.Role;
-import com.example.loborems.models.Permission;
 
-import java.util.Properties;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.service.ServiceRegistry;
+import com.example.loborems.models.Permission;
+import com.example.loborems.models.Role;
+import com.example.loborems.models.User;
 
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
