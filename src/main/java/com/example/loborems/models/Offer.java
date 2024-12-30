@@ -21,6 +21,10 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false, insertable = false, updatable = false)
+    private Client client;
+
     @Column(name = "client_id", nullable = false)
     private int clientId;
 
@@ -66,6 +70,14 @@ public class Offer {
 
     public void setClientId(int clientId) {
         this.clientId = clientId;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public String getClientName() {

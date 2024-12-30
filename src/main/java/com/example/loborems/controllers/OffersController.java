@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.loborems.interfaces.OfferDAO;
-import com.example.loborems.interfaces.DOAClient;
 import com.example.loborems.models.Client;
 import com.example.loborems.models.Offer;
 import com.example.loborems.models.Offer.OfferType;
 import com.example.loborems.models.Offer.PropertyType;
 import com.example.loborems.models.Offer.Status;
+import com.example.loborems.services.DOAClientImpl;
 import com.example.loborems.services.OfferDAOImpl;
 
 import javafx.collections.FXCollections;
@@ -60,7 +60,7 @@ public class OffersController {
 
     private ObservableList<Offer> offerData = FXCollections.observableArrayList();
     private OfferDAO offerDAO = new OfferDAOImpl();
-    private DOAClient clientDAO = new DOAClient();
+    private DOAClientImpl clientDAO = new DOAClientImpl();
     private Offer selectedOffer;
 
     @FXML
