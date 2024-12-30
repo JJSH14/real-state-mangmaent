@@ -1,13 +1,15 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.models.Client;
+import java.io.IOException;
+import java.util.List;
+
 import com.example.loborems.models.Offer;
 import com.example.loborems.models.Offer.OfferType;
 import com.example.loborems.models.Offer.PropertyType;
 import com.example.loborems.models.Offer.Status;
 import com.example.loborems.models.services.OfferDAO;
 import com.example.loborems.models.services.OfferDAOImpl;
-import com.example.loborems.models.DOAClient;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,15 +25,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.List;
-
 public class OffersController {
 
     @FXML
     private Button backButtonOffers;
-    @FXML
-    private Button backButtonClients;
 
     @FXML
     private TextField clientNameField;
@@ -54,34 +51,8 @@ public class OffersController {
     @FXML
     private TableColumn<Offer, Status> statusColumn;
 
-    @FXML
-    private TextField clientNameInputField;
-    @FXML
-    private TextField contactInfoField;
-    @FXML
-    private TextField phoneField;
-    @FXML
-    private TextField propertyField;
-    @FXML
-    private TextField roleField;
-    @FXML
-    private TableView<Client> clientsTable;
-    @FXML
-    private TableColumn<Client, String> clientNameColumn2;
-    @FXML
-    private TableColumn<Client, String> contactInfoColumn;
-    @FXML
-    private TableColumn<Client, String> phoneColumn;
-    @FXML
-    private TableColumn<Client, String> propertyColumn;
-    @FXML
-    private TableColumn<Client, String> roleColumn;
-
     private ObservableList<Offer> offerData = FXCollections.observableArrayList();
-    private ObservableList<Client> clientData = FXCollections.observableArrayList();
-
     private OfferDAO offerDAO = new OfferDAOImpl();
-    private DOAClient doaClient = new DOAClient();
 
     @FXML
     public void initialize() {
@@ -97,30 +68,13 @@ public class OffersController {
         statusColumn.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getStatus()));
         offersTable.setItems(offerData);
 
-        // Set up TableColumns for the clientsTable
-        clientNameColumn2.setCellValueFactory(data -> data.getValue().nameProperty());
-        contactInfoColumn.setCellValueFactory(data -> data.getValue().emailProperty());
-        phoneColumn.setCellValueFactory(data -> data.getValue().phoneProperty());
-        propertyColumn.setCellValueFactory(data -> data.getValue().propertyProperty());
-        roleColumn.setCellValueFactory(data -> data.getValue().roleProperty());
-        clientsTable.setItems(clientData);
-
-        // Load existing offers and clients
-        loadOffers();
-        loadClients();
+        // Load existing offers
+        // loadOffers();
     }
 
     private void loadOffers() {
         List<Offer> offers = offerDAO.findAll();
         offerData.setAll(offers);
-    }
-
-    private void loadClients() {
-        List<Client> clients = doaClient.findAll();
-        if (clients != null) {
-            clientData.clear();
-            clientData.addAll(clients);
-        }
     }
 
     @FXML
@@ -139,31 +93,6 @@ public class OffersController {
         propertyTypeCombo.getSelectionModel().clearSelection();
         offerTypeCombo.getSelectionModel().clearSelection();
         priceField.clear();
-    }
-
-    @FXML
-    public void handleAddClient(ActionEvent event) {
-        String name = clientNameInputField.getText();
-        String email = contactInfoField.getText();
-        String phone = phoneField.getText();
-        String property = propertyField.getText();
-        String role = roleField.getText();
-
-        // Create a new Client object
-        Client newClient = new Client(name, email, phone, property, role);
-
-        // Save the client to the database
-        doaClient.save(newClient);
-
-        // Add the client to the TableView
-        clientData.add(newClient);
-
-        // Clear the input fields
-        clientNameInputField.clear();
-        contactInfoField.clear();
-        phoneField.clear();
-        propertyField.clear();
-        roleField.clear();
     }
 
     @FXML
