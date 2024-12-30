@@ -1,10 +1,10 @@
 package com.example.loborems.interfaces;
 
-
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import com.example.loborems.models.Client;
 import com.example.loborems.util.HibernateUtil;
@@ -51,15 +51,26 @@ public class DOAClient implements DOA<Client> {
         }
     }
 
+    public Client findByIdOrName(int id, String name) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Client WHERE id = :id OR name = :name";
+            Query<Client> query = session.createQuery(hql, Client.class);
+            query.setParameter("id", id);
+            query.setParameter("name", name);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public List<Client> findAll() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM Client", Client.class).list();
         } catch (Exception e) {
             e.printStackTrace();
-
             return null;
         }
-
     }
 }

@@ -21,6 +21,9 @@ public class Offer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "client_id", nullable = false)
+    private int clientId;
+
     private String clientName;
 
     @Enumerated(EnumType.STRING)
@@ -39,7 +42,8 @@ public class Offer {
     }
 
     // Parameterized constructor
-    public Offer(String clientName, PropertyType propertyType, OfferType offerType, double price, Status status) {
+    public Offer(int clientId, String clientName, PropertyType propertyType, OfferType offerType, double price, Status status) {
+        this.clientId = clientId;
         this.clientName = clientName;
         this.propertyType = propertyType;
         this.offerType = offerType;
@@ -54,6 +58,14 @@ public class Offer {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 
     public String getClientName() {

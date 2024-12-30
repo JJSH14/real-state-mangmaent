@@ -3,6 +3,8 @@ package com.example.loborems.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import com.example.loborems.models.Client;
+import com.example.loborems.models.Offer;
 import com.example.loborems.models.Permission;
 import com.example.loborems.models.Role;
 import com.example.loborems.models.User;
@@ -20,6 +22,8 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Permission.class);
             configuration.addAnnotatedClass(Role.class);
+            configuration.addAnnotatedClass(Offer.class);
+            configuration.addAnnotatedClass(Client.class);
 
             // Build the SessionFactory
             return configuration.buildSessionFactory();
