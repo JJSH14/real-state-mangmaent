@@ -61,7 +61,13 @@ public class DOAInteraction implements DOA<Interaction> {
 
     @Override
     public List<Interaction> findAll() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            // Use HQL to fetch all records of Interaction
+            return session.createQuery("FROM Interaction", Interaction.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
