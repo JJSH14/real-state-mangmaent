@@ -8,5 +8,5 @@ public interface PropertyDAO {
     Property getById(int id);
     void update(Property property);
     void delete(Property property);
-    List<Property> getAllProperties();  // Add this method to the interface
+    List<Property> getAllProperties();
 }

@@ -73,15 +73,14 @@ public class PropertyDAOImpl implements PropertyDAO {
         }
     }
 
-    // New method to get all properties
+    // method to get all properties
     @Override
     public List<Property> getAllProperties() {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Property> properties = null;
         try {
-            // Creating a query to select all properties
             Query<Property> query = session.createQuery("FROM Property", Property.class);
-            properties = query.list();  // Execute the query and get the list of properties
+            properties = query.list();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

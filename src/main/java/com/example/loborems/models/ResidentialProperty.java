@@ -10,8 +10,10 @@ public class ResidentialProperty extends Property {
     private boolean hasGarden;
     @Override
     public void setType(String type) {
-        // Set the property type explicitly if needed
-        // In this case, it's already set by the DiscriminatorValue annotation
+    }
+    @Override
+    public String getType() {
+        return "Residential";
     }
     public int getNumberOfBedrooms() { return numberOfBedrooms; }
     public void setNumberOfBedrooms(int numberOfBedrooms) { this.numberOfBedrooms = numberOfBedrooms; }

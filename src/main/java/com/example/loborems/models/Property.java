@@ -11,7 +11,7 @@ public abstract class Property {
     private Long id;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT", length = 16777215) // Increased length to maximum MEDIUMTEXT size
+    @Column(columnDefinition = "LONGTEXT", length = 16777215)
     private String images;
 
     private String title;
@@ -44,8 +44,7 @@ public abstract class Property {
     public void setImages(String images) {
         this.images = images;
     }
-    public String getType() {
-        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
-    }
+    public abstract String getType();
+
     public abstract void setType(String type);
 }

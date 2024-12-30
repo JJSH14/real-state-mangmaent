@@ -39,8 +39,6 @@ public class AddPropertyController {
     @FXML public TextField parkingField;
 
 
-    // Remove @FXML from these as they're not in the FXML
-
     private List<File> selectedPhotos = new ArrayList<>();
     private Property currentProperty;
 

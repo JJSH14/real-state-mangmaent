@@ -55,7 +55,7 @@ public class PropertyService {
         }
 
 
-//handle photos
+        //handle photos
         if (photoFiles != null && !photoFiles.isEmpty()) {
             StringBuilder imageDataBuilder = new StringBuilder();
             for (File photoFile : photoFiles) {
@@ -80,4 +80,16 @@ public class PropertyService {
     public List<Property> getAllProperties() {
         return propertyDAO.getAllProperties(); // Calls the DAO method to fetch all properties
     }
+    public void updateProperty(Property property) {
+        propertyDAO.update(property);
+    }
+
+    public void deleteProperty(Property property) {
+        propertyDAO.delete(property);
+    }
+
+    public Property getPropertyById(int id) {
+        return propertyDAO.getById(id);
+    }
+
 }

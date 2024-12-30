@@ -10,8 +10,10 @@ public class CommercialProperty extends Property {
     private int parkingSpaces;
     @Override
     public void setType(String type) {
-        // Set the property type explicitly if needed
-        // In this case, it's already set by the DiscriminatorValue annotation
+    }
+    @Override
+    public String getType() {
+        return "Commercial";
     }
     public int getNumberOfFloors() { return numberOfFloors; }
     public void setNumberOfFloors(int numberOfFloors) { this.numberOfFloors = numberOfFloors; }

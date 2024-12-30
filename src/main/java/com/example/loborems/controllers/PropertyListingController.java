@@ -20,88 +20,60 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class PropertyListingController implements javafx.fxml.Initializable {
+    private final PropertyService propertyService = new PropertyService();
 
-    @FXML
-    public Button navigateButton;
     @FXML
     public Button backButton;
-    @FXML
-    public Button detailsPage;
+
     @FXML
     private FlowPane propertyListContainer;
-
+    @FXML
+    private Button addPropertyButton;
     @FXML
     private Stage stage;
     @FXML
     private Scene scene;
 
 
-    @FXML
-    private PropertyService propertyService; // Assuming this is properly initialized elsewhere
+
 
     private List<Property> properties;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialize any required logic here (e.g., populate property list)
         System.out.println("Initializing property listing...");
 
-        if (propertyService != null) {
-            // Fetch all properties from the service
-            System.out.println("Property service is available, fetching properties...");
-            properties = propertyService.getAllProperties();
+        // Fetch all properties
+        properties = propertyService.getAllProperties();
+        if (properties != null && !properties.isEmpty()) {
+            System.out.println("Found " + properties.size() + " properties.");
 
-            if (properties != null && !properties.isEmpty()) {
-                System.out.println("Found " + properties.size() + " properties.");
-
-                // Add each property item using the addPropertyItem method
-                for (Property property : properties) {
-                    System.out.println("Adding property: " + property.getTitle());
-                    addPropertyItem(property.getTitle(), property.getLocation(), property.getType(), property.getPrice(), property.getSize());
-                }
-            } else {
-                System.out.println("No properties found in the service.");
+            // Add each property card
+            for (Property property : properties) {
+                addPropertyItem(property);
             }
         } else {
-            System.out.println("Property service is not available.");
+            System.out.println("No properties found.");
         }
     }
 
 
-
-    private void addPropertyItem(String title, String location, String type, double price, double size) {
+    private void addPropertyItem(Property property) {
         try {
             // Load the property item FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-item.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/loborems/PropertyListing/property-item.fxml")
+            );
             Node propertyCard = loader.load();
 
-            // Get the controller and set the property details
             PropertyItemController itemController = loader.getController();
+            itemController.setPropertyDetails(property);
 
-            // Create a property object based on the type
-            Property property = null;
-            if ("Residential".equals(type)) {
-                property = new ResidentialProperty();
-            } else if ("Commercial".equals(type)) {
-                property = new CommercialProperty();
-            }
-
-            if (property != null) {
-                property.setTitle(title);
-                property.setLocation(location);
-                property.setType(type);
-                property.setPrice(price);
-                property.setSize(size);
-                itemController.setPropertyDetails(property);  // Set property details in the controller
-            }
-
-            // Add the property card to the FlowPane
             propertyListContainer.getChildren().add(propertyCard);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 
 
