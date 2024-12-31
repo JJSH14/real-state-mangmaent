@@ -21,6 +21,18 @@ public class UserDOAimp implements UserDOA {
     public UserDOAimp() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
+    public User getByResetToken(String resetToken) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE resetToken = :resetToken", User.class);
+            query.setParameter("resetToken", resetToken);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            logger.severe("Error getting user by reset token: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public void save(User user) {
@@ -147,6 +159,18 @@ public class UserDOAimp implements UserDOA {
             return new ArrayList<>();
         }
     }
+    public User getUserByToken(String token) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User WHERE resetToken = :token", User.class);
+            query.setParameter("token", token);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            logger.severe("Error finding user by token: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     @Override
     public User findClient(int id) {
@@ -194,5 +218,7 @@ public class UserDOAimp implements UserDOA {
             e.printStackTrace();
             return null;
         }
+
+
     }
 }

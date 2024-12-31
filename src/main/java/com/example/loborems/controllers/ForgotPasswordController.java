@@ -4,9 +4,14 @@ import com.example.loborems.models.User;
 import com.example.loborems.models.services.UserDOAimp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
@@ -44,12 +49,13 @@ public class ForgotPasswordController {
                 userDAO.update(user); // Update the user with the token and expiration
 
                 // Generate the reset link
-                String resetLink = "http://localhost:8080/reset-password?token=" + token;
-
-                // Send the reset email
-                EmailSender.sendResetEmail(email, resetLink);
+                String emailBody = "Use the following token to reset your password: " + token;
+                EmailSender.sendResetEmail(email, emailBody);
 
                 showAlert("Success", "A password reset link has been sent to your email.");
+
+                // Redirect to Reset Password page
+                loadResetPasswordPage(token); // Pass the token to the next page
             } else {
                 showAlert("Error", "Email not found in the database.");
             }
@@ -58,6 +64,34 @@ public class ForgotPasswordController {
             showAlert("Email Error", "Failed to send the reset email.");
         }
     }
+
+    /**
+     * Redirects the user to the Reset Password page and passes the token.
+     */
+    private void loadResetPasswordPage(String token) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/ResetPassword/reset-password.fxml")); // Update the path
+        try {
+            Parent root = loader.load();
+
+            // Pass the token to ResetPasswordController
+            ResetPasswordController controller = loader.getController();
+            controller.setToken(token);
+
+            // Show the Reset Password page
+            Stage stage = new Stage();
+            stage.setTitle("Reset Password");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Optionally close the current window
+            Stage currentStage = (Stage) emailField.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", "Failed to load the Reset Password page.");
+        }
+    }
+
 
     /**
      * Displays an alert dialog with the specified title and message.
