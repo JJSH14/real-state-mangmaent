@@ -32,8 +32,31 @@ public class User {
     )
     private Set<Permission> permissions;
 
-    // Existing getters and setters...
+    // New Fields for Password Reset Token and Expiration
+    @Column(name = "reset_token")
+    private String resetToken;
 
+    @Column(name = "token_expiration")
+    private Long tokenExpiration;
+
+    // Getters and Setters for new fields
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    public Long getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(Long tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
+    // Existing getters and setters
     public Set<Permission> getPermissions() {
         return permissions;
     }
@@ -81,6 +104,4 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    // Keep all other existing getters and setters...
 }
