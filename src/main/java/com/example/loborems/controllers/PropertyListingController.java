@@ -121,8 +121,40 @@ public class PropertyListingController implements javafx.fxml.Initializable {
 
     @FXML
     public void handleSearchClick(ActionEvent actionEvent) {
+        // Get the search text entered by the user
+        String searchText = searchBar.getText().trim().toLowerCase();
 
+        // If the search bar is empty, display all properties
+        if (searchText.isEmpty()) {
+            // If no search text, display all properties again
+            propertyListContainer.getChildren().clear();
+            for (Property property : properties) {
+                addPropertyItem(property);
+            }
+            return;
+        }
+
+        // Filter properties by title
+        List<Property> filteredProperties = new ArrayList<>();
+        for (Property property : properties) {
+            if (property.getTitle().toLowerCase().contains(searchText)) {
+                filteredProperties.add(property);
+            }
+        }
+
+        // Clear the previous properties and show filtered ones
+        propertyListContainer.getChildren().clear();
+        if (filteredProperties.isEmpty()) {
+            // If no results found, show a message or some placeholder
+            showAlert("No Results", "No properties found matching the search criteria.");
+        } else {
+            // Display the filtered properties
+            for (Property p : filteredProperties) {
+                addPropertyItem(p);
+            }
+        }
     }
+
 
     @FXML
     private void handleFilterApply() {

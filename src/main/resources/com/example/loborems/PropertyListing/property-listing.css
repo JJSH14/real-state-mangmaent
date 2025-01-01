@@ -1,6 +1,6 @@
 /* Main layout styling */
 .main-layout {
-    -fx-background-color: #FFF;
+    -fx-background-color: #F4F6F9; /* Match the sidebar background */
 }
 
 /* Sidebar styles */
@@ -29,6 +29,7 @@
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-cursor: hand; /* Add cursor pointer for better UX */
 }
 
 .button:hover {
