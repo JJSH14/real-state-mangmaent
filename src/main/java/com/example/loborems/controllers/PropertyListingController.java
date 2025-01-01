@@ -1,21 +1,23 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.models.CommercialProperty;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.ResidentialProperty;
-import com.example.loborems.models.services.PropertyService;
+import com.example.loborems.services.PropertyDAOImpl;
+import com.example.loborems.services.PropertyService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -30,12 +32,28 @@ public class PropertyListingController implements javafx.fxml.Initializable {
     @FXML
     private Button addPropertyButton;
     @FXML
+    private Button filterButton;
+    @FXML
+    private ComboBox<String> propertyTypeComboBox;
+    @FXML
+    private TextField locationField;
+    @FXML
+    private TextField minPriceField;
+    @FXML
+    private TextField maxPriceField;
+    @FXML
+    private CheckBox hasGardenCheckBox;
+
+    @FXML
     private Stage stage;
     @FXML
     private Scene scene;
-
-
-
+    @FXML
+    private Button searchButton;
+    @FXML
+    private TextField searchBar;
+    @FXML
+    private VBox sidebar; // The sidebar VBox
 
     private List<Property> properties;
 
@@ -57,7 +75,6 @@ public class PropertyListingController implements javafx.fxml.Initializable {
         }
     }
 
-
     private void addPropertyItem(Property property) {
         try {
             // Load the property item FXML
@@ -74,8 +91,6 @@ public class PropertyListingController implements javafx.fxml.Initializable {
             e.printStackTrace();
         }
     }
-
-
 
     // Handle click to navigate to Add Property Page
     @FXML
@@ -102,5 +117,77 @@ public class PropertyListingController implements javafx.fxml.Initializable {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    public void handleSearchClick(ActionEvent actionEvent) {
+
+    }
+
+    @FXML
+    private void handleFilterApply() {
+        String location = locationField.getText().trim().toLowerCase();
+        String minPriceText = minPriceField.getText().trim();
+        String maxPriceText = maxPriceField.getText().trim();
+        boolean hasGarden = hasGardenCheckBox.isSelected();
+        String propertyType = propertyTypeComboBox.getValue();
+
+        PropertyDAOImpl propertyDAO = new PropertyDAOImpl();
+
+        // Get all properties from DAO
+        List<Property> filteredProperties = new ArrayList<>(propertyDAO.getAllProperties());
+
+        try {
+            // Apply location filter
+            if (!location.isEmpty()) {
+                filteredProperties.removeIf(p -> !p.getLocation().toLowerCase().contains(location));
+            }
+
+            // Apply minimum price filter
+            if (!minPriceText.isEmpty()) {
+                double minPrice = Double.parseDouble(minPriceText);
+                filteredProperties.removeIf(p -> p.getPrice() < minPrice);
+            }
+
+            // Apply maximum price filter
+            if (!maxPriceText.isEmpty()) {
+                double maxPrice = Double.parseDouble(maxPriceText);
+                filteredProperties.removeIf(p -> p.getPrice() > maxPrice);
+            }
+
+            // Apply property type filter
+            if (propertyType != null && !propertyType.isEmpty()) {
+                filteredProperties.removeIf(p -> !p.getType().equalsIgnoreCase(propertyType));
+            }
+
+            // Apply hasGarden filter for residential properties
+            if (hasGarden) {
+                filteredProperties.removeIf(p -> !(p instanceof ResidentialProperty) || !((ResidentialProperty) p).isHasGarden());
+            }
+        } catch (NumberFormatException e) {
+            showAlert("Invalid Input", "Please enter valid numbers for price filters.");
+            return;
+        }
+
+        // Clear the previous properties and show filtered ones
+        propertyListContainer.getChildren().clear();
+        for (Property p : filteredProperties) {
+            addPropertyItem(p);
+        }
+    }
+
+
+
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public void handleToggleSidebar(ActionEvent actionEvent) {
+        sidebar.setVisible(!sidebar.isVisible());
     }
 }

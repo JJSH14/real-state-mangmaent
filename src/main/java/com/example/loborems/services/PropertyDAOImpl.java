@@ -1,12 +1,13 @@
-package com.example.loborems.models.services;
+package com.example.loborems.services;
 
-import com.example.loborems.models.Interfaces.PropertyDAO;
+import com.example.loborems.interfaces.PropertyDAO;
+import com.example.loborems.models.Property;
+import com.example.loborems.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import com.example.loborems.models.Property;
-import com.example.loborems.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyDAOImpl implements PropertyDAO {
@@ -73,11 +74,10 @@ public class PropertyDAOImpl implements PropertyDAO {
         }
     }
 
-    // method to get all properties
     @Override
     public List<Property> getAllProperties() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Property> properties = null;
+        List<Property> properties = new ArrayList<>();
         try {
             Query<Property> query = session.createQuery("FROM Property", Property.class);
             properties = query.list();

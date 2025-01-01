@@ -47,4 +47,5 @@ public abstract class Property {
     public abstract String getType();
 
     public abstract void setType(String type);
+
 }

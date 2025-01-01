@@ -1,13 +1,8 @@
 package com.example.loborems.util;
 
+import com.example.loborems.models.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import com.example.loborems.models.User;
-import com.example.loborems.models.Role;
-import com.example.loborems.models.Permission;
-import com.example.loborems.models.Property;
-import com.example.loborems.models.ResidentialProperty;
-import com.example.loborems.models.CommercialProperty;
 
 import java.util.Properties;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -23,7 +18,9 @@ public class HibernateUtil {
             configuration.configure("hibernate.cfg.xml"); // Load default settings from the XML file
 
             // Add annotated classes dynamically
+            configuration.addAnnotatedClass(Interaction.class);
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Client.class);
             configuration.addAnnotatedClass(Permission.class);
             configuration.addAnnotatedClass(Role.class);
             configuration.addAnnotatedClass(Property.class);

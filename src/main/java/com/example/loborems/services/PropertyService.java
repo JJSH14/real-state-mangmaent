@@ -1,6 +1,8 @@
-package com.example.loborems.models.services;
+package com.example.loborems.services;
 
-import com.example.loborems.models.Interfaces.PropertyDAO;
+
+
+import com.example.loborems.interfaces.PropertyDAO;
 import com.example.loborems.models.CommercialProperty;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.PropertyFactory;
