@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextField;
 import org.mindrot.jbcrypt.BCrypt;
 import java.io.IOException;
@@ -25,17 +26,30 @@ public class LoginController {
     private Button loginButton;
 
     @FXML
+    private Hyperlink forgotPasswordLink;
+
+    @FXML
     public void initialize() {
-        // Add event handler for loginButton click
         loginButton.setOnAction(e -> handleLogin());
     }
 
+    @FXML
+    private void handleForgotPassword() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/ForgotPassword/forgot-password.fxml"));
+            Parent forgotPasswordRoot = loader.load();
+            Scene currentScene = forgotPasswordLink.getScene();
+            currentScene.setRoot(forgotPasswordRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Unable to load the forgot password page.");
+        }
+    }
+
     private void handleLogin() {
-        // Fetch input values
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
-        // Validate input
         if (email.isEmpty() || password.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Please fill out all required fields.");
             return;
@@ -43,12 +57,9 @@ public class LoginController {
 
         try {
             if (validateLogin(email, password)) {
-                // Navigate to the Dashboard
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/views/Dashboard.fxml"));
                     Parent dashboardRoot = loader.load();
-
-                    // Get current scene and set the new root
                     Scene currentScene = loginButton.getScene();
                     currentScene.setRoot(dashboardRoot);
                 } catch (IOException e) {
@@ -66,17 +77,11 @@ public class LoginController {
 
     private boolean validateLogin(String email, String password) {
         try {
-            // Get user from database by email
             User user = userDOAimp.getByEmail(email);
-
-            // Check if user exists
             if (user == null) {
                 return false;
             }
-
-            // Verify password using BCrypt
             return BCrypt.checkpw(password, user.getPassword());
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
