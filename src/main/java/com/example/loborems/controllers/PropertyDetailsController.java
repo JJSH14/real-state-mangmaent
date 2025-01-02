@@ -1,92 +1,205 @@
 package com.example.loborems.controllers;
 
+import com.example.loborems.models.Interfaces.PropertyDAO;
+import com.example.loborems.models.Property;
+import com.example.loborems.models.ResidentialProperty;
+import com.example.loborems.models.CommercialProperty;
+import com.example.loborems.models.services.PropertyDAOImpl;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
+import javafx.concurrent.Task;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
+import java.util.Base64;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 public class PropertyDetailsController {
+    @FXML private Text titleLabel;
+    @FXML private Label locationLabel;
+    @FXML private Label sizeLabel;
+    @FXML private Label priceLabel;
+    @FXML private Label typeLabel;
+    @FXML private Label statusLabel;
+    @FXML private Label featuresLabel;
 
-    @FXML
-    private AnchorPane rootPane;
+    // Residential specific labels
+    @FXML private Label bedroomsLabel;
+    @FXML private Label bedroomsTitleLabel;
+    @FXML private Label gardenLabel;
+    @FXML private Label gardenTitleLabel;
 
-    @FXML
-    private ImageView mainImageView;
+    // Commercial specific labels
+    @FXML private Label floorsLabel;
+    @FXML private Label floorsTitleLabel;
+    @FXML private Label parkingLabel;
+    @FXML private Label parkingTitleLabel;
 
-    @FXML
-    private ImageView thumbImage1;
+    @FXML private ImageView mainImageView;
+    @FXML private ImageView thumbImage1;
+    @FXML private ImageView thumbImage2;
+    @FXML private ImageView thumbImage3;
+    @FXML private ImageView thumbImage4;
+    @FXML private Button backButton;
+    @FXML private Button editButton;
+    @FXML private Button deleteButton;
 
-    @FXML
-    private ImageView thumbImage2;
-
-    @FXML
-    private ImageView thumbImage3;
-
-    @FXML
-    private ImageView thumbImage4;
-
-    @FXML
-    private Button backButton;
-
-    @FXML
-    private Button editButton;
+    private Property currentProperty;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+    private Image[] loadedImages;
 
 
-    // مسارات الصور
-    private final String[] imagePaths = {
-            getClass().getResource("/images/th.jpeg").toExternalForm(),
-            getClass().getResource("/images/imgB2.gif").toExternalForm(),
-            getClass().getResource("/images/th3.jpeg").toExternalForm(),
-            getClass().getResource("/images/FB4.jpg").toExternalForm()
-    };
-
-    @FXML
     public void initialize() {
-        // إعداد لون الخلفية
-
-        // تعيين الصور الصغيرة عند بداية التطبيق
-        thumbImage1.setImage(new Image(imagePaths[0]));
-        thumbImage2.setImage(new Image(imagePaths[1]));
-        thumbImage3.setImage(new Image(imagePaths[2]));
-        thumbImage4.setImage(new Image(imagePaths[3]));
-
-        // الصورة الرئيسية تكون الأولى افتراضياً
-        mainImageView.setImage(new Image(imagePaths[0]));
-
-        // إضافة تأثير تغيير الصورة عند الضغط على الصور المصغرة
-        thumbImage1.setOnMouseClicked(event -> changeMainImage(imagePaths[0]));
-        thumbImage2.setOnMouseClicked(event -> changeMainImage(imagePaths[1]));
-        thumbImage3.setOnMouseClicked(event -> changeMainImage(imagePaths[2]));
-        thumbImage4.setOnMouseClicked(event -> changeMainImage(imagePaths[3]));
-
-        // إضافة تأثيرات عند المرور على الصور المصغرة (مثل تكبير الحجم)
-        addHoverEffect(thumbImage1);
-        addHoverEffect(thumbImage2);
-        addHoverEffect(thumbImage3);
-        addHoverEffect(thumbImage4);
+        // Hide all property-specific labels by default
+        hideAllPropertySpecificLabels();
     }
 
-    // تغيير الصورة الرئيسية بدون تأثير التلاشي
-    private void changeMainImage(String imagePath) {
-        mainImageView.setImage(new Image(imagePath));
+    private void hideAllPropertySpecificLabels() {
+        // Hide residential labels
+        bedroomsTitleLabel.setVisible(false);
+        bedroomsLabel.setVisible(false);
+        gardenTitleLabel.setVisible(false);
+        gardenLabel.setVisible(false);
+
+        // Hide commercial labels
+        floorsTitleLabel.setVisible(false);
+        floorsLabel.setVisible(false);
+        parkingTitleLabel.setVisible(false);
+        parkingLabel.setVisible(false);
     }
 
-    // إضافة تأثير عند التمرير على الصور المصغرة
-    private void addHoverEffect(ImageView imageView) {
-        imageView.setOnMouseEntered(event -> {
-            imageView.setScaleX(1.1);
-            imageView.setScaleY(1.1);
+    public void setProperty(Property property) {
+        this.currentProperty = property;
+        populateData();
+        loadImagesAsync();
+    }
+
+    private void populateData() {
+        // Populate common fields
+        titleLabel.setText(currentProperty.getTitle());
+        locationLabel.setText(currentProperty.getLocation());
+        sizeLabel.setText(String.format("%.2f sqm", currentProperty.getSize()));
+        priceLabel.setText(String.format("$%.2f", currentProperty.getPrice()));
+        typeLabel.setText(currentProperty.getType());
+        statusLabel.setText(currentProperty.getStatus());
+        featuresLabel.setText(currentProperty.getFeatures());
+
+        // Handle property-specific fields
+        if (currentProperty instanceof ResidentialProperty) {
+            populateResidentialData((ResidentialProperty) currentProperty);
+        } else if (currentProperty instanceof CommercialProperty) {
+            populateCommercialData((CommercialProperty) currentProperty);
+        }
+    }
+
+    private void populateResidentialData(ResidentialProperty property) {
+        // Handle bedrooms
+        if (property.getNumberOfBedrooms() > 0) {
+            bedroomsTitleLabel.setVisible(true);
+            bedroomsLabel.setVisible(true);
+            bedroomsLabel.setText(String.format("%d Bedrooms", property.getNumberOfBedrooms()));
+        }
+
+        // Handle garden
+        gardenTitleLabel.setVisible(true);
+        gardenLabel.setVisible(true);
+        gardenLabel.setText(property.isHasGarden() ? "Yes" : "No");
+    }
+
+    private void populateCommercialData(CommercialProperty property) {
+        // Handle floors
+        if (property.getNumberOfFloors() > 0) {
+            floorsTitleLabel.setVisible(true);
+            floorsLabel.setVisible(true);
+            floorsLabel.setText(String.format("%d Floors", property.getNumberOfFloors()));
+        }
+
+        // Handle parking spaces
+        if (property.getParkingSpaces() > 0) {
+            parkingTitleLabel.setVisible(true);
+            parkingLabel.setVisible(true);
+            parkingLabel.setText(String.format("%d Parking Spaces", property.getParkingSpaces()));
+        }
+    }
+
+    private void loadImagesAsync() {
+        if (currentProperty.getImages() == null || currentProperty.getImages().isEmpty()) {
+            return;
+        }
+
+        Task<Image[]> imageLoadTask = new Task<>() {
+            @Override
+            protected Image[] call() {
+                String[] imageStrings = currentProperty.getImages().split(",");
+                Image[] images = new Image[imageStrings.length];
+
+                for (int i = 0; i < imageStrings.length; i++) {
+                    if (isCancelled()) {
+                        return null;
+                    }
+                    images[i] = decodeBase64Image(imageStrings[i]);
+                    final int index = i;
+                    Platform.runLater(() -> updateImageView(index, images[index]));
+                }
+                return images;
+            }
+        };
+
+        imageLoadTask.setOnSucceeded(event -> {
+            loadedImages = imageLoadTask.getValue();
+            if (loadedImages != null && loadedImages.length > 0) {
+                setupImageClickHandlers();
+            }
         });
-        imageView.setOnMouseExited(event -> {
-            imageView.setScaleX(1.0);
-            imageView.setScaleY(1.0);
-        });
+
+        executorService.submit(imageLoadTask);
+    }
+
+    private void updateImageView(int index, Image image) {
+        if (image == null) return;
+
+        if (index == 0) {
+            mainImageView.setImage(image);
+        }
+
+        ImageView[] thumbnails = {thumbImage1, thumbImage2, thumbImage3, thumbImage4};
+        if (index < thumbnails.length) {
+            thumbnails[index].setImage(image);
+        }
+    }
+
+    private void setupImageClickHandlers() {
+        ImageView[] thumbnails = {thumbImage1, thumbImage2, thumbImage3, thumbImage4};
+        for (int i = 0; i < thumbnails.length; i++) {
+            if (i < loadedImages.length) {
+                final int index = i;
+                thumbnails[i].setOnMouseClicked(e -> updateMainImage(loadedImages[index]));
+            }
+        }
+    }
+
+    private void updateMainImage(Image newImage) {
+        if (newImage != null && !newImage.equals(mainImageView.getImage())) {
+            mainImageView.setImage(newImage);
+        }
+    }
+
+    private Image decodeBase64Image(String base64) {
+        try {
+            byte[] imageData = Base64.getDecoder().decode(base64.trim());
+            return new Image(new ByteArrayInputStream(imageData));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @FXML
@@ -95,24 +208,38 @@ public class PropertyDetailsController {
             Stage stage = (Stage) backButton.getScene().getWindow();
             Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml")));
             stage.setScene(newScene);
-
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load Client List Page.");
         }
     }
 
     @FXML
     private void onEditButtonClicked() {
         try {
-            Stage stage = (Stage) backButton.getScene().getWindow();
+            Stage stage = (Stage) editButton.getScene().getWindow();
             Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/AddProperty/add-property.fxml")));
-
             stage.setScene(newScene);
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load Client List Page.");
         }
     }
 
+    public void cleanup() {
+        executorService.shutdown();
+    }
+
+    @FXML
+    private void oneDleteButtonClicked() {
+        try {
+            PropertyDAO propertyDAO = new PropertyDAOImpl();
+            propertyDAO.delete(currentProperty);
+
+            // Navigate back to the property listing screen after successful deletion
+            Stage stage = (Stage) deleteButton.getScene().getWindow();
+            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml")));
+            stage.setScene(newScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
