@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Base64;
+import javafx.scene.Parent;
 
 
 public class PropertyItemController {
@@ -46,9 +47,13 @@ public class PropertyItemController {
     private ImageView propertyImage;
     @FXML
     private Button viewMoreButton;
+
+    private Property property;
+
     public void setPropertyDetails(Property property) {
         if (property == null) return;
 
+        this.property = property;
         // Shared fields
         propertyName.setText(property.getTitle());
         locationLabel.setText("📍 " + property.getLocation());
@@ -71,8 +76,7 @@ public class PropertyItemController {
 
             bedroomsLabel.setText("Bedrooms: " + rp.getNumberOfBedrooms());
             gardenLabel.setText("Garden: " + (rp.isHasGarden() ? "Yes" : "No"));
-        }
-        else if (property instanceof CommercialProperty cp) {
+        } else if (property instanceof CommercialProperty cp) {
             floorsLabel.setVisible(true);
             floorsLabel.setManaged(true);
             parkingLabel.setVisible(true);
@@ -86,7 +90,6 @@ public class PropertyItemController {
             floorsLabel.setText("Floors: " + cp.getNumberOfFloors());
             parkingLabel.setText("Parking: " + cp.getParkingSpaces());
         }
-
 
 
         if (property.getImages() != null && !property.getImages().isEmpty()) {
@@ -107,16 +110,25 @@ public class PropertyItemController {
         }
 
     }
+
     @FXML
     public void onViewButtonClicked() {
         try {
+            // تحميل الـ FXML الخاص بـ Property Details
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyDetails/property-details.fxml"));
+            Parent root = loader.load();
+
+            // الحصول على الكنترولر الخاص بالنافذة الجديدة
+            PropertyDetailsController controller = loader.getController();
+
+            // تمرير الخاصية الحالية إلى الكنترولر
+            controller.setProperty(property);
+
+            // إعداد المشهد الجديد
             Stage stage = (Stage) viewMoreButton.getScene().getWindow();
-            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyDetails/property-details.fxml")));
-            stage.setScene(newScene);
+            stage.setScene(new Scene(root));
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Failed to load Property Details Page.");
         }
     }
-
 }
