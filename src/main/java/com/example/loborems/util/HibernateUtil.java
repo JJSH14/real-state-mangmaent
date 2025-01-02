@@ -7,6 +7,11 @@ import org.hibernate.cfg.Configuration;
 import java.util.Properties;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
+import com.example.loborems.models.Client;
+import com.example.loborems.models.Offer;
+import com.example.loborems.models.Permission;
+import com.example.loborems.models.Role;
+import com.example.loborems.models.User;
 
 public class HibernateUtil {
     private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -26,6 +31,7 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(Property.class);
             configuration.addAnnotatedClass(ResidentialProperty.class);
             configuration.addAnnotatedClass(CommercialProperty.class);
+            configuration.addAnnotatedClass(Offer.class);
 
             // Build the SessionFactory
             return configuration.buildSessionFactory();
