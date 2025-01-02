@@ -73,7 +73,6 @@ public class PropertyDAOImpl implements PropertyDAO {
         }
     }
 
-    // method to get all properties
     @Override
     public List<Property> getAllProperties() {
         Session session = HibernateUtil.getSessionFactory().openSession();
