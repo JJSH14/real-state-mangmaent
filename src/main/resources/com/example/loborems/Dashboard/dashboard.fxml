@@ -206,7 +206,6 @@
       <JFXButton layoutX="766.0" layoutY="41.0" onAction="#goToManageAgent" style="-fx-background-color: #8696C2;" text="Manage Agent" textFill="#14274d" />
       <JFXButton layoutX="58.0" layoutY="409.0" onAction="#goToCategorisation" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Tcategorization" />
       <JFXButton layoutX="57.0" layoutY="449.0" onAction="#goToOffers" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Offer" />
-      <JFXButton layoutX="761.0" layoutY="71.0" onAction="#goToPermission" style="-fx-background-color: #8696C2;" text="Add Permissions" textFill="#14274d" />
     </children>
     <stylesheets>
         <URL value="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" />
