@@ -15,7 +15,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="883.0" styleClass="img" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.DashboardAgentController">
     <children>
 
-        <Text fill="#14274d" layoutX="281.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-style: #111827;" text="Dashboard" wrappingWidth="172.13671875">
+        <Text fill="#14274d" layoutX="281.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard" wrappingWidth="172.13671875">
             <font>
                 <Font name="System Bold" size="29.0" />
             </font>
@@ -51,7 +51,7 @@
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Text fill="#0ff8abed" layoutX="542.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="18" wrappingWidth="46.2568359375">
+        <Text fill="#0ff8abed" layoutX="542.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="46.2568359375">
             <font>
                 <Font name="Baskerville Old Face" size="22.0" />
             </font>
@@ -143,7 +143,7 @@
         </Text>
         <AnchorPane layoutX="14.0" layoutY="12.0" prefHeight="584.0" prefWidth="222.0" style="-fx-background-color: #8696C2;" styleClass="pack1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css">
             <children>
-                <Text fill="#14274d" layoutX="37.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-style: #111827;" text="RealEstate">
+                <Text fill="#14274d" layoutX="37.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RealEstate">
                     <font>
                         <Font name="Book Antiqua" size="27.0" />
                     </font>
@@ -205,13 +205,13 @@
                 <Image url="@../../../../../../../../Pictures/person.png" />
             </image>
         </ImageView>
-        <JFXButton onAction="#goToDashboard" layoutX="58.0" layoutY="225.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Dashboard" />
-        <JFXButton onAction="#goToInteractions" layoutX="58.0" layoutY="356.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Interactions" />
-        <JFXButton onAction="#goToClients" layoutX="58.0" layoutY="270.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Client" />
-        <JFXButton onAction="#logout" layoutX="58.0" layoutY="490.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Logut" />
-        <JFXButton onAction="#goToProperties" layoutX="58.0" layoutY="315.0" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Prorperties" />
-      <JFXButton onAction="#goToCategorisation" layoutX="58.0" layoutY="399.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Tcategorization" />
-      <JFXButton onAction="#goToOffers" layoutX="57.0" layoutY="443.0" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Offer" />
+        <JFXButton layoutX="58.0" layoutY="225.0" onAction="#goToDashboard" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Dashboard" />
+        <JFXButton layoutX="58.0" layoutY="356.0" onAction="#goToInteractions" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Interactions" />
+        <JFXButton layoutX="58.0" layoutY="270.0" onAction="#goToClients" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Client" />
+        <JFXButton layoutX="58.0" layoutY="490.0" onAction="#logout" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Logut" />
+        <JFXButton layoutX="58.0" layoutY="315.0" onAction="#goToProperties" prefHeight="29.0" prefWidth="155.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Prorperties" />
+      <JFXButton layoutX="58.0" layoutY="399.0" onAction="#goToCategorisation" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Tcategorization" />
+      <JFXButton layoutX="57.0" layoutY="443.0" onAction="#goToOffers" prefHeight="29.0" prefWidth="157.0" styleClass="button1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css" text="Offer" />
       <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="21.0" layoutY="228.0">
          <image>
             <Image url="@../../../../images/home.png" />

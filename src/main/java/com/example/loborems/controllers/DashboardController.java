@@ -43,8 +43,8 @@ public class DashboardController implements Initializable {
     private final PropertyDAO propertyDao;
 
     public DashboardController() {
-        this.userDao = new UserDOAimp(); // Or use dependency injection if available
-        this.propertyDao = new PropertyDAOImpl(); // Or use dependency injection if available
+        this.userDao = new UserDOAimp(); // Replace with dependency injection if needed
+        this.propertyDao = new PropertyDAOImpl(); // Replace with dependency injection if needed
     }
 
     @Override
@@ -56,7 +56,7 @@ public class DashboardController implements Initializable {
             total.setText(String.valueOf(userCount));
 
             if (!users.isEmpty()) {
-                User user = users.get(0); // Get the first user
+                User user = users.get(0); // Use the first user for demonstration
                 name.setText(user.getFullName());
                 email.setText(user.getEmail());
             }
@@ -64,13 +64,12 @@ public class DashboardController implements Initializable {
             // Retrieve all properties
             List<Property> properties = propertyDao.getAllProperties();
             if (!properties.isEmpty()) {
-                Property property = properties.get(0); // Get the first property
+                Property property = properties.get(0); // Use the first property for demonstration
                 proname.setText(property.getFeatures());
                 price.setText(String.valueOf(property.getPrice()));
                 locationn.setText(property.getLocation());
                 prostatus.setText(property.getStatus());
             }
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
