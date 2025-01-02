@@ -1,5 +1,11 @@
 package com.example.loborems.controllers;
 
+import com.example.loborems.models.Interfaces.PropertyDAO;
+import com.example.loborems.models.Interfaces.UserDOA;
+import com.example.loborems.models.Property;
+import com.example.loborems.models.User;
+import com.example.loborems.models.services.PropertyDAOImpl;
+import com.example.loborems.models.services.UserDOAimp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,92 +18,69 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
-import java.sql.ResultSet;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import static java.lang.String.valueOf;
-
-//import java.sql.Connection;
 public class DashboardController implements Initializable {
-    private static final String URL = "jdbc:mysql://localhost:3306/LoboDB";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
     @FXML
-    Text total;
+    private Text total;
     @FXML
-    Text active;
+    private Text active;
     @FXML
-    Text name;
+    private Text name;
     @FXML
-    Text email;
+    private Text email;
     @FXML
-    Text proname;
+    private Text proname;
     @FXML
-    Text prostatus;
+    private Text prostatus;
     @FXML
-    Text price;
+    private Text price;
     @FXML
-    Text locationn;
-    @FXML
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    private Text locationn;
 
-        Connection aa = null;
-        try {
-            aa = DriverManager.getConnection(URL, USER, PASSWORD);
-            String hh = "SELECT count(id) from user where role_id = 2 ";
-            Statement stmt = aa.createStatement();
-            ResultSet rs = stmt.executeQuery(hh);
-            if (rs.next()) {
-                int count = rs.getInt(1); // الحصول على القيمة من العمود الأول
-                total.setText(valueOf(count));
-            } else {
-                System.out.print("No results found.");
-            }
-            Statement stmtt = aa.createStatement();
-            String sql1="SELECT * from user";
-            ResultSet rsse = stmtt.executeQuery(sql1);
-            if(rsse.next()){
-                String namee=rsse.getString("full_name");
-                String emaill=rsse.getString("email");
-                name.setText(namee);
-                email.setText(emaill);
+    private final UserDOA userDao;
+    private final PropertyDAO propertyDao;
 
-            }
-            Connection h2=DriverManager.getConnection(URL, USER, PASSWORD);
-            String sql3="SELECT * from property";
-            Statement stmt3 = h2.createStatement();
-            ResultSet rss3 = stmt3.executeQuery(sql3);
-            if(rss3.next()){
-                String profeat= rss3.getString("features");
-                String prolocation= rss3.getString("location");
-                int proprice= rss3.getInt("price");
-                String status= rss3.getString("status");
-                proname.setText(profeat);
-                price.setText(valueOf(proprice));
-                locationn.setText(prolocation);
-                prostatus.setText(status);
-
-            }
-
-
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+    public DashboardController() {
+        this.userDao = new UserDOAimp(); // Or use dependency injection if available
+        this.propertyDao = new PropertyDAOImpl(); // Or use dependency injection if available
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            // Retrieve all users and filter by role_id
+            List<User> users = userDao.getAll();
+            long userCount = users.stream().filter(user -> user.getRole().getId() == 2).count();
+            total.setText(String.valueOf(userCount));
+
+            if (!users.isEmpty()) {
+                User user = users.get(0); // Get the first user
+                name.setText(user.getFullName());
+                email.setText(user.getEmail());
+            }
+
+            // Retrieve all properties
+            List<Property> properties = propertyDao.getAllProperties();
+            if (!properties.isEmpty()) {
+                Property property = properties.get(0); // Get the first property
+                proname.setText(property.getFeatures());
+                price.setText(String.valueOf(property.getPrice()));
+                locationn.setText(property.getLocation());
+                prostatus.setText(property.getStatus());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void logout(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Login/login.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
-
     }
 
     public void goToDashboard(ActionEvent event) throws IOException {
@@ -105,58 +88,61 @@ public class DashboardController implements Initializable {
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToInteractions(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientInteraction/client-interaction.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToClients(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientList/client-list.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToProperties(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToAddAgents(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddAgent/addAgent.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToCategorisation(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientCategorization/client-categorization.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToOffers(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Offers/offers.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
+
     public void goToManageAgent(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AgentManage/AgentManage.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
-
     }
 
-
-
+    public void goToPermission(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Permissions/permissions.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+    }
 }
