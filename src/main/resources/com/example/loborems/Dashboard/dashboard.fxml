@@ -14,7 +14,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="883.0" style="-fx-background-color: #FFFFFF;" styleClass="img" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.DashboardController">
     <children>
 
-        <Text fill="#14274d" layoutX="281.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-style: #111827;" text="Dashboard" wrappingWidth="172.13671875">
+        <Text fill="#14274d" layoutX="281.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard" wrappingWidth="172.13671875">
             <font>
                 <Font name="System Bold" size="29.0" />
             </font>
@@ -35,7 +35,7 @@
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Text fx:id="active" fill="#08ffaded" layoutX="643.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="6" wrappingWidth="46.2568359375">
+        <Text fx:id="active" fill="#08ffaded" layoutX="643.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="46.2568359375">
             <font>
                 <Font name="Baskerville Old Face" size="22.0" />
             </font>
@@ -130,7 +130,7 @@
         </ImageView>
         <AnchorPane layoutX="14.0" layoutY="12.0" prefHeight="584.0" prefWidth="222.0" style="-fx-background-color: #8696C2;" styleClass="pack1" stylesheets="@../../../../../../../../../../../../backupSalahsWork/fxml/Dashboard/salah.css">
             <children>
-                <Text fill="#14274d" layoutX="37.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-style: #111827;" text="RealEstate">
+                <Text fill="#14274d" layoutX="37.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RealEstate">
                     <font>
                         <Font name="Book Antiqua" size="27.0" />
                     </font>
