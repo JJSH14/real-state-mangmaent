@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="500" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.loborems.controllers.PermissionsController">
+
+    <!-- Header -->
+    <top>
+        <HBox spacing="10" style="-fx-background-color: #7091E6; -fx-padding: 10;">
+            <Label style="-fx-font-size: 18px; -fx-text-fill: white;" text="Permissions Management" />
+        </HBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox spacing="10" style="-fx-background-color: #EDE8F5;">
+            <!-- TableView -->
+            <TableView fx:id="usersTable" style="-fx-background-color: #FFFFFF;" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="userIdColumn" prefWidth="150.0" text="User ID" />
+                    <TableColumn fx:id="userNameColumn" prefWidth="200.0" text="Username" />
+                    <TableColumn fx:id="roleColumn" prefWidth="150.0" text="Role" />
+                </columns>
+            </TableView>
+
+            <!-- Permissions -->
+            <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #EDE8F5;">
+                <CheckBox fx:id="viewPermission" text="View" />
+                <CheckBox fx:id="editPermission" text="Edit" />
+                <CheckBox fx:id="deletePermission" text="Delete" />
+            </HBox>
+
+            <!-- Buttons -->
+            <HBox alignment="CENTER" spacing="10" style="-fx-background-color: #EDE8F5;">
+                <Button onAction="#handleSavePermissions" text="Save Permissions" style="-fx-background-color: #7091E6; -fx-text-fill: white;" />
+                <Button onAction="#handleCancel" text="Cancel" style="-fx-background-color: #7091E6; -fx-text-fill: white;" />
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Footer -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-background-color: #EDE8F5; -fx-padding: 10;">
+            <Label style="-fx-font-size: 12px; -fx-text-fill: #616161;" text="© 2025 All rights reserved." />
+        </HBox>
+    </bottom>
+</BorderPane>

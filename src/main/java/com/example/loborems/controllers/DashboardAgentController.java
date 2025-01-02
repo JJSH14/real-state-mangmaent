@@ -19,10 +19,10 @@ import java.util.ResourceBundle;
 import static java.lang.String.valueOf;
 
 //import java.sql.Connection;
-public class DashboardController implements Initializable {
+public class DashboardAgentController implements Initializable {
     private static final String URL = "jdbc:mysql://localhost:3306/LoboDB";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String USER = "root"; // اسم المستخدم الخاص بـ MySQL
+    private static final String PASSWORD = ""; // كلمة المرور (اتركها فارغة إذا لم تضف كلمة مرور)
     @FXML
     Text total;
     @FXML
@@ -42,12 +42,13 @@ public class DashboardController implements Initializable {
     @FXML
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        Connection h2=null;
         Connection aa = null;
         try {
+            h2= DriverManager.getConnection(URL, USER, PASSWORD);
             aa = DriverManager.getConnection(URL, USER, PASSWORD);
-            String hh = "SELECT count(id) from user where role_id = 2 ";
-            Statement stmt = aa.createStatement();
+            String hh = "SELECT count(id) from property ";
+            Statement stmt = h2.createStatement();
             ResultSet rs = stmt.executeQuery(hh);
             if (rs.next()) {
                 int count = rs.getInt(1); // الحصول على القيمة من العمود الأول
@@ -55,17 +56,27 @@ public class DashboardController implements Initializable {
             } else {
                 System.out.print("No results found.");
             }
+
+            String sql="SELECT count(id) from client ";
             Statement stmtt = aa.createStatement();
-            String sql1="SELECT * from user";
+            ResultSet rss = stmtt.executeQuery(sql);
+            if (rss.next()) {
+                int countt = rss.getInt(1); // الحصول على القيمة من العمود الأول
+                active.setText(valueOf(countt));
+            } else {
+                System.out.print("No results found.");
+            }
+
+            String sql1="SELECT * from client";
             ResultSet rsse = stmtt.executeQuery(sql1);
             if(rsse.next()){
-                String namee=rsse.getString("full_name");
+                String namee=rsse.getString("name");
                 String emaill=rsse.getString("email");
                 name.setText(namee);
                 email.setText(emaill);
 
             }
-            Connection h2=DriverManager.getConnection(URL, USER, PASSWORD);
+
             String sql3="SELECT * from property";
             Statement stmt3 = h2.createStatement();
             ResultSet rss3 = stmt3.executeQuery(sql3);
@@ -149,8 +160,8 @@ public class DashboardController implements Initializable {
         window.setScene(newScene);
 
     }
-    public void goToManageAgent(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AgentManage/AgentManage.fxml"));
+    public void goToDownloadData(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/DownloadData/download-data.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);
@@ -160,3 +171,4 @@ public class DashboardController implements Initializable {
 
 
 }
+
