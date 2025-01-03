@@ -87,6 +87,13 @@
       <artifactId>bootstrapfx-core</artifactId>
       <version>0.4.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.simplejavamail</groupId>
+      <artifactId>simple-java-mail</artifactId>
+      <version>7.5.0</version>
+    </dependency>
+
+
 
     <!-- Hibernate ORM -->
     <dependency>
@@ -148,6 +155,11 @@
           <artifactId>commons-logging</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.simplejavamail</groupId>
+      <artifactId>core-module</artifactId>
+      <version>7.5.0</version>
     </dependency>
   </dependencies>
 

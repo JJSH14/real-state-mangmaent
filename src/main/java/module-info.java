@@ -16,6 +16,9 @@ module com.example.loborems {
     requires java.logging;
     requires java.desktop;
     requires org.apache.commons.compress;
+    requires org.simplejavamail;
+    requires org.simplejavamail.core;
+
 
     // Export and open necessary packages
     opens com.example.loborems to javafx.fxml;
