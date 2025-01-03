@@ -1,17 +1,19 @@
-package com.example.loborems.models;
-
-import com.example.loborems.interfaces.DOA;
-import com.example.loborems.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+package com.example.loborems.services;
 
 import java.util.List;
 
-public class DOAInteraction implements DOA<Interaction> {
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import com.example.loborems.interfaces.DOA;
+import com.example.loborems.models.Interaction;
+import com.example.loborems.util.HibernateUtil;
+
+public class DOAInteractionImpl implements DOA<Interaction> {
 
     private final SessionFactory sessionFactory;
 
-    public DOAInteraction() {
+    public DOAInteractionImpl() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
@@ -60,7 +62,13 @@ public class DOAInteraction implements DOA<Interaction> {
 
     @Override
     public List<Interaction> findAll() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            // Use HQL to fetch all records of Interaction
+            return session.createQuery("FROM Interaction", Interaction.class).list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

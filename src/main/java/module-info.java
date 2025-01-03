@@ -15,6 +15,7 @@ module com.example.loborems {
     requires com.jfoenix;
     requires java.logging;
     requires java.desktop;
+    requires org.apache.commons.compress;
     requires org.simplejavamail;
     requires org.simplejavamail.core;
 
@@ -30,7 +31,6 @@ module com.example.loborems {
     exports com.example.loborems.models;
     opens com.example.loborems.util to javafx.fxml;
     exports com.example.loborems.util;
-
+    exports com.example.loborems.services;
+    opens com.example.loborems.services to javafx.fxml;
 }
-
-

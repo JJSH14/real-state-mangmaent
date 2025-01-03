@@ -1,5 +1,6 @@
-package com.example.loborems.models.services;
-import com.example.loborems.models.Interfaces.ClientListDAO;
+package com.example.loborems.services;
+
+import com.example.loborems.interfaces.ClientListDAO;
 import com.example.loborems.models.Client;
 import com.example.loborems.util.HibernateUtil;
 import org.hibernate.Session;
@@ -9,6 +10,7 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class ClientListDAOImp implements ClientListDAO {
+
     @Override
     public void addClient(Client client) throws Exception {
         Transaction transaction = null;

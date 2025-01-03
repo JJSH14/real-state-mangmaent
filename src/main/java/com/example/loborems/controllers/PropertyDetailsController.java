@@ -1,10 +1,10 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.models.Interfaces.PropertyDAO;
+import com.example.loborems.interfaces.PropertyDAO;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.ResidentialProperty;
 import com.example.loborems.models.CommercialProperty;
-import com.example.loborems.models.services.PropertyDAOImpl;
+import com.example.loborems.services.PropertyDAOImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,40 +22,64 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 public class PropertyDetailsController {
-    @FXML private Text titleLabel;
-    @FXML private Label locationLabel;
-    @FXML private Label sizeLabel;
-    @FXML private Label priceLabel;
-    @FXML private Label typeLabel;
-    @FXML private Label statusLabel;
-    @FXML private Label featuresLabel;
+
+    @FXML
+    private Text titleLabel;
+    @FXML
+    private Label locationLabel;
+    @FXML
+    private Label sizeLabel;
+    @FXML
+    private Label priceLabel;
+    @FXML
+    private Label typeLabel;
+    @FXML
+    private Label statusLabel;
+    @FXML
+    private Label featuresLabel;
 
     // Residential specific labels
-    @FXML private Label bedroomsLabel;
-    @FXML private Label bedroomsTitleLabel;
-    @FXML private Label gardenLabel;
-    @FXML private Label gardenTitleLabel;
+    @FXML
+    private Label bedroomsLabel;
+    @FXML
+    private Label bedroomsTitleLabel;
+    @FXML
+    private Label gardenLabel;
+    @FXML
+    private Label gardenTitleLabel;
 
     // Commercial specific labels
-    @FXML private Label floorsLabel;
-    @FXML private Label floorsTitleLabel;
-    @FXML private Label parkingLabel;
-    @FXML private Label parkingTitleLabel;
+    @FXML
+    private Label floorsLabel;
+    @FXML
+    private Label floorsTitleLabel;
+    @FXML
+    private Label parkingLabel;
+    @FXML
+    private Label parkingTitleLabel;
 
-    @FXML private ImageView mainImageView;
-    @FXML private ImageView thumbImage1;
-    @FXML private ImageView thumbImage2;
-    @FXML private ImageView thumbImage3;
-    @FXML private ImageView thumbImage4;
-    @FXML private Button backButton;
-    @FXML private Button editButton;
-    @FXML private Button deleteButton;
+    @FXML
+    private ImageView mainImageView;
+    @FXML
+    private ImageView thumbImage1;
+    @FXML
+    private ImageView thumbImage2;
+    @FXML
+    private ImageView thumbImage3;
+    @FXML
+    private ImageView thumbImage4;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     private Property currentProperty;
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
     private Image[] loadedImages;
-
 
     public void initialize() {
         // Hide all property-specific labels by default
@@ -164,7 +188,9 @@ public class PropertyDetailsController {
     }
 
     private void updateImageView(int index, Image image) {
-        if (image == null) return;
+        if (image == null) {
+            return;
+        }
 
         if (index == 0) {
             mainImageView.setImage(image);

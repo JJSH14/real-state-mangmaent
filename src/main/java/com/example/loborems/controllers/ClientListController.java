@@ -1,6 +1,7 @@
 package com.example.loborems.controllers;
-import com.example.loborems.models.Interfaces.ClientListDAO;
-import com.example.loborems.models.services.ClientListDAOImp;
+
+import com.example.loborems.interfaces.ClientListDAO;
+import com.example.loborems.services.ClientListDAOImp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,18 +16,30 @@ import org.hibernate.exception.ConstraintViolationException;
 
 public class ClientListController {
 
-    @FXML private TableView<Client> clientTable;
-    @FXML private TableColumn<Client, String> idColumn;
-    @FXML private TableColumn<Client, String> nameColumn;
-    @FXML private TableColumn<Client, String> emailColumn;
-    @FXML private TableColumn<Client, String> phoneColumn;
-    @FXML private TableColumn<Client, String> propertyColumn;
-    @FXML private TableColumn<Client, String> roleColumn;
-    @FXML private TableColumn<Client, Void> editColumn;
-    @FXML private TableColumn<Client, Void> removeColumn;
-    @FXML private TextField nameField, emailField, phoneField, propertyField, roleField, searchField;
-    @FXML private Button addClientButton;
-    @FXML private Button backButton;
+    @FXML
+    private TableView<Client> clientTable;
+    @FXML
+    private TableColumn<Client, String> idColumn;
+    @FXML
+    private TableColumn<Client, String> nameColumn;
+    @FXML
+    private TableColumn<Client, String> emailColumn;
+    @FXML
+    private TableColumn<Client, String> phoneColumn;
+    @FXML
+    private TableColumn<Client, String> propertyColumn;
+    @FXML
+    private TableColumn<Client, String> roleColumn;
+    @FXML
+    private TableColumn<Client, Void> editColumn;
+    @FXML
+    private TableColumn<Client, Void> removeColumn;
+    @FXML
+    private TextField nameField, emailField, phoneField, propertyField, roleField, searchField;
+    @FXML
+    private Button addClientButton;
+    @FXML
+    private Button backButton;
 
     private final ObservableList<Client> clientList = FXCollections.observableArrayList();
     private final ClientListDAO clientDAO = new ClientListDAOImp();
@@ -198,10 +211,18 @@ public class ClientListController {
     private boolean validateFields(String name, String email, String phone, String role) {
         StringBuilder errorMessage = new StringBuilder();
 
-        if (name.isEmpty()) errorMessage.append("Name is required.\n");
-        if (email.isEmpty()) errorMessage.append("Email is required.\n");
-        if (phone.isEmpty()) errorMessage.append("Phone is required.\n");
-        if (role.isEmpty()) errorMessage.append("Role is required.\n");
+        if (name.isEmpty()) {
+            errorMessage.append("Name is required.\n");
+        }
+        if (email.isEmpty()) {
+            errorMessage.append("Email is required.\n");
+        }
+        if (phone.isEmpty()) {
+            errorMessage.append("Phone is required.\n");
+        }
+        if (role.isEmpty()) {
+            errorMessage.append("Role is required.\n");
+        }
 
         if (!email.isEmpty() && !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             errorMessage.append("Invalid email format.\n");

@@ -1,7 +1,7 @@
 package com.example.loborems.controllers;
 
 import com.example.loborems.models.User;
-import com.example.loborems.models.services.UserDOAimp;
+import com.example.loborems.services.UserDOAimp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -93,7 +93,6 @@ public class ForgotPasswordController {
         }
     }
 
-
     /**
      * Displays an alert dialog with the specified title and message.
      */
@@ -104,6 +103,7 @@ public class ForgotPasswordController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     public void backToSignIn(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Login/login.fxml"));
         Scene newScene = new Scene(secondRoot);

@@ -1,17 +1,20 @@
-package com.example.loborems.models;
-
-import com.example.loborems.interfaces.DOA;
-import com.example.loborems.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+package com.example.loborems.services;
 
 import java.util.List;
 
-public class DOAClient implements DOA<Client> {
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+
+import com.example.loborems.interfaces.DOA;
+import com.example.loborems.models.Client;
+import com.example.loborems.util.HibernateUtil;
+
+public class DOAClientImpl implements DOA<Client> {
 
     private final SessionFactory sessionFactory;
 
-    public DOAClient() {
+    public DOAClientImpl() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
@@ -49,6 +52,19 @@ public class DOAClient implements DOA<Client> {
         }
     }
 
+    public Client findByIdOrName(int id, String name) {
+        try (Session session = sessionFactory.openSession()) {
+            String hql = "FROM Client WHERE id = :id OR name = :name";
+            Query<Client> query = session.createQuery(hql, Client.class);
+            query.setParameter("id", id);
+            query.setParameter("name", name);
+            return query.uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     @Override
     public List<Client> findAll() {
         try (Session session = sessionFactory.openSession()) {
@@ -59,8 +75,8 @@ public class DOAClient implements DOA<Client> {
     public long getTotalClients() {
         try (Session session = sessionFactory.openSession()) {
             return (long) session.createQuery(
-                            "SELECT COUNT(c) FROM Client c WHERE c.roleId = :roleId"
-                    )
+                    "SELECT COUNT(c) FROM Client c WHERE c.roleId = :roleId"
+            )
                     .setParameter("roleId", 2)
                     .uniqueResult();
         } catch (Exception e) {
@@ -68,7 +84,6 @@ public class DOAClient implements DOA<Client> {
             return 0;
         }
     }
-
 
     public long getActiveClients() {
         try (Session session = sessionFactory.openSession()) {

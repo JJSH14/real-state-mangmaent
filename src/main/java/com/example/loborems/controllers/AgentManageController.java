@@ -2,7 +2,7 @@ package com.example.loborems.controllers;
 
 import com.example.loborems.models.Role;
 import com.example.loborems.models.User;
-import com.example.loborems.models.services.UserDOAimp;
+import com.example.loborems.services.UserDOAimp;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;

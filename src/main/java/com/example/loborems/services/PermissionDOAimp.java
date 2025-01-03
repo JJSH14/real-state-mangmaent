@@ -1,28 +1,29 @@
-package com.example.loborems.models.services;
-
-import com.example.loborems.models.Interfaces.RoleDOA;
-import com.example.loborems.models.Role;
-import com.example.loborems.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+package com.example.loborems.services;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoleDOAimp implements RoleDOA {
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import com.example.loborems.interfaces.PermissionDOA;
+import com.example.loborems.models.Permission;
+import com.example.loborems.util.HibernateUtil;
+
+public class PermissionDOAimp implements PermissionDOA {
     private final SessionFactory sessionFactory;
 
-    public RoleDOAimp() {
+    public PermissionDOAimp() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
     @Override
-    public void save(Role role) {
+    public void save(Permission permission) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.save(role);
+            session.save(permission);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -33,11 +34,11 @@ public class RoleDOAimp implements RoleDOA {
     }
 
     @Override
-    public void update(Role role) {
+    public void update(Permission permission) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.update(role);
+            session.update(permission);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -48,11 +49,11 @@ public class RoleDOAimp implements RoleDOA {
     }
 
     @Override
-    public void delete(Role role) {
+    public void delete(Permission permission) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            session.delete(role);
+            session.delete(permission);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -63,9 +64,9 @@ public class RoleDOAimp implements RoleDOA {
     }
 
     @Override
-    public List<Role> getAll() {
+    public List<Permission> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Role", Role.class).list();
+            return session.createQuery("FROM Permission", Permission.class).list();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -73,24 +74,26 @@ public class RoleDOAimp implements RoleDOA {
     }
 
     @Override
-    public Role findRole(int id) {
+    public Permission findPermission(int id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Role.class, id);
+            return session.get(Permission.class, id);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    @Override
+    public List<Permission> findByRoleId(int roleId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                            "SELECT p FROM Permission p JOIN p.roles r WHERE r.id = :roleId", Permission.class)
+                    .setParameter("roleId", roleId)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
-    @Override
-    public Role findByName(String name) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM Role WHERE name = :name", Role.class)
-                    .setParameter("name", name)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 }

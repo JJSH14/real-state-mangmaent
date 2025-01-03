@@ -1,10 +1,11 @@
 package com.example.loborems.controllers;
-import com.example.loborems.models.Interfaces.PropertyDAO;
-import com.example.loborems.models.Interfaces.UserDOA;
+
+import com.example.loborems.interfaces.PropertyDAO;
+import com.example.loborems.interfaces.UserDOA;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.User;
-import com.example.loborems.models.services.UserDOAimp;
-import com.example.loborems.models.services.PropertyDAOImpl;
+import com.example.loborems.services.UserDOAimp;
+import com.example.loborems.services.PropertyDAOImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 public class DashboardAgentController implements Initializable {
+
     @FXML
     private Text total;
     @FXML
@@ -50,9 +53,6 @@ public class DashboardAgentController implements Initializable {
             // Retrieve all properties and count them
             List<Property> properties = propertyDao.getAllProperties();
             total.setText(String.valueOf(properties.size()));
-
-
-
 
             // Retrieve all users and count them
             List<User> users = userDao.getAll();

@@ -3,9 +3,16 @@ package com.example.loborems.controllers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+
+import java.io.IOException;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -13,9 +20,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.example.loborems.models.Client;
-import com.example.loborems.models.DOAClient;
-import com.example.loborems.models.DOAInteraction;
 import com.example.loborems.models.Interaction;
+import com.example.loborems.services.DOAClientImpl;
+import com.example.loborems.services.DOAInteractionImpl;
+
+import javafx.stage.Stage;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 
 public class ClientInteractionController {
 
@@ -49,6 +72,8 @@ public class ClientInteractionController {
 
     @FXML
     private Button saveButton;
+    @FXML
+    private Button backButton;
 
     @FXML
     private TableView<Interaction> tableView;
@@ -57,6 +82,17 @@ public class ClientInteractionController {
 
     @FXML
     void initialize() {
+
+        // Set table resize policy
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Set preferred width for other columns
+        clientIDColumn.setPrefWidth(150);
+        dateColumn.setPrefWidth(100);
+        interactionTypeColumn.setPrefWidth(200);
+
+        // Let the Status column take the remaining space
+        statusColumn.setMaxWidth(Double.MAX_VALUE);
         LOGGER.info("Initializing ClientInteractionController.");
 
         setupTableColumns();
@@ -68,12 +104,22 @@ public class ClientInteractionController {
             LOGGER.info("Save button clicked.");
             saveInteraction();
         });
+        backButton.setOnAction(event -> {
+            LOGGER.info("Back button clicked.");
+            try {
+                goToDashboard(event);
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error navigating to the dashboard.", e);
+                showAlert(AlertType.ERROR, "Error", "Failed to navigate to the dashboard. Check the logs for details.");
+            }
+        });
 
         cancelButton.setOnAction(event -> {
             LOGGER.info("Cancel button clicked.");
             clearFields();
         });
     }
+
 
     private void setupTableColumns() {
         clientIDColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClient().getName()));
@@ -84,12 +130,21 @@ public class ClientInteractionController {
         LOGGER.info("Table columns configured.");
     }
 
+    public void goToDashboard(ActionEvent event) throws IOException {
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
+        Scene newScene = new Scene(secondRoot);
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setScene(newScene);
+        window.show();
+    }
+
     private void loadTableData() {
         try {
-            DOAInteraction doaInteraction = new DOAInteraction();
+            DOAInteractionImpl doaInteraction = new DOAInteractionImpl();
             List<Interaction> interactions = doaInteraction.findAll();
 
-            if (interactions == null || interactions.isEmpty()) {
+            if (interactions == null || interactions.isEmpty()
+            ) {
                 LOGGER.warning("No interactions found.");
                 return;
             }
@@ -127,7 +182,7 @@ public class ClientInteractionController {
                     clientSelect.getValue()
             );
 
-            DOAInteraction doaInteraction = new DOAInteraction();
+            DOAInteractionImpl doaInteraction = new DOAInteractionImpl();
             doaInteraction.save(interaction);
 
             LOGGER.info("Interaction saved successfully.");
@@ -143,7 +198,7 @@ public class ClientInteractionController {
 
     private void loadClients() {
         try {
-            DOAClient doaClient = new DOAClient();
+            DOAClientImpl doaClient = new DOAClientImpl();
             List<Client> clients = doaClient.findAll();
 
             ObservableList<Client> clientNames = FXCollections.observableArrayList(clients);

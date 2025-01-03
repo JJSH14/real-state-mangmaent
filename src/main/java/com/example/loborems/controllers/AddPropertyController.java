@@ -1,7 +1,7 @@
 package com.example.loborems.controllers;
 
 import com.example.loborems.models.*;
-import com.example.loborems.models.services.PropertyService;
+import com.example.loborems.services.PropertyService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
