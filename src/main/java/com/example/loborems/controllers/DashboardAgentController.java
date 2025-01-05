@@ -4,6 +4,7 @@ import com.example.loborems.interfaces.PropertyDAO;
 import com.example.loborems.interfaces.UserDOA;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.User;
+import com.example.loborems.services.DOAClientImpl;
 import com.example.loborems.services.UserDOAimp;
 import com.example.loborems.services.PropertyDAOImpl;
 import javafx.event.ActionEvent;
@@ -21,11 +22,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class DashboardAgentController implements Initializable {
+    @FXML
+    private Text TotalProperties;
+    @FXML
+    private Text ActiveClients;
+    @FXML
+    private Text TotalClients;
 
-    @FXML
-    private Text total;
-    @FXML
-    private Text active;
     @FXML
     private Text name;
     @FXML
@@ -52,11 +55,18 @@ public class DashboardAgentController implements Initializable {
         try {
             // Retrieve all properties and count them
             List<Property> properties = propertyDao.getAllProperties();
-            total.setText(String.valueOf(properties.size()));
+            TotalProperties.setText(String.valueOf(properties.size()));
 
-            // Retrieve all users and count them
             List<User> users = userDao.getAll();
-            active.setText(String.valueOf(users.size()));
+            ActiveClients.setText(String.valueOf(2));
+
+            // Retrieve all clients and count them
+            DOAClientImpl clientDao = new DOAClientImpl();
+            long totalClientsCount = clientDao.getTotalClients();
+
+            ActiveClients.setText(String.valueOf(2));
+
+            TotalClients.setText(String.valueOf(totalClientsCount));
 
             // Set the first user's details (assuming it's an agent)
             if (!users.isEmpty()) {
@@ -79,6 +89,7 @@ public class DashboardAgentController implements Initializable {
         }
     }
 
+
     public void logout(ActionEvent event) throws IOException {
         Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Login/login.fxml"));
         Scene newScene = new Scene(secondRoot);
@@ -87,7 +98,7 @@ public class DashboardAgentController implements Initializable {
     }
 
     public void goToDashboard(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
+        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard-agent.fxml"));
         Scene newScene = new Scene(secondRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(newScene);

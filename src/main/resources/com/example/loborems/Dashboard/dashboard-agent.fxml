@@ -41,17 +41,17 @@
          <cursor>
             <Cursor fx:constant="NONE" />
          </cursor></Button>
-        <Text fx:id="total" fill="#14274ded" layoutX="355.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="24" wrappingWidth="46.2568359375">
+        <Text fx:id="TotalProperties" fill="#14274ded" layoutX="355.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="24" wrappingWidth="46.2568359375">
             <font>
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Text fx:id="active" fill="#14274ded" layoutX="723.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="42" wrappingWidth="46.2568359375">
+        <Text fx:id="TotalClients" fill="#14274ded" layoutX="723.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="42" wrappingWidth="46.2568359375">
             <font>
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Text fill="#0ff8abed" layoutX="542.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="46.2568359375">
+        <Text fx:id="ActiveClients" fill="#0ff8abed" layoutX="542.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="46.2568359375">
             <font>
                 <Font name="Baskerville Old Face" size="22.0" />
             </font>

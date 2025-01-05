@@ -75,20 +75,8 @@ public class DOAClientImpl implements DOA<Client> {
     public long getTotalClients() {
         try (Session session = sessionFactory.openSession()) {
             return (long) session.createQuery(
-                    "SELECT COUNT(c) FROM Client c WHERE c.roleId = :roleId"
+                    "SELECT COUNT(c) FROM Client c"
             )
-                    .setParameter("roleId", 2)
-                    .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    public long getActiveClients() {
-        try (Session session = sessionFactory.openSession()) {
-            return (long) session.createQuery("SELECT COUNT(c) FROM Client c WHERE c.status = :status")
-                    .setParameter("status", "active")
                     .uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
