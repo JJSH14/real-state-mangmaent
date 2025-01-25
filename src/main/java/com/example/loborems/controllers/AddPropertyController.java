@@ -2,6 +2,7 @@ package com.example.loborems.controllers;
 
 import com.example.loborems.models.*;
 import com.example.loborems.services.PropertyService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,10 +13,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 
 import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class AddPropertyController {
@@ -46,6 +49,15 @@ public class AddPropertyController {
     @FXML
     public void initialize() {
         propertyTypeComboBox.setItems(FXCollections.observableArrayList("Residential", "Commercial"));
+        statusComboBox.setItems(FXCollections.observableArrayList("Available", "Sold", "Rented"));
+
+        // Find the save button and update its text if in edit mode
+        if (isEditMode) {
+            Button saveButton = (Button) uploadPhotosButton.getScene().lookup("#saveButton");
+            if (saveButton != null) {
+                saveButton.setText("Update Property");
+            }
+        }
     }
     @FXML
     public void handlePropertyTypeChange(ActionEvent event) {
@@ -56,6 +68,35 @@ public class AddPropertyController {
             return;
         }
 
+        // If we're in edit mode and changing property type
+        if (isEditMode && currentProperty != null && !currentProperty.getType().equals(selectedType)) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Change Property Type");
+            alert.setHeaderText("Warning: Changing Property Type");
+            alert.setContentText("Changing property type will reset type-specific fields. Continue?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // Clear type-specific fields
+                if ("Residential".equals(selectedType)) {
+                    floorsField.clear();
+                    parkingField.clear();
+                    bedroomsField.clear();
+                    hasGardenCheckBox.setSelected(false);
+                } else if ("Commercial".equals(selectedType)) {
+                    bedroomsField.clear();
+                    hasGardenCheckBox.setSelected(false);
+                    floorsField.clear();
+                    parkingField.clear();
+                }
+            } else {
+                // User cancelled - revert combo box selection
+                propertyTypeComboBox.setValue(currentProperty.getType());
+                return;
+            }
+        }
+
+        // Update UI visibility
         boolean isResidential = "Residential".equals(selectedType);
         boolean isCommercial = "Commercial".equals(selectedType);
 
@@ -88,7 +129,7 @@ public class AddPropertyController {
     @FXML
     public void handleSaveProperty(ActionEvent actionEvent) {
         if (validateInput()) {
-            if (selectedPhotos.size() != 5) {
+            if (!isEditMode && selectedPhotos.size() != 5) {
                 showAlert("Validation Error", "Please upload 5 photos.");
                 return;
             }
@@ -102,49 +143,66 @@ public class AddPropertyController {
                 String features = featuresArea.getText();
                 String status = statusComboBox.getValue();
 
-                if ("Residential".equals(propertyType)) {
-                    int bedrooms = Integer.parseInt(bedroomsField.getText());
-                    propertyService.saveProperty(
-                            propertyType, title, location, size, price, features, status,
-                            bedrooms, hasGardenCheckBox, null, null, selectedPhotos
-                    );
-                } else if ("Commercial".equals(propertyType)) {
-                    int floors = Integer.parseInt(floorsField.getText());
-                    int parking = Integer.parseInt(parkingField.getText());
-                    propertyService.saveProperty(
-                            propertyType, title, location, size, price, features, status,
-                            null, null, floors, parking, selectedPhotos
-                    );
+                if (isEditMode) {
+                    // Create new property instance of the selected type
+                    Property property = PropertyFactory.createProperty(propertyType);
+                    property.setId(editPropertyId);
+                    property.setTitle(title);
+                    property.setLocation(location);
+                    property.setSize(size);
+                    property.setPrice(price);
+                    property.setFeatures(features);
+                    property.setStatus(status);
+
+                    // Keep existing images
+                    if (currentProperty != null && currentProperty.getImages() != null) {
+                        property.setImages(currentProperty.getImages());
+                    }
+
+                    // Set type-specific fields based on the new type
+                    if (property instanceof ResidentialProperty) {
+                        ResidentialProperty rp = (ResidentialProperty) property;
+                        if (!bedroomsField.getText().trim().isEmpty()) {
+                            rp.setNumberOfBedrooms(Integer.parseInt(bedroomsField.getText().trim()));
+                        }
+                        rp.setHasGarden(hasGardenCheckBox.isSelected());
+                    } else if (property instanceof CommercialProperty) {
+                        CommercialProperty cp = (CommercialProperty) property;
+                        if (!floorsField.getText().trim().isEmpty()) {
+                            cp.setNumberOfFloors(Integer.parseInt(floorsField.getText().trim()));
+                        }
+                        if (!parkingField.getText().trim().isEmpty()) {
+                            cp.setParkingSpaces(Integer.parseInt(parkingField.getText().trim()));
+                        }
+                    }
+
+                    propertyService.updateProperty(property);
+                    showAlert("Success", "Property has been successfully updated.");
+                    navigateToPropertyListing(actionEvent);
+                }  else {
+                    if ("Residential".equals(propertyType)) {
+                        int bedrooms = Integer.parseInt(bedroomsField.getText());
+                        propertyService.saveProperty(
+                                propertyType, title, location, size, price, features, status,
+                                bedrooms, hasGardenCheckBox, null, null, selectedPhotos
+                        );
+                    } else if ("Commercial".equals(propertyType)) {
+                        int floors = Integer.parseInt(floorsField.getText());
+                        int parking = Integer.parseInt(parkingField.getText());
+                        propertyService.saveProperty(
+                                propertyType, title, location, size, price, features, status,
+                                null, null, floors, parking, selectedPhotos
+                        );
+                    }
+                    showAlert("Success", "Property has been successfully added.");
+                    navigateToPropertyListing(actionEvent);
                 }
-
-                showAlert("Property Saved", "Property has been successfully added.");
-                navigateToPropertyListing(actionEvent);
-
             } catch (NumberFormatException e) {
-                showAlert("Validation Error", "Please check numeric fields for valid numbers.");
+                showAlert("Error", "Please check numeric fields for valid numbers.");
+            } catch (Exception e) {
+                showAlert("Error", "An error occurred: " + e.getMessage());
+                e.printStackTrace();
             }
-        }
-    }
-
-
-    private void updatePropertyFromFields() {
-        if (currentProperty == null) {
-            currentProperty = PropertyFactory.createProperty(propertyTypeComboBox.getValue());
-        }
-
-        currentProperty.setTitle(titleField.getText());
-        currentProperty.setLocation(locationField.getText());
-        currentProperty.setSize(Double.parseDouble(sizeField.getText()));
-        currentProperty.setPrice(Double.parseDouble(priceField.getText()));
-        currentProperty.setFeatures(featuresArea.getText());
-        currentProperty.setStatus(statusComboBox.getValue());
-
-        if (currentProperty instanceof ResidentialProperty residential) {
-            residential.setNumberOfBedrooms(Integer.parseInt(bedroomsField.getText()));
-            residential.setHasGarden(hasGardenCheckBox.isSelected());
-        } else if (currentProperty instanceof CommercialProperty commercial) {
-            commercial.setNumberOfFloors(Integer.parseInt(floorsField.getText()));
-            commercial.setParkingSpaces(Integer.parseInt(parkingField.getText()));
         }
     }
 
@@ -364,4 +422,45 @@ public class AddPropertyController {
         alert.setContentText("You have unsaved changes. Do you want to discard them?");
         return alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
+
+    private boolean isEditMode = false;
+    private Long editPropertyId;
+
+    public void setEditMode(Property property) {
+        isEditMode = true;
+        editPropertyId = property.getId();
+        currentProperty = property; // Store reference to current property
+
+        // Set basic fields
+        Platform.runLater(() -> {
+            propertyTypeComboBox.setValue(property.getType());
+            handlePropertyTypeChange(new ActionEvent()); // Trigger field visibility
+
+            titleField.setText(property.getTitle());
+            locationField.setText(property.getLocation());
+            sizeField.setText(String.valueOf(property.getSize()));
+            priceField.setText(String.valueOf(property.getPrice()));
+            featuresArea.setText(property.getFeatures());
+            statusComboBox.setValue(property.getStatus());
+
+            // Set type-specific fields
+            if (property instanceof ResidentialProperty) {
+                ResidentialProperty rp = (ResidentialProperty) property;
+                bedroomsField.setText(String.valueOf(rp.getNumberOfBedrooms()));
+                hasGardenCheckBox.setSelected(rp.isHasGarden());
+            } else if (property instanceof CommercialProperty) {
+                CommercialProperty cp = (CommercialProperty) property;
+                floorsField.setText(String.valueOf(cp.getNumberOfFloors()));
+                parkingField.setText(String.valueOf(cp.getParkingSpaces()));
+            }
+
+            // Update button text
+            Button saveButton = (Button) titleField.getScene().lookup(".primary-button");
+            if (saveButton != null) {
+                saveButton.setText("Update Property");
+            }
+        });
+    }
+
+
 }

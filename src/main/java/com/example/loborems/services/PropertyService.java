@@ -82,13 +82,51 @@ public class PropertyService {
     public List<Property> getAllProperties() {
         return propertyDAO.getAllProperties(); // Calls the DAO method to fetch all properties
     }
+
     public void updateProperty(Property property) {
-        propertyDAO.update(property);
+        // Get the existing property from database to compare types
+        Property existingProperty = propertyDAO.getById(property.getId());
+
+        if (existingProperty == null) {
+            throw new RuntimeException("Property not found with ID: " + property.getId());
+        }
+
+        // Handle type conversion if property type has changed
+        if (!existingProperty.getType().equals(property.getType())) {
+            // Create new property of the new type
+            Property convertedProperty = PropertyFactory.createProperty(property.getType());
+
+            // Copy common properties
+            convertedProperty.setId(property.getId());
+            convertedProperty.setTitle(property.getTitle());
+            convertedProperty.setLocation(property.getLocation());
+            convertedProperty.setSize(property.getSize());
+            convertedProperty.setPrice(property.getPrice());
+            convertedProperty.setFeatures(property.getFeatures());
+            convertedProperty.setStatus(property.getStatus());
+            convertedProperty.setImages(property.getImages());
+
+            // Handle type-specific properties
+            if (convertedProperty instanceof ResidentialProperty && property instanceof ResidentialProperty) {
+                ResidentialProperty resProp = (ResidentialProperty) convertedProperty;
+                ResidentialProperty origProp = (ResidentialProperty) property;
+                resProp.setNumberOfBedrooms(origProp.getNumberOfBedrooms());
+                resProp.setHasGarden(origProp.isHasGarden());
+            } else if (convertedProperty instanceof CommercialProperty && property instanceof CommercialProperty) {
+                CommercialProperty comProp = (CommercialProperty) convertedProperty;
+                CommercialProperty origProp = (CommercialProperty) property;
+                comProp.setNumberOfFloors(origProp.getNumberOfFloors());
+                comProp.setParkingSpaces(origProp.getParkingSpaces());
+            }
+
+            // Update with the converted property
+            propertyDAO.update(convertedProperty);
+        } else {
+            // If type hasn't changed, perform normal update
+            propertyDAO.update(property);
+        }
     }
 
-    public void deleteProperty(Property property) {
-        propertyDAO.delete(property);
-    }
 
     public Property getPropertyById(int id) {
         return propertyDAO.getById(id);

@@ -10,6 +10,9 @@ public class ResidentialProperty extends Property {
     private boolean hasGarden;
     @Override
     public void setType(String type) {
+        if (!"Residential".equals(type)) {
+            throw new IllegalArgumentException("Invalid type for ResidentialProperty");
+        }
     }
     @Override
     public String getType() {
@@ -19,4 +22,5 @@ public class ResidentialProperty extends Property {
     public void setNumberOfBedrooms(int numberOfBedrooms) { this.numberOfBedrooms = numberOfBedrooms; }
     public boolean isHasGarden() { return hasGarden; }
     public void setHasGarden(boolean hasGarden) { this.hasGarden = hasGarden; }
+
 }

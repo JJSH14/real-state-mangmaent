@@ -2,6 +2,7 @@ package com.example.loborems.controllers;
 
 import com.example.loborems.models.Property;
 import com.example.loborems.models.ResidentialProperty;
+import com.example.loborems.models.User;
 import com.example.loborems.services.PropertyDAOImpl;
 import com.example.loborems.services.PropertyService;
 import javafx.fxml.FXML;
@@ -56,6 +57,17 @@ public class PropertyListingController implements javafx.fxml.Initializable {
     private VBox sidebar; // The sidebar VBox
 
     private List<Property> properties;
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        System.out.println("PropertyListingController - Current User Role: " +
+                (user != null && user.getRole() != null ? user.getRole().getId() : "null"));
+
+        if (propertyListContainer != null) {
+            refreshPropertyList();
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -84,7 +96,12 @@ public class PropertyListingController implements javafx.fxml.Initializable {
             Node propertyCard = loader.load();
 
             PropertyItemController itemController = loader.getController();
+
+            itemController.setCurrentUser(currentUser);
             itemController.setPropertyDetails(property);
+            System.out.println("PropertyListingController addPropertyItem - Passing User Role: " +
+                    (currentUser != null && currentUser.getRole() != null ? currentUser.getRole().getId() : "null"));
+
 
             propertyListContainer.getChildren().add(propertyCard);
         } catch (IOException e) {
@@ -221,5 +238,15 @@ public class PropertyListingController implements javafx.fxml.Initializable {
 
     public void handleToggleSidebar(ActionEvent actionEvent) {
         sidebar.setVisible(!sidebar.isVisible());
+    }
+
+    private void refreshPropertyList() {
+        propertyListContainer.getChildren().clear();
+        properties = propertyService.getAllProperties();
+        if (properties != null && !properties.isEmpty()) {
+            for (Property property : properties) {
+                addPropertyItem(property);
+            }
+        }
     }
 }

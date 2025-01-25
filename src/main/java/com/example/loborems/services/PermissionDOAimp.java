@@ -1,15 +1,14 @@
 package com.example.loborems.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.example.loborems.interfaces.PermissionDOA;
+import com.example.loborems.models.Permission;
+import com.example.loborems.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.example.loborems.interfaces.PermissionDOA;
-import com.example.loborems.models.Permission;
-import com.example.loborems.util.HibernateUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PermissionDOAimp implements PermissionDOA {
     private final SessionFactory sessionFactory;

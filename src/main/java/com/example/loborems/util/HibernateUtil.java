@@ -14,7 +14,6 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            // Create a configuration instance and configure programmatically
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml"); // Load default settings from the XML file
 

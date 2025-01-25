@@ -20,10 +20,13 @@ import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class addAgentController {
+    private static final Logger logger = Logger.getLogger(addAgentController.class.getName());
     private final UserDOAimp userDOAimp = new UserDOAimp();
     private final RoleDOAimp roleDOAimp = new RoleDOAimp();
+    private static User loggedInUser;
 
     @FXML
     private JFXTextField emailField;
@@ -42,17 +45,43 @@ public class addAgentController {
 
     @FXML
     private JFXComboBox<String> roleChoiceBox;
+
     @FXML
     private Stage stage;
+
     @FXML
     private Scene scene;
 
+// set logged in user
+
+    public static void setLoggedInUser(User user) {
+        loggedInUser = user;
+    }
+
+
     @FXML
     public void initialize() {
-        // Populate ComboBox with roles
+
+    //permission check
+        if (loggedInUser == null || loggedInUser.getRole() == null || loggedInUser.getRole().getId() != 1) {
+            disableAllControls();
+            showAlert(Alert.AlertType.ERROR, "Access Denied",
+                    "Only administrators can access this page.");
+
+            try {
+                handleBackClick(new ActionEvent());
+            } catch (IOException e) {
+                logger.severe("Error redirecting to dashboard: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return;
+        }
+
+
         roleChoiceBox.setItems(FXCollections.observableArrayList("admin", "agent"));
 
-        // Add listeners for validation
+
+
         full_name.textProperty().addListener((observable, oldValue, newValue) -> validateFields());
         emailField.textProperty().addListener((observable, oldValue, newValue) -> validateFields());
         passwordField.textProperty().addListener((observable, oldValue, newValue) -> validateFields());
@@ -60,30 +89,54 @@ public class addAgentController {
         roleChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFields());
     }
 
+    private void disableAllControls() {
+        emailField.setDisable(true);
+        full_name.setDisable(true);
+        passwordField.setDisable(true);
+        addButton1.setDisable(true);
+        acceptTerms.setDisable(true);
+        roleChoiceBox.setDisable(true);
+    }
+
     @FXML
     public void event(ActionEvent event) {
+
+        if (loggedInUser == null || loggedInUser.getRole() == null || loggedInUser.getRole().getId() != 1) {
+            showAlert(Alert.AlertType.ERROR, "Access Denied",
+                    "Only administrators can add new agents. Please log in with an admin account.");
+            try {
+                handleBackClick(event);
+            } catch (IOException e) {
+                logger.severe("Error redirecting to dashboard: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return;
+        }
+
         if (!validateFields()) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", "Please fill all required fields, select a role, and accept the terms.");
+            showAlert(Alert.AlertType.ERROR, "Validation Error",
+                    "Please fill all required fields, select a role, and accept the terms.");
             return;
         }
 
         try {
-            // Check if email already exists
+
             if (userDOAimp.getByEmail(emailField.getText().trim()) != null) {
                 showAlert(Alert.AlertType.ERROR, "Registration Error", "Email already exists");
                 return;
             }
 
-            // Create new User object
+
             User newUser = new User();
             newUser.setFullName(full_name.getText());
             newUser.setEmail(emailField.getText().trim());
 
             // Hash the password before saving
+
             String hashedPassword = hashPassword(passwordField.getText().trim());
             newUser.setPassword(hashedPassword);
 
-            // Save the role selected from the ComboBox
+            // save the role
             String selectedRole = roleChoiceBox.getValue();
             Role role = roleDOAimp.findByName(selectedRole);
 
@@ -92,22 +145,29 @@ public class addAgentController {
                 return;
             }
 
+
+            if (role.getId() == 1 && loggedInUser.getRole().getId() != 1) {
+                showAlert(Alert.AlertType.ERROR, "Access Denied",
+                        "You do not have permission to create admin users.");
+                return;
+            }
+
             newUser.setRole(role);
 
-            // Save the user using UserDOAimp
+            // Save the user
             userDOAimp.save(newUser);
 
-            // Show success message
             showAlert(Alert.AlertType.INFORMATION, "Success", "Agent account created successfully!");
-
-            // Clear the fields
             clearFields();
 
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Registration Error", "An error occurred: " + e.getMessage());
+            logger.severe("Error creating new user: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Registration Error",
+                    "An error occurred while creating the account: " + e.getMessage());
             e.printStackTrace();
         }
     }
+        //BCrypt hashing
 
     private String hashPassword(String plainTextPassword) {
         return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt(12));
@@ -116,31 +176,26 @@ public class addAgentController {
     private boolean validateFields() {
         addButton1.setDisable(true);
 
-        // Check if any field is empty
         if (isFieldEmpty(emailField) ||
                 isFieldEmpty(passwordField) ||
                 isFieldEmpty(full_name)) {
             return false;
         }
 
-        // Validate email format
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         if (!emailField.getText().trim().matches(emailRegex)) {
             return false;
         }
 
-        // Validate password length and complexity
         String password = passwordField.getText().trim();
         if (!isPasswordValid(password)) {
             return false;
         }
 
-        // Check if a role is selected
         if (roleChoiceBox.getValue() == null || roleChoiceBox.getValue().trim().isEmpty()) {
             return false;
         }
 
-        // Check if terms are accepted
         if (!acceptTerms.isSelected()) {
             return false;
         }
@@ -150,21 +205,11 @@ public class addAgentController {
     }
 
     private boolean isPasswordValid(String password) {
-        // Minimum length of 8 characters
         if (password.length() < 8) return false;
-
-        // Check for at least one lowercase letter
         if (!password.matches(".*[a-z].*")) return false;
-
-        // Check for at least one uppercase letter
         if (!password.matches(".*[A-Z].*")) return false;
-
-        // Check for at least one number
         if (!password.matches(".*[0-9].*")) return false;
-
-        // Check for at least one special character
         if (!password.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*")) return false;
-
         return true;
     }
 
@@ -187,6 +232,7 @@ public class addAgentController {
         acceptTerms.setSelected(false);
         roleChoiceBox.getSelectionModel().clearSelection();
     }
+
     public void handleBackClick(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

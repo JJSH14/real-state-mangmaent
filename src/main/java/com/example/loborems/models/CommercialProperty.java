@@ -10,6 +10,9 @@ public class CommercialProperty extends Property {
     private int parkingSpaces;
     @Override
     public void setType(String type) {
+        if (!"Commercial".equals(type)) {
+            throw new IllegalArgumentException("Invalid type for CommercialProperty");
+        }
     }
     @Override
     public String getType() {

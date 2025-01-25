@@ -42,15 +42,15 @@ public class UserDOAimp implements UserDOA {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
 
-            // Save the user
+
             session.save(user);
 
-            // Save or update associated role if provided
+
             if (user.getRole() != null) {
                 session.saveOrUpdate(user.getRole());
             }
 
-            // Save or update associated permissions if provided
+
             if (user.getPermissions() != null && !user.getPermissions().isEmpty()) {
                 for (Permission permission : user.getPermissions()) {
                     session.saveOrUpdate(permission);
@@ -79,15 +79,13 @@ public class UserDOAimp implements UserDOA {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
 
-            // Update the user
+
             session.update(user);
 
-            // Update associated role if provided
             if (user.getRole() != null) {
                 session.saveOrUpdate(user.getRole());
             }
 
-            // Update associated permissions if provided
             if (user.getPermissions() != null && !user.getPermissions().isEmpty()) {
                 for (Permission permission : user.getPermissions()) {
                     session.saveOrUpdate(permission);
@@ -116,21 +114,17 @@ public class UserDOAimp implements UserDOA {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
 
-            // Reload the user to ensure we have a managed entity
             User managedUser = session.get(User.class, user.getId());
 
             if (managedUser != null) {
-                // Clear permissions
                 if (managedUser.getPermissions() != null) {
                     managedUser.getPermissions().clear();
                     session.flush();
                 }
 
-                // Clear role reference
                 managedUser.setRole(null);
                 session.flush();
 
-                // Delete the user
                 session.delete(managedUser);
             }
 

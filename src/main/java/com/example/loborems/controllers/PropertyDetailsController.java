@@ -8,8 +8,10 @@ import com.example.loborems.services.PropertyDAOImpl;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,9 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import com.example.loborems.models.User;
+import com.example.loborems.services.UserDOAimp;
+import javafx.scene.control.Alert;
 
 public class PropertyDetailsController {
 
@@ -81,10 +86,41 @@ public class PropertyDetailsController {
     private final ExecutorService executorService = Executors.newFixedThreadPool(2);
     private Image[] loadedImages;
 
+
+
     public void initialize() {
         // Hide all property-specific labels by default
         hideAllPropertySpecificLabels();
     }
+
+    private User currentUser;
+    private final UserDOAimp userService = new UserDOAimp();
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        System.out.println("PropertyDetailsController - Received User Role: " +
+                (user != null && user.getRole() != null ? user.getRole().getId() : "null"));
+
+        Platform.runLater(() -> updateUIBasedOnPermissions());
+    }
+
+    private void updateUIBasedOnPermissions() {
+        boolean hasFullAccess = false;
+        if (currentUser != null && currentUser.getRole() != null) {
+            int roleId = currentUser.getRole().getId();
+            hasFullAccess = roleId == 2;
+            System.out.println("PropertyDetailsController updateUIBasedOnPermissions - User Role: " + roleId +
+                    ", HasFullAccess: " + hasFullAccess);
+        } else {
+            System.out.println("PropertyDetailsController updateUIBasedOnPermissions - User or Role is null");
+        }
+
+        editButton.setVisible(hasFullAccess);
+        editButton.setManaged(hasFullAccess);
+        deleteButton.setVisible(hasFullAccess);
+        deleteButton.setManaged(hasFullAccess);
+    }
+
 
     private void hideAllPropertySpecificLabels() {
         // Hide residential labels
@@ -231,20 +267,38 @@ public class PropertyDetailsController {
     @FXML
     private void onBackButtonClicked() {
         try {
+            // Load the property listing FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and set the current user
+            PropertyListingController propertyListingController = loader.getController();
+            propertyListingController.setCurrentUser(currentUser);
+
+            // Get the stage and set the new scene
             Stage stage = (Stage) backButton.getScene().getWindow();
-            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml")));
-            stage.setScene(newScene);
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Error", "Failed to return to property listing page: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     @FXML
     private void onEditButtonClicked() {
+        if (!checkFullAccess()) {
+            showAlert("Access Denied", "Only users with Role 2 can edit properties.", Alert.AlertType.WARNING);
+            return;
+        }
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/AddProperty/add-property.fxml"));
+            Parent root = loader.load();
+            AddPropertyController controller = loader.getController();
+            controller.setEditMode(currentProperty); // New method
             Stage stage = (Stage) editButton.getScene().getWindow();
-            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/AddProperty/add-property.fxml")));
-            stage.setScene(newScene);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -256,16 +310,49 @@ public class PropertyDetailsController {
 
     @FXML
     private void oneDleteButtonClicked() {
-        try {
-            PropertyDAO propertyDAO = new PropertyDAOImpl();
-            propertyDAO.delete(currentProperty);
-
-            // Navigate back to the property listing screen after successful deletion
-            Stage stage = (Stage) deleteButton.getScene().getWindow();
-            Scene newScene = new Scene(FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml")));
-            stage.setScene(newScene);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!checkFullAccess()) {
+            showAlert("Access Denied", "Only users with Role 2 can delete properties.", Alert.AlertType.WARNING);
+            return;
         }
+
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirm Delete");
+        confirmDialog.setContentText("Are you sure you want to delete this property?");
+
+        confirmDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    PropertyDAO propertyDAO = new PropertyDAOImpl();
+                    propertyDAO.delete(currentProperty);
+
+                    Stage stage = (Stage) deleteButton.getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
+                    Scene newScene = new Scene(loader.load());
+
+                    // إضافة السطرين الجديدين
+                    PropertyListingController propertyListingController = loader.getController();
+                    propertyListingController.setCurrentUser(currentUser);
+
+                    stage.setScene(newScene);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Error", "Failed to delete property: " + e.getMessage(), Alert.AlertType.ERROR);
+                }
+            }
+        });
+    }
+
+    private boolean checkFullAccess() {
+        if (currentUser == null || currentUser.getRole() == null) {
+            return false;
+        }
+        return currentUser.getRole().getId() == 2;
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

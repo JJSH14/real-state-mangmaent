@@ -1,148 +1,122 @@
 package com.example.loborems.controllers;
 
-import com.example.loborems.interfaces.PropertyDAO;
-import com.example.loborems.interfaces.UserDOA;
-import com.example.loborems.models.Property;
 import com.example.loborems.models.User;
-import com.example.loborems.services.PropertyDAOImpl;
-import com.example.loborems.services.UserDOAimp;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
-public class DashboardController implements Initializable {
+public class DashboardController {
+    private User currentUser;
 
-    @FXML
-    private Text total;
-    @FXML
-    private Text active;
-    @FXML
-    private Text name;
-    @FXML
-    private Text email;
-    @FXML
-    private Text proname;
-    @FXML
-    private Text prostatus;
-    @FXML
-    private Text price;
-    @FXML
-    private Text locationn;
-
-    private final UserDOA userDao;
-    private final PropertyDAO propertyDao;
-
-    public DashboardController() {
-        this.userDao = new UserDOAimp(); // Replace with dependency injection if needed
-        this.propertyDao = new PropertyDAOImpl(); // Replace with dependency injection if needed
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        try {
-            // Retrieve all users and filter by role_id
-            List<User> users = userDao.getAll();
-            long userCount = users.stream().filter(user -> user.getRole().getId() == 2).count();
-            total.setText(String.valueOf(userCount));
-
-            if (!users.isEmpty()) {
-                User user = users.get(0); // Use the first user for demonstration
-                name.setText(user.getFullName());
-                email.setText(user.getEmail());
-            }
-
-            // Retrieve all properties
-            List<Property> properties = propertyDao.getAllProperties();
-            if (!properties.isEmpty()) {
-                Property property = properties.get(0); // Use the first property for demonstration
-                proname.setText(property.getFeatures());
-                price.setText(String.valueOf(property.getPrice()));
-                locationn.setText(property.getLocation());
-                prostatus.setText(property.getStatus());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    private void setFullScreen(Stage window) {
+        window.setMaximized(true);
+        window.setFullScreen(true);
     }
 
     public void logout(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Login/login.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        // Clear session state
+        clearSession();
+
+        // Redirect to login page
+        Parent loginRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Login/login.fxml"));
+        Scene loginScene = new Scene(loginRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(loginScene);
+        setFullScreen(window);
+    }
+
+    private void clearSession() {
+        // Clear the currentUser reference
+        this.currentUser = null;
+
+        // Also clear any global session-like states, if applicable
+        AgentManageController.setLoggedInUser(null);
+        addAgentController.setLoggedInUser(null);
     }
 
     public void goToDashboard(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent dashboardRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
+        Scene dashboardScene = new Scene(dashboardRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(dashboardScene);
+        setFullScreen(window);
     }
 
     public void goToInteractions(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientInteraction/client-interaction.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent interactionsRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientInteraction/client-interaction.fxml"));
+        Scene interactionsScene = new Scene(interactionsRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(interactionsScene);
+        setFullScreen(window);
     }
 
     public void goToClients(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientList/client-list.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/ClientList/client-list.fxml"));
+        Parent clientRoot = loader.load();
+
+        ClientListController controller = loader.getController();
+        controller.setCurrentUser(currentUser);
+
+        Scene clientScene = new Scene(clientRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(clientScene);
+        setFullScreen(window);
     }
 
     public void goToProperties(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyListing/property-listing.fxml"));
+        Parent propertyRoot = loader.load();
+
+        PropertyListingController controller = loader.getController();
+        if (currentUser != null && currentUser.getRole() != null) {
+            System.out.println("DashboardController goToProperties - Passing User Role: " + currentUser.getRole().getId());
+        }
+        controller.setCurrentUser(currentUser);
+
+        Scene propertyScene = new Scene(propertyRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(propertyScene);
+        setFullScreen(window);
     }
 
     public void goToAddAgents(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddAgent/addAgent.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent addAgentRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AddAgent/addAgent.fxml"));
+        Scene addAgentScene = new Scene(addAgentRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(addAgentScene);
+        setFullScreen(window);
     }
 
     public void goToCategorisation(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientCategorization/client-categorization.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent categorizationRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/ClientCategorization/client-categorization.fxml"));
+        Scene categorizationScene = new Scene(categorizationRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(categorizationScene);
+        setFullScreen(window);
     }
 
     public void goToOffers(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Offers/offers.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent offersRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Offers/offers.fxml"));
+        Scene offersScene = new Scene(offersRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(offersScene);
+        setFullScreen(window);
     }
 
     public void goToManageAgent(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AgentManage/AgentManage.fxml"));
-        Scene newScene = new Scene(secondRoot);
+        Parent manageAgentRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/AgentManage/AgentManage.fxml"));
+        Scene manageAgentScene = new Scene(manageAgentRoot);
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
-    }
-
-    public void goToPermission(ActionEvent event) throws IOException {
-        Parent secondRoot = FXMLLoader.load(getClass().getResource("/com/example/loborems/Permissions/permissions.fxml"));
-        Scene newScene = new Scene(secondRoot);
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setScene(newScene);
+        window.setScene(manageAgentScene);
+        setFullScreen(window);
     }
 }

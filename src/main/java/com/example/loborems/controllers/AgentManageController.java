@@ -35,6 +35,8 @@ import java.util.logging.Logger;
 public class AgentManageController implements Initializable {
     private static final Logger logger = Logger.getLogger(AgentManageController.class.getName());
 
+    private static User loggedInUser; //store logged in user
+
     @FXML private TableView<User> agentTable;
     @FXML private TableColumn<User, Integer> idColumn;
     @FXML private TableColumn<User, String> nameColumn;
@@ -49,6 +51,8 @@ public class AgentManageController implements Initializable {
     @FXML private JFXComboBox<Integer> roleChoiceBox;
     @FXML private JFXButton editButton;
     @FXML private JFXButton deleteButton;
+    @FXML private Stage stage;
+    @FXML private Scene scene;
 
     private final UserDOAimp userDAO;
     private ObservableList<User> agentList;
@@ -62,14 +66,53 @@ public class AgentManageController implements Initializable {
         roleMap.put(2, "Agent");
     }
 
+    //  set logged in user
+    public static void setLoggedInUser(User user) {
+        loggedInUser = user;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Check permission
+
+        if (!isAdminUser()) {
+            disableAllControls();
+            showAlert(Alert.AlertType.ERROR, "Access Denied",
+                    "Only administrators can access this page.");
+
+            try {
+                handleBackClick(new ActionEvent());
+            } catch (IOException e) {
+                logger.severe("Error redirecting to dashboard: " + e.getMessage());
+                e.printStackTrace();
+            }
+            return;
+        }
+
         setupTableColumns();
         setupRoleChoiceBox();
         loadAgents();
         setupSearchField();
         setupTableSelection();
         setupButtons();
+    }
+
+    private boolean isAdminUser() {
+        return loggedInUser != null &&
+                loggedInUser.getRole() != null &&
+                loggedInUser.getRole().getId() == 1;
+    }
+
+    private void disableAllControls() {
+        agentTable.setDisable(true);
+        searchField.setDisable(true);
+        full_name.setDisable(true);
+        emailField.setDisable(true);
+        passwordField.setDisable(true);
+        roleChoiceBox.setDisable(true);
+        editButton.setDisable(true);
+        deleteButton.setDisable(true);
     }
 
     private void setupTableColumns() {
@@ -90,7 +133,6 @@ public class AgentManageController implements Initializable {
 
     private void setupRoleChoiceBox() {
         roleChoiceBox.setItems(FXCollections.observableArrayList(1, 2));
-
         roleChoiceBox.setConverter(new StringConverter<Integer>() {
             @Override
             public String toString(Integer roleId) {
@@ -146,15 +188,23 @@ public class AgentManageController implements Initializable {
     private void populateFields(User user) {
         full_name.setText(user.getFullName());
         emailField.setText(user.getEmail());
-        passwordField.setText(""); // For security reasons, don't populate password
+        passwordField.setText(""); // For security reasons, I don't populate password
         if (user.getRole() != null) {
             roleChoiceBox.setValue(user.getRole().getId());
         }
     }
 
     private void handleEdit() {
+        // permission check
+        if (!isAdminUser()) {
+            showAlert(Alert.AlertType.ERROR, "Access Denied",
+                    "Only administrators can edit agent information.");
+            return;
+        }
+
         if (selectedUser == null) {
-            showAlert(Alert.AlertType.WARNING, "Please select an agent to edit");
+            showAlert(Alert.AlertType.WARNING, "Selection Required",
+                    "Please select an agent to edit");
             return;
         }
 
@@ -175,17 +225,27 @@ public class AgentManageController implements Initializable {
             userDAO.update(selectedUser);
             loadAgents();
             clearFields();
-            showAlert(Alert.AlertType.INFORMATION, "Agent updated successfully");
+            showAlert(Alert.AlertType.INFORMATION, "Success",
+                    "Agent updated successfully");
         } catch (Exception e) {
             logger.severe("Error during edit: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error updating agent: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error",
+                    "Error updating agent: " + e.getMessage());
         }
     }
 
     private void handleDelete() {
+        // Verify admin permission
+        if (!isAdminUser()) {
+            showAlert(Alert.AlertType.ERROR, "Access Denied",
+                    "Only administrators can delete agents.");
+            return;
+        }
+
         if (selectedUser == null) {
-            showAlert(Alert.AlertType.WARNING, "Please select an agent to delete");
+            showAlert(Alert.AlertType.WARNING, "Selection Required",
+                    "Please select an agent to delete");
             return;
         }
 
@@ -198,14 +258,16 @@ public class AgentManageController implements Initializable {
             Optional<ButtonType> result = confirmAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 userDAO.delete(selectedUser);
-                loadAgents(); // Reload the entire list
+                loadAgents();
                 clearFields();
-                showAlert(Alert.AlertType.INFORMATION, "Agent deleted successfully");
+                showAlert(Alert.AlertType.INFORMATION, "Success",
+                        "Agent deleted successfully");
             }
         } catch (Exception e) {
             logger.severe("Error during delete: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error deleting agent: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Error",
+                    "Error deleting agent: " + e.getMessage());
         }
     }
 
@@ -217,13 +279,25 @@ public class AgentManageController implements Initializable {
         selectedUser = null;
     }
 
-    private void showAlert(Alert.AlertType alertType, String message) {
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
-        alert.setTitle(alertType.toString());
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
+    private void showAlert(Alert.AlertType alertType, String message) {
+        showAlert(alertType, alertType.toString(), message);
+    }
+
+    @FXML
+    public void handleBackClick(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

@@ -29,7 +29,7 @@ public class PropertyDAOImpl implements PropertyDAO {
     }
 
     @Override
-    public Property getById(int id) {
+    public Property getById(long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Property property = null;
         try {
@@ -48,11 +48,25 @@ public class PropertyDAOImpl implements PropertyDAO {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
-            session.update(property);
+
+            Property existingProperty = session.get(Property.class, property.getId());
+
+            if (existingProperty != null) {
+                if (!existingProperty.getType().equals(property.getType())) {
+                    // Use the specialized method for type changes
+                    handleTypeChange(existingProperty, property);
+                } else {
+                    session.update(property);
+                }
+            }
+
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            if (transaction != null) {
+                transaction.rollback();
+            }
             e.printStackTrace();
+            throw new RuntimeException("Error updating property: " + e.getMessage());
         } finally {
             session.close();
         }
@@ -87,5 +101,30 @@ public class PropertyDAOImpl implements PropertyDAO {
             session.close();
         }
         return properties;
+    }
+
+    @Override
+    public void handleTypeChange(Property oldProperty, Property newProperty) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            // Delete the old property
+            session.delete(oldProperty);
+            session.flush();
+
+            // Save the new property
+            session.save(newProperty);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Error during property type change: " + e.getMessage());
+        } finally {
+            session.close();
+        }
     }
 }

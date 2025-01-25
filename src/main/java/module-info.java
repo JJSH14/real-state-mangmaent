@@ -20,6 +20,8 @@ module com.example.loborems {
     requires org.simplejavamail.core;
 
 
+
+
     // Export and open necessary packages
     opens com.example.loborems to javafx.fxml;
     exports com.example.loborems;
@@ -32,5 +34,5 @@ module com.example.loborems {
     opens com.example.loborems.util to javafx.fxml;
     exports com.example.loborems.util;
     exports com.example.loborems.services;
-    opens com.example.loborems.services to javafx.fxml;
+    opens com.example.loborems.services to javafx.fxml, org.hibernate.orm.core;
 }

@@ -2,10 +2,12 @@ package com.example.loborems.controllers;
 
 import com.example.loborems.interfaces.ClientListDAO;
 import com.example.loborems.services.ClientListDAOImp;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -13,6 +15,9 @@ import javafx.util.Callback;
 import java.io.IOException;
 import com.example.loborems.models.Client;
 import org.hibernate.exception.ConstraintViolationException;
+import com.example.loborems.models.User;
+import com.example.loborems.services.UserDOAimp;
+import javafx.scene.control.Alert;
 
 public class ClientListController {
 
@@ -58,6 +63,36 @@ public class ClientListController {
         }
     }
 
+    private User currentUser;
+    private final UserDOAimp userService = new UserDOAimp();
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        Platform.runLater(() -> updateUIBasedOnPermissions());
+    }
+
+    private void updateUIBasedOnPermissions() {
+        if (currentUser != null && currentUser.getRole() != null) {
+            int roleId = currentUser.getRole().getId();
+            System.out.println("Current user role in ClientList: " + roleId);
+
+            // Both Role 1 and 2 can see the Add button
+            addClientButton.setVisible(true);
+            addClientButton.setManaged(true);
+
+            // Only Role 2 can see edit/delete columns
+            boolean hasFullAccess = roleId == 2;
+            editColumn.setVisible(hasFullAccess);
+            removeColumn.setVisible(hasFullAccess);
+        } else {
+            // No user or no role - hide all controls
+            addClientButton.setVisible(false);
+            editColumn.setVisible(false);
+            removeColumn.setVisible(false);
+        }
+    }
+
+
     private void loadAllClients() {
         try {
             clientList.clear();
@@ -94,6 +129,17 @@ public class ClientListController {
 
     @FXML
     private void onAddClientButtonClicked() {
+        if (currentUser == null || currentUser.getRole() == null) {
+            showAlert("Access Denied", "You must be logged in to perform this action.", Alert.AlertType.WARNING);
+            return;
+        }
+
+        // If we're in edit mode and the user doesn't have full access, prevent the edit
+        if (currentlyEditingClient != null && !checkFullAccess()) {
+            showAlert("Access Denied", "Only users with Role 2 can edit clients.", Alert.AlertType.WARNING);
+            return;
+        }
+
         try {
             String name = nameField.getText().trim();
             String email = emailField.getText().trim();
@@ -103,24 +149,27 @@ public class ClientListController {
 
             if (validateFields(name, email, phone, role)) {
                 if (currentlyEditingClient == null) {
+                    // Add new client - both roles can do this
                     Client newClient = new Client(name, email, phone, property, role);
                     clientDAO.addClient(newClient);
                     clientList.add(newClient);
                     showAlert("Success", "Client added successfully!", Alert.AlertType.INFORMATION);
                 } else {
-                    currentlyEditingClient.setName(name);
-                    currentlyEditingClient.setEmail(email);
-                    currentlyEditingClient.setPhone(phone);
-                    currentlyEditingClient.setProperty(property);
-                    currentlyEditingClient.setRole(role);
+                    // Edit existing client - only Role 2 can do this
+                    if (checkFullAccess()) {
+                        currentlyEditingClient.setName(name);
+                        currentlyEditingClient.setEmail(email);
+                        currentlyEditingClient.setPhone(phone);
+                        currentlyEditingClient.setProperty(property);
+                        currentlyEditingClient.setRole(role);
 
-                    clientDAO.updateClient(currentlyEditingClient);
-                    clientTable.refresh();
-                    showAlert("Success", "Client updated successfully!", Alert.AlertType.INFORMATION);
-                    currentlyEditingClient = null;
+                        clientDAO.updateClient(currentlyEditingClient);
+                        clientTable.refresh();
+                        showAlert("Success", "Client updated successfully!", Alert.AlertType.INFORMATION);
+                    }
                 }
                 clearFields();
-                loadAllClients(); // Refresh the table
+                loadAllClients();
             }
         } catch (ConstraintViolationException e) {
             showAlert("Database Error", "This client information conflicts with existing data.", Alert.AlertType.ERROR);
@@ -136,8 +185,12 @@ public class ClientListController {
             {
                 editButton.setStyle("-fx-background-color: #14274d; -fx-text-fill: white;");
                 editButton.setOnAction(event -> {
-                    currentlyEditingClient = getTableView().getItems().get(getIndex());
-                    populateFieldsForEdit(currentlyEditingClient);
+                    if (checkFullAccess()) {
+                        currentlyEditingClient = getTableView().getItems().get(getIndex());
+                        populateFieldsForEdit(currentlyEditingClient);
+                    } else {
+                        showAlert("Access Denied", "Only users with Role 2 can edit clients.", Alert.AlertType.WARNING);
+                    }
                 });
             }
 
@@ -157,8 +210,12 @@ public class ClientListController {
             {
                 deleteButton.setStyle("-fx-background-color: #14274d; -fx-text-fill: white;");
                 deleteButton.setOnAction(event -> {
-                    Client clientToDelete = getTableView().getItems().get(getIndex());
-                    handleDeleteClient(clientToDelete);
+                    if (checkFullAccess()) {
+                        Client clientToDelete = getTableView().getItems().get(getIndex());
+                        handleDeleteClient(clientToDelete);
+                    } else {
+                        showAlert("Access Denied", "Only users with Role 2 can delete clients.", Alert.AlertType.WARNING);
+                    }
                 });
             }
 
@@ -251,7 +308,16 @@ public class ClientListController {
         try {
             Stage stage = (Stage) backButton.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/Dashboard/dashboard.fxml"));
-            Scene scene = new Scene(loader.load());
+
+            // Load the FXML first
+            Parent root = loader.load();
+
+            // Then get the controller and set the user
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setCurrentUser(currentUser);
+
+            // Create and set the scene
+            Scene scene = new Scene(root);
             stage.setScene(scene);
         } catch (IOException e) {
             showAlert("Navigation Error", "Failed to load Dashboard: " + e.getMessage(), Alert.AlertType.ERROR);
@@ -260,5 +326,12 @@ public class ClientListController {
 
     public void refreshTable() {
         loadAllClients();
+    }
+
+    private boolean checkFullAccess() {
+        if (currentUser == null || currentUser.getRole() == null) {
+            return false;
+        }
+        return currentUser.getRole().getId() == 2;
     }
 }

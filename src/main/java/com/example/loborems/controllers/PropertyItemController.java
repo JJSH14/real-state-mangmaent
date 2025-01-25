@@ -4,6 +4,7 @@ import com.example.loborems.models.CommercialProperty;
 import com.example.loborems.models.Property;
 import com.example.loborems.models.ResidentialProperty;
 
+import com.example.loborems.models.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -111,20 +112,26 @@ public class PropertyItemController {
 
     }
 
+    private User currentUser;
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        System.out.println("PropertyItemController - Current User Role: " +
+                (user != null && user.getRole() != null ? user.getRole().getId() : "null"));
+    }
+
     @FXML
     public void onViewButtonClicked() {
         try {
-            // تحميل الـ FXML الخاص بـ Property Details
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/loborems/PropertyDetails/property-details.fxml"));
             Parent root = loader.load();
 
-            // الحصول على الكنترولر الخاص بالنافذة الجديدة
             PropertyDetailsController controller = loader.getController();
-
-            // تمرير الخاصية الحالية إلى الكنترولر
             controller.setProperty(property);
+            System.out.println("PropertyItemController onViewButtonClicked - Passing User Role: " +
+                    (currentUser != null && currentUser.getRole() != null ? currentUser.getRole().getId() : "null"));
+            controller.setCurrentUser(currentUser);  // Make sure this line is called
 
-            // إعداد المشهد الجديد
             Stage stage = (Stage) viewMoreButton.getScene().getWindow();
             stage.setScene(new Scene(root));
         } catch (IOException e) {

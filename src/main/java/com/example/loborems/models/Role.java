@@ -25,7 +25,7 @@ public class Role {
     )
     private Set<Permission> permissions;
 
-    // Getters and Setters
+
     public int getId() {
         return id;
     }

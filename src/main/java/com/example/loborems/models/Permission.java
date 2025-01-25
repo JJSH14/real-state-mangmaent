@@ -14,6 +14,9 @@ public class Permission {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles;
 
@@ -40,5 +43,12 @@ public class Permission {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

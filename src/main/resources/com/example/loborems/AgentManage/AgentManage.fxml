@@ -44,7 +44,7 @@
         <VBox spacing="20" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
             <!-- Header Section -->
             <HBox alignment="CENTER_LEFT" prefHeight="86.0" prefWidth="938.0" spacing="20" style="-fx-background-color: #8697c4; -fx-background-radius: 5; -fx-padding: 0 15 0 15;">
-                <JFXButton fx:id="backButton" alignment="CENTER" buttonType="RAISED" style="-fx-background-color: #7091e6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20 8 15; -fx-font-size: 14; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);" text="back">
+                <JFXButton fx:id="backButton" alignment="CENTER" buttonType="RAISED" onAction="#handleBackClick" style="-fx-background-color: #7091e6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 8 20 8 15; -fx-font-size: 14; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);" text="back">
                     <graphic>
                         <HBox alignment="CENTER" spacing="5">
                             <ImageView fitHeight="16" fitWidth="16">
